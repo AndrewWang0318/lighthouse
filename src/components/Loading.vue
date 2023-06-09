@@ -1,5 +1,5 @@
 <template>
-  <div class="loading" v-show="loadingSwitch">
+  <div class="Loading" v-show="loadingSwitch">
     <van-loading size="24">
       <span class="loading-text">加载中...</span>
     </van-loading>
@@ -14,7 +14,7 @@
 </script>
 
 <style scoped lang="scss">
-.loading {
+.Loading {
   position: fixed;
   top: 0;
   left: 0;
