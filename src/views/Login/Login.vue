@@ -22,7 +22,7 @@
       </van-swipe-item>
     </van-swipe>
     <!-- 登录表单 -->
-    <!-- <van-form @submit="onLoginSubmit" v-show="status === 'login'">
+    <van-form @submit="onLoginSubmit" v-show="status === 'login'">
       <div class="login-content">
         <van-cell-group inset>
           <van-field
@@ -64,9 +64,9 @@
           >注册</van-button
         >
       </div>
-    </van-form> -->
+    </van-form>
     <!-- 注册表单 -->
-    <!-- <van-form @submit="onRegisteSubmit" v-show="status === 'registe'">
+    <van-form @submit="onRegisteSubmit" v-show="status === 'registe'">
       <div class="register-content">
         <van-cell-group inset>
           <van-field
@@ -91,7 +91,7 @@
           点击注册
         </van-button>
       </div>
-    </van-form> -->
+    </van-form>
   </div>
 </template>
 
@@ -100,12 +100,13 @@
   import { showToast } from "vant"
   import { ref,reactive,onMounted } from 'vue'
   import _API from "@/request/api"
+  import baseUrl from '@/request/base_url'
   import $util from "@/assets/js/util"
   import router from '@/router'
   const _store = store();
 
   let status = ref("login");
-  let autoLogin = ref(true) // 免登录开关
+  let autoLogin = ref(false) // 免登录开关
   let loginForm = reactive({
     user_name: "",
     user_password: "",
@@ -115,25 +116,25 @@
     user_password: "",
   })
   const swiperList = reactive( [
-    { imgSrc: require("@/assets/images/swiper1.jpg") },
-    { imgSrc: require("@/assets/images/swiper2.jpg") },
-    { imgSrc: require("@/assets/images/swiper3.jpg") },
-    { imgSrc: require("@/assets/images/swiper4.jpg") },
-    { imgSrc: require("@/assets/images/swiper5.jpg") },
+    { imgSrc: `${baseUrl}/image/swiper1.jpg` },
+    { imgSrc: `${baseUrl}/image/swiper2.jpg` },
+    { imgSrc: `${baseUrl}/image/swiper3.jpg` },
+    { imgSrc: `${baseUrl}/image/swiper4.jpg` },
+    { imgSrc: `${baseUrl}/image/swiper5.jpg` },
   ])
 
   const onClickLeft = () => {// 返回
     router.go("-1");
   }
+
   const onLoginSubmit = (form) => {// 用户登录
-    _API.login(form).then((res) => {
+    let params= form
+    _API.login(params).then((res) => {
       showToast(res.data.msg);
-      if (res.status === 200 && res.data.code === 0) {
-        let user_info = res.data.success;
-        _store.userInfoAction(user_info) // 存入状态管理
-        if (this.autoLogin) $util.operatCookie("set","user_info",JSON.stringify({ ...form }),9999); // 存入cookie,自动登录
-        this.$router.push("/home/mine");
-      }
+      _store.userInfoAction(res.data.user_info) // 存入状态管理
+      if (autoLogin) $util.operatCookie("set","user_info",JSON.stringify(form),9999); // 存入cookie,自动登录
+
+      router.push("/home/mine");
     });
   }
   const onRegisteSubmit = (form) => {// 注册新用户
@@ -151,22 +152,12 @@
       showToast(err.response.data.msg);
     });
   }
-  
+
   onMounted(()=>{
     // 校验cookie后自动登录
-    let user_info_cookie = $util.operatCookie("get", "user_info");
-    let is_user_info_cookie_exist = user_info_cookie && user_info_cookie != "{}";
-    // let user_info_store = _store.userInfo;
-    // let is_user_info_store_exist = !user_info_store || JSON.stringify(user_info_store) == "{}";
-
-    if (is_user_info_cookie_exist) {
-      let param = JSON.parse(user_info_cookie);
-      _API.login(param).then((res) => {
-        if (res.data.status == 200 && res.data.success) {
-          let user_info = res.data.success;
-          _store.userInfoAction(user_info) // 存入状态管理
-        }
-      });
+    let user_cookie = $util.operatCookie("get", "user_info");
+    if (user_cookie && user_cookie != "{}") {
+      onLoginSubmit(user_cookie);
     }
   })
 

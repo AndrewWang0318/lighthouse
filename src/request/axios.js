@@ -1,9 +1,11 @@
 import axios from "axios"; // 引入axios
 // import qs from 'qs' // 引入qs解析库
-import { Toast } from "vant"; // 引入vant中的提示信息
+import { showToast } from "vant"; // 引入vant中的提示信息
 import router from "@/router"; // Vue Router
 import codeMessage from "./error_code.json" // 状态码错误信息
 import baseURL from './base_url'
+import { store } from '@/stores/stores'
+
 // 创建axios实例
 const service = axios.create({
   baseURL,
@@ -43,7 +45,7 @@ service.interceptors.response.use(
     return response;
   },(err) => {
     loadingSwitch("close");
-    Toast(codeMessage[err.response.status]); // 输出错误信息
+    showToast(codeMessage[err.response.status]); // 输出错误信息
     switch (err.response.status) {
       case 401: // token过期或错误
         router.replace("/login");
@@ -55,8 +57,9 @@ service.interceptors.response.use(
   }
 );
 // loading开关函数
-// function loadingSwitch(state) {
-//   if (state === "open") store.dispatch("GlobaLoadingShowActions", true);
-//   if (state === "close") store.dispatch("GlobaLoadingShowActions", false);
-// }
+const _store = store()
+function loadingSwitch(state) {
+  if (state === "open") _store.loadingSwitch = true;
+  if (state === "close") _store.loadingSwitch = false;
+}
 export default service;

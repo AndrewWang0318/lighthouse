@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const store = defineStore('counter', {
+const store = defineStore('counter', {
   state: () => {
     return {
       userInfo: {}, // 用户信息
@@ -15,4 +15,11 @@ export const store = defineStore('counter', {
       this.loadingSwitch = data
     }
   },
+  persist: {
+    key: 'map',
+    storage: sessionStorage,
+  },
 })
+
+
+export { store }
