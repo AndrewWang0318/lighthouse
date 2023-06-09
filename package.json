@@ -13,7 +13,12 @@
     "pixelfit": "^1.0.1",
     "vant": "^4.4.1",
     "vue": "^3.3.2",
-    "vue-router": "^4.2.0"
+    "vue-router": "^4.2.0",
+    "animejs": "^3.2.1",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "vconsole": "^3.12.1",
+    "moment": "^2.29.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",

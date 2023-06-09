@@ -4,6 +4,7 @@ import { RouterView } from 'vue-router'
 
 <template>
   <RouterView />
+  <Loading />
 </template>
 
 <style scoped>
