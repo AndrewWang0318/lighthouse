@@ -318,5 +318,18 @@ export default {
       }
     }
     return true
+  },
+  checkFileType:function(file_extension){ // 判断文件类型
+    let file_type; // 文件类型
+    const img_format = ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp', 'psd', 'svg', 'tiff']; // 图片的格式
+    const video_format = ['mp4','avi','rmvb','wmv','mpg','mpeg','swf','flv','mov']; // 图片的格式
+    const audio_format = ['mp3','wma','wav','ape','flac','ogg','aac']; // 图片的格式
+    const book_format = ['epub']; // 图书的格式
+    if( img_format.includes( file_extension ) ){ file_type = 'image' } 
+    else if(video_format.includes(file_extension)){ file_type = 'video' } 
+    else if(audio_format.includes(file_extension)){ file_type = 'audio' }
+    else if (book_format.includes(file_extension)){ file_type = 'book'  } 
+    else { file_type = 'other' }
+    return file_type
   }
 }

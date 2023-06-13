@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { showToast } from "vant"; //引入Vant ui
 import { store } from '@/stores/stores'
-import $util from "@/assets/js/util"
+// import $tool from "@/assets/js/util"
 
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,9 +23,9 @@ const router = createRouter({
           component: () => import("@/views/Plan/Plan.vue"),
         },
         {
-          path: "Dynamic",
-          name: "Dynamic",
-          component: () => import("@/views/Dynamic/Dynamic.vue"),
+          path: "FriendDynamic",
+          name: "FriendDynamic",
+          component: () => import("@/views/Dynamic/FriendDynamic.vue"),
         },
         {
           path: "Mine",

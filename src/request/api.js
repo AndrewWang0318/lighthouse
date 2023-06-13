@@ -26,6 +26,9 @@ class Api extends Axios {// Api继承Axios
   async login(parmas = {}) { // 登录
     return await this.axios("POST", "/user/login", parmas);
   }
+  async dynamicList(parmas = {}){ // 获取动态列表
+    return await this.axios("POST", "/user/login", parmas);
+  }
 }
 
 const API = new Api()

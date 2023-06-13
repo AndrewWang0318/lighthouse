@@ -101,7 +101,7 @@
   import { ref,reactive,onMounted } from 'vue'
   import _API from "@/request/api"
   import baseUrl from '@/request/base_url'
-  import $util from "@/assets/js/util"
+  import $tool from "@/assets/js/util"
   import router from '@/router'
   const _store = store();
 
@@ -132,7 +132,7 @@
     _API.login(params).then((res) => {
       showToast(res.data.msg);
       _store.userInfoAction(res.data.user_info) // 存入状态管理
-      if (autoLogin) $util.operatCookie("set","user_info",JSON.stringify(form),9999); // 存入cookie,自动登录
+      if (autoLogin) $tool.operatCookie("set","user_info",JSON.stringify(form),9999); // 存入cookie,自动登录
 
       router.push("/home/mine");
     });
@@ -155,7 +155,7 @@
 
   onMounted(()=>{
     // 校验cookie后自动登录
-    let user_cookie = $util.operatCookie("get", "user_info");
+    let user_cookie = $tool.operatCookie("get", "user_info");
     if (user_cookie && user_cookie != "{}") {
       onLoginSubmit(user_cookie);
     }

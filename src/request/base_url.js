@@ -1,3 +1,5 @@
+// process.env.NODE_ENV 用于区分运行环境是 线上[打包后的环境] 开发[未打包的环境]
+// process.env.VUE_APP_FLAG 用于通过build命令生成后文件环境配置
 let baseURL;
 import VConsole from 'vconsole'; // 引入VConsole
 if (process.env.NODE_ENV == "development") {

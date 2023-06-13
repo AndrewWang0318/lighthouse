@@ -26,7 +26,7 @@
     },
     {
       title: "动态",
-      route: "/Home/Dynamic",
+      route: "/Home/FriendDynamic",
       icon: "fire",
     },
     {
