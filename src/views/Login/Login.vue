@@ -1,12 +1,5 @@
 <template>
    <div class="login">
-    <van-nav-bar
-      title="登录"
-      left-text="返回"
-      left-arrow
-      @click-left="onClickLeft"
-    >
-    </van-nav-bar>
     <van-swipe
       class="login-swipe"
       :autoplay="3000"
@@ -101,7 +94,7 @@
   import { ref,reactive,onMounted } from 'vue'
   import _API from "@/request/api"
   import baseUrl from '@/request/base_url'
-  import $tool from "@/assets/js/util"
+  import $tool from "@/utils/tool"
   import router from '@/router'
   const _store = store();
 
@@ -122,11 +115,6 @@
     { imgSrc: `${baseUrl}/image/swiper4.jpg` },
     { imgSrc: `${baseUrl}/image/swiper5.jpg` },
   ])
-
-  const onClickLeft = () => {// 返回
-    router.go("-1");
-  }
-
   const onLoginSubmit = (form) => {// 用户登录
     let params= form
     _API.login(params).then((res) => {
