@@ -5,7 +5,7 @@ import router from "@/router"; // Vue Router
 import codeMessage from "./error_code.json" // 状态码错误信息
 import baseURL from './base_url'
 import { store } from '@/stores/stores'
-
+import $tool from "@/utils/tool"
 // 创建axios实例
 const service = axios.create({
   baseURL,
@@ -25,7 +25,9 @@ const service = axios.create({
 service.interceptors.request.use(
   (config) => {
     loadingSwitch("open");
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
+    const token = $tool.operatCookie('get','token');
+
     if (token) config.headers["authorization"] = "Bearer " + token; // 请求头带token
     // if(config.method === 'post'){ // 更加请求头的headers来决定,如果是application/json;charset=utf-8,则不需要qs转化
     //   config.data = qs.stringify(config.data)// 如果是post请求,将参数转化为JSONSTRING
@@ -41,11 +43,13 @@ service.interceptors.response.use(
   (response) => {
     loadingSwitch("close");
     const token = response.data.token;
-    if (token) localStorage.setItem("token", token); // 存入token
+    // if (token) localStorage.setItem("token", token); // 存入token
+    if (token) $tool.operatCookie("set","token", token,1000 * 60 * 60 * 24); // 存入token
     return response;
   },(err) => {
     loadingSwitch("close");
-    showToast(codeMessage[err.response.status]); // 输出错误信息
+    showToast(err.message+' '+err.response.data.msg); // 输出错误信息
+    // showToast(codeMessage[err.response.status]+';'+err.response.msg); // 输出错误信息
     switch (err.response.status) {
       case 401: // token过期或错误
         router.replace("/login");

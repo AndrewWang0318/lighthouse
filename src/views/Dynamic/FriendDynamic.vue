@@ -72,7 +72,6 @@ export default {
   },
   setup () {
     const _store = store();
-    console.log()
     let dynamicData = reactive([]); // 动态数据
     let currentIndex = ref(null); // 当前点击的某一项
 
@@ -93,39 +92,6 @@ export default {
     let userInfo = reactive(_store.userInfo); //用户信息
     let page = ref(1);
     let limit = ref(10);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 
     return {
       dynamicData,

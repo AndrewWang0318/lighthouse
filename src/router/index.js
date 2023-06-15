@@ -1,8 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { showToast } from "vant"; //引入Vant ui
 import { store } from '@/stores/stores'
-// import $tool from "@/utils/tool"
-
+import $tool from "@/utils/tool"
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -37,7 +36,16 @@ const router = createRouter({
     {
       path: '/Login',
       name: 'Login',
-      component: () => import('@/views/Login/Login.vue')
+      component: () => import('@/views/Login/Login.vue'),
+      beforeEnter: (to, from) => {
+        let user_cookie = $tool.operatCookie("get", "user_info");
+        if (user_cookie && user_cookie != "{}") {
+          showToast("当前已登录~");
+          return false
+        }else{
+          return true
+        }
+      },
     },
     {
       path:'/Error',
@@ -49,7 +57,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   // 访问部分路由需要校验是否登录
-  let checkLoginArr = ["/main/upload","/main/dynamic"];
+  let checkLoginArr = ["",""];
   const _store = store();
   if (checkLoginArr.includes(to.path)) {
     let user_info = _store.userInfo;
