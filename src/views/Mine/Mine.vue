@@ -1,13 +1,69 @@
 <template>
-  <div>
-    我的
+  <div class="page-mine">
+    <div class="login-content" v-if="isLogin" @click="route_to_updateinfo">
+      <div
+        class="user-avatar"
+        :style="`background-image:url(${user_info.user_avatar})`"
+      ></div>
+      <div class="user-info">
+        <div class="user-nickname">{{ user_info.user_nickname }}</div>
+      </div>
+    </div>
+    <div class="unlogin-content" v-else>
+      <div class="user-avatar"></div>
+      <div class="user-info">
+        <div class="notic" @click="jumpLogin">点击登录</div>
+      </div>
+    </div>
+    <div class="function-content">
+      <div class="setting-area">
+        <div class="setting-item" @click="exit">退出登录</div>
+      </div>
+    </div>
   </div>
 </template>
 
-<script setup>
+<script>
+import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router';
+import { store } from '@/stores/stores'
+import $tool from "@/utils/tool"
+export default {
+  name:'MinePage',
+  setup () {
+    const _store = store();
+    const router = useRouter();
+    const user_info = reactive(_store.userInfo);
+    let isLogin = ref(false);
+    if(JSON.stringify(user_info) !== "{}"){
+      isLogin.value = true
+    }
 
+
+    const jumpLogin = () => {
+      router.push("/login");
+    }
+    const route_to_updateinfo = ()  => {
+      router.push("/updateInfo");
+    }
+    const exit = () => { // 退出登录
+      _store.userInfoAction({}) // 存入状态管理
+      $tool.operatCookie("del", "user_info");
+      $tool.operatCookie("del", "token");
+      router.replace("/login");
+    }
+    
+    return {
+      isLogin,
+      user_info,
+      jumpLogin,
+      route_to_updateinfo,
+      exit
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-
+@import "@/assets/sass/Mine/Mine.scss";
 </style>

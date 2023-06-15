@@ -1,0 +1,93 @@
+.user-basic-info {
+  padding-top: 0.26rem;
+}
+.basic-info-item {
+  background-color: white;
+  padding-left: 0.18rem;
+  padding-right: 0.18rem;
+  box-sizing: border-box;
+}
+.user_avatar {
+  width: 1rem;
+  height: 1rem;
+  background-color: gray;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+}
+.item-content {
+  min-height: 0.6rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  padding-right: 0.3rem;
+  box-sizing: border-box;
+  border-bottom: 0.01rem solid rgb(223, 223, 223);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  position: relative;
+  .value {
+    max-width: 3rem;
+    line-height: 1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+.arrow {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.basic-info-item:last-of-type .item-content {
+  border-bottom: none;
+}
+
+// 选择性别框
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sex-choice {
+  width: 86%;
+  background-color: white;
+  margin: 0 auto;
+  // 标题
+  .title {
+    height: 0.8rem;
+    line-height: 0.8rem;
+    font-size: 0.26rem;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 0.02rem solid rgb(230, 230, 230);
+  }
+
+  .choice-content {
+    height: 2rem;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  .choice-item {
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    // background-color: gray;
+    background-size: auto 100%;
+    background-position: center center;
+  }
+  .btn-insure {
+    height: 0.8rem;
+    line-height: 0.8rem;
+    font-size: 0.26rem;
+    font-weight: bold;
+    text-align: center;
+    border-top: 0.02rem solid rgb(230, 230, 230);
+  }
+}

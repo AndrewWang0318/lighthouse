@@ -39,7 +39,7 @@ const router = createRouter({
       component: () => import('@/views/Login/Login.vue'),
       beforeEnter: (to, from) => {
         let user_cookie = $tool.operatCookie("get", "user_info");
-        if (user_cookie && user_cookie != "{}") {
+        if (from.path != "/" && user_cookie && user_cookie != "{}") {
           showToast("当前已登录~");
           return false
         }else{
@@ -48,10 +48,24 @@ const router = createRouter({
       },
     },
     {
+      path: '/UpdateInfo',
+      name: 'UpdateInfo',
+      component: () => import('@/views/Mine/UpdateInfo.vue'),
+    },
+    {
+      path: '/UpdateInfoDetail',
+      name: 'UpdateInfoDetail',
+      component: () => import('@/views/Mine/UpdateInfoDetail.vue'),
+    },
+    {
       path:'/Error',
       name: 'Error',
       component: () => import('@/views/Error/Error.vue')
-    }
+    },
+    {
+      path: "/:catchAll(.*)",
+      redirect: "/Error",
+    },
   ]
 })
 
