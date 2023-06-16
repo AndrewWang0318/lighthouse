@@ -1,12 +1,12 @@
 <template>
   <div class="update-info">
-    <van-nav-bar title="账户资料" left-text="返回" left-arrow @click-left="$router.go(-1)" />
+    <van-nav-bar title="账户资料" left-text="返回" left-arrow @click-left="router.go(-1)" />
     <div class="user-basic-info">
       <div class="basic-info-item" v-for="(v, i) in updateUserInfo" :key="i" @click="open_update(v)">
         <div class="item-content">
           <div class="title">{{ v.name }}</div>
           <div v-if="v.param_key == 'user_avatar'" class="user_avatar"
-            :style="`background-image:url(http://${v.value})`" />
+            :style="`background-image:url(${v.value})`" />
 
           <div v-else-if="v.param_key == 'user_sex'" class="value">
             {{ v.value == 1 ? "男" : v.value == 2 ? "女" : "保密" }}
@@ -60,11 +60,13 @@ import { showToast } from "vant";
 import { areaList } from '@vant/area-data';
 import { ref, reactive, computed } from 'vue'
 import { store } from '@/stores/stores'
+import { useRoute,useRouter } from 'vue-router';
 
 export default {
   name: "UpdateInfoPage",
   setup() {
     const _store = store();
+    const router = useRouter();
     let bottom_mask = ref(false);
     let bottom_mask_choice = reactive([
       { name: "从相册选择", type: 1, avatar_type: 1 },
@@ -77,15 +79,18 @@ export default {
     let sex_choice_data = [
       {
         type: 1,
-        img: require("@/assets/images/sex_male.png"),
+        // img: require("~@/assets/images/sex_male.png"),
+        img: new URL('@/assets/images/sex_male.png', import.meta.url).href,
       },
       {
         type: 0,
-        img: require("@/assets/images/sex_secret.png"),
+        // img: require("~@/assets/images/sex_secret.png"),
+        img: new URL('@/assets/images/sex_secret.png', import.meta.url).href,
       },
       {
         type: 2,
-        img: require("@/assets/images/sex_female.png"),
+        // img: require("~@/assets/images/sex_female.png"),
+        img: new URL('@/assets/images/sex_female.png', import.meta.url).href,
       },
     ];
     let address_choice_show = false;
@@ -97,27 +102,17 @@ export default {
     let userInfo = _store.userInfo
 
     let updateUserInfo = computed(()=>{
-      let userInfo = userInfo;
-      let {
-        user_avatar,
-        user_nickname,
-        user_sex,
-        user_birth,
-        user_signature,
-        user_locat,
-      } = userInfo;
-
       let infoArr = [
-        { name: "头像", param_key: "user_avatar", value: user_avatar },
-        { name: "昵称", param_key: "user_nickname", value: user_nickname },
-        { name: "性别", param_key: "user_sex", value: user_sex },
-        { name: "出生年月", param_key: "user_birth", value: user_birth },
+        { name: "头像", param_key: "user_avatar", value: userInfo.user_avatar },
+        { name: "昵称", param_key: "user_nickname", value: userInfo.user_nickname },
+        { name: "性别", param_key: "user_sex", value: userInfo.user_sex },
+        { name: "出生年月", param_key: "user_birth", value: userInfo.user_birth },
         {
           name: "个性签名",
           param_key: "user_signature",
-          value: user_signature,
+          value: userInfo.user_signature,
         },
-        { name: "地址", param_key: "user_locat", value: user_locat },
+        { name: "地址", param_key: "user_locat", value: userInfo.user_locat },
       ];
       return infoArr;
     })
@@ -146,7 +141,7 @@ export default {
         current_address_code = userInfo.user_locat
         address_choice_show = true
       } else {
-        let userInfo = JSON.stringify(userInfo);
+        let str_userInfo = JSON.stringify(userInfo);
         let param_name = v.name;
         let param_key = v.param_key;
         let param_val = v.value;
@@ -155,14 +150,14 @@ export default {
         if (param_key == "user_nickname") type = "input";
         if (param_key == "user_signature") type = "textarea";
 
-        $router.push({
+        router.push({
           name: "UpdateInfoDetail",
           params: {
             param_name,
             param_key,
             param_val,
             type,
-            userInfo,
+            userInfo:str_userInfo,
           },
         });
       }
@@ -184,12 +179,15 @@ export default {
         let param = { user_id, user_name, avatar_type: 2 };
         _API.updateUserAvatar(param).then((res) => {
           showToast(res.data.msg);
-          let userInfo = userInfo;
+
           let user_avatar = res.data.user_avatar;
 
           let new_userInfo = Object.assign({}, userInfo, { user_avatar });
-          $store.dispatch("UserInfoActions", new_userInfo);
-          userInfo = userInfo;
+
+
+
+          _store.userInfoAction(new_userInfo);
+
         });
       }
       bottom_mask = false;
@@ -207,43 +205,35 @@ export default {
 
       _API.updateUserAvatar(formData).then((res) => {
         showToast(res.data.msg);
-        let userInfo = userInfo;
+
         let user_avatar = res.data.user_avatar;
         let new_userInfo = Object.assign({}, userInfo, { user_avatar });
-        $store.dispatch("UserInfoActions", new_userInfo);
-        userInfo = userInfo;
+
+        _store.userInfoAction(new_userInfo);
+
       });
     }
     function sex_change(v) { // 选择性别
       sex_choice = v.type;
     }
     function sex_insure() { // 确认修改性别
-      let userInfo = userInfo;
-      let {
-        user_id,
-        user_name,
-        user_nickname,
-        user_sex,
-        user_birth,
-        user_signature,
-        user_locat,
-      } = userInfo;
       user_sex = sex_choice;
       let param = {
-        user_id,
-        user_name,
-        user_nickname,
-        user_sex,
-        user_birth,
-        user_signature,
-        user_locat,
+        user_id:userInfo.user_id,
+        user_name:userInfo.user_name,
+        user_nickname:userInfo.user_nickname,
+        user_sex:userInfo.user_sex,
+        user_birth:userInfo.user_birth,
+        user_signature:userInfo.user_signature,
+        user_locat:userInfo.user_locat,
       };
       _API.updateUser(param).then((res) => {
         showToast(res.data.msg);
         if (res.status == 200 && res.data.status == 200) {
           let new_userInfo = Object.assign({}, userInfo, { user_sex });
-          $store.dispatch("UserInfoActions", new_userInfo);
-          userInfo = userInfo;
+
+
+          _store.userInfoAction(new_userInfo);
 
           sex_overlay = false;
         }
@@ -256,32 +246,22 @@ export default {
       })
       current_address_code = address_code.join()
 
-      let userInfo = userInfo;
-      let {
-        user_id,
-        user_name,
-        user_nickname,
-        user_sex,
-        user_birth,
-        user_signature,
-        user_locat,
-      } = userInfo;
       user_locat = current_address_code;
       let param = {
-        user_id,
-        user_name,
-        user_nickname,
-        user_sex,
-        user_birth,
-        user_signature,
-        user_locat,
+        user_id:userInfo.user_id,
+        user_name:userInfo.user_name,
+        user_nickname:userInfo.user_nickname,
+        user_sex:userInfo.user_sex,
+        user_birth:userInfo.user_birth,
+        user_signature:userInfo.user_signature,
+        user_locat:userInfo.user_locat,
       };
       _API.updateUser(param).then((res) => {
         showToast(res.data.msg);
         if (res.status == 200 && res.data.status == 200) {
           let new_userInfo = Object.assign({}, userInfo, { user_locat });
-          $store.dispatch("UserInfoActions", new_userInfo);
-          userInfo = userInfo;
+
+          _store.userInfoAction(new_userInfo);
 
           address_choice_show = false;
         }
@@ -289,41 +269,27 @@ export default {
     }
     function birth_confirm(result) { // 确定修改出生日期
       current_birth_date = $moment(result).format('YYYY-MM-DD')
-      let userInfo = userInfo;
-      let {
-        user_id,
-        user_name,
-        user_nickname,
-        user_sex,
-        user_birth,
-        user_signature,
-        user_locat,
-      } = userInfo;
+
       user_birth = current_birth_date;
       let param = {
-        user_id,
-        user_name,
-        user_nickname,
-        user_sex,
-        user_birth,
-        user_signature,
-        user_locat,
+        user_id:userInfo.user_id,
+        user_name:userInfo.user_name,
+        user_nickname:userInfo.user_nickname,
+        user_sex:userInfo.user_sex,
+        user_birth:userInfo.user_birth,
+        user_signature:userInfo.user_signature,
+        user_locat:userInfo.user_locat,
       };
       _API.updateUser(param).then((res) => {
         showToast(res.data.msg);
         if (res.status == 200 && res.data.status == 200) {
           let new_userInfo = Object.assign({}, userInfo, { user_birth });
-          $store.dispatch("UserInfoActions", new_userInfo);
-          userInfo = userInfo;
+
+          _store.userInfoAction(new_userInfo);
 
           birth_choice_show = false;
         }
       });
-
-
-
-
-      console.log($moment(result).format('YYYY-MM-DD'))
     }
     return {
       bottom_mask,
@@ -341,7 +307,8 @@ export default {
       current_birth_date,
       userInfo,
       updateUserInfo,
-
+      router,
+      
       show_user_locat,
       open_update,
       bottom_mask_change,
