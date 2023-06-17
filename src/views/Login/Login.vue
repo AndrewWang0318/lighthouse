@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { store } from '@/stores/stores'
+import { useStore }  from '@/stores/stores'
 import { showToast } from "vant"
 import { ref, reactive, onBeforeMount , onMounted,getCurrentInstance } from 'vue'
 import { useRoute,useRouter } from 'vue-router';
@@ -58,7 +58,7 @@ import router from '@/router'
 export default {
   name: 'LoginPage',
   setup() {
-    const _store = store();
+    const _store = useStore();
     let status = ref("login");
     let autoLogin = ref(false) // 免登录开关
     let loginForm = reactive({
@@ -81,8 +81,10 @@ export default {
       _API.login(params).then((res) => {
         showToast(res.data.msg);
         _store.userInfoAction(res.data.user_info) // 存入状态管理
-        if (autoLogin.value) $tool.operatCookie("set", "user_info", JSON.stringify(form), 1000 * 60 * 60 * 24); // 存入cookie用于自动登录
-
+        // 如果自动登录存在
+        if (autoLogin.value){
+          $tool.operatCookie("set", "user_info", JSON.stringify(form), 1000 * 60 * 60 * 24); // 存入cookie用于自动登录
+        }
         router.push("/Home");
       });
     }

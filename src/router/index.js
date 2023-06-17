@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { showToast } from "vant"; //引入Vant ui
-import { store } from '@/stores/stores'
+import { useStore } from '@/stores/stores'
 import $tool from "@/utils/tool";
 
 const router = createRouter({
@@ -40,7 +40,7 @@ const router = createRouter({
       component: () => import('@/views/Login/Login.vue'),
       beforeEnter: (to, from) => {
         let user_cookie = $tool.operatCookie("get", "user_info");
-        const _store = store();
+        const _store = useStore();
         let user_pina = _store.userInfo;
         if (from.path != "/" ) {
           if((user_cookie && user_cookie != "{}") || (user_pina && JSON.stringify(user_pina) != "{}")){
@@ -79,7 +79,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   // 访问部分路由需要校验是否登录
   let checkLoginArr = ["",""];
-  const _store = store();
+  const _store = useStore();
   if (checkLoginArr.includes(to.path)) {
     let user_info = _store.userInfo;
     if (user_info && JSON.stringify(user_info) !== "{}") {

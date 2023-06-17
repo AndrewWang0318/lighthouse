@@ -64,14 +64,14 @@ import _API from "@/request/api";
 import { Toast } from "vant";
 import Reply from '@/views/Dynamic/components/Reply.vue'
 import { ref, reactive ,onMounted} from 'vue';
-import { store } from '@/stores/stores'
+import { useStore }  from '@/stores/stores'
 export default {
   name: "FriendDynamic",
   components: {
     Reply
   },
   setup () {
-    const _store = store();
+    const _store = useStore();
     let dynamicData = reactive([]); // 动态数据
     let currentIndex = ref(null); // 当前点击的某一项
 

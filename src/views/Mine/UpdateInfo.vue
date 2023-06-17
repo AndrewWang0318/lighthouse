@@ -8,16 +8,34 @@
     />
     <!-- 用户基本信息列表 -->
     <van-cell-group class="user-basic-info">
-      <van-cell
-        class="basic-info-item"
-        v-for="(v, i) in user_info_list"
-        :title="v.name"
-        size="large"
-        is-link
-        @click="basicInfoItemClick(v)"
-      >
+      <van-cell class="basic-info-item" title="头像" size="large" is-link @click="basicInfoItemClick('user_avatar')">
         <template #default>
-          <Fragment v-html="v.html"></Fragment>
+          <div class="user-avatar" :style="`background-image:url(${ baseURL + userInfo.user_avatar })`" ></div>
+        </template>
+      </van-cell>
+      <van-cell class="basic-info-item" title="昵称" size="large" is-link @click="basicInfoItemClick('user_nickname')">
+        <template #default>
+          <div class="user-nickname">{{userInfo.user_nickname || "暂无"}}</div>
+        </template>
+      </van-cell>
+      <van-cell class="basic-info-item" title="性别" size="large" is-link @click="basicInfoItemClick('user_sex')">
+        <template #default>
+          <div class="user-sex">{{ { 1: "男", 2: "女" }[userInfo.user_sex] || "保密" }}</div>
+        </template>
+      </van-cell>
+      <van-cell class="basic-info-item" title="出生年月" size="large" is-link @click="basicInfoItemClick('user_birth')">
+        <template #default>
+          <div class="user-birth">{{userInfo.user_birth || "暂无"}}</div>
+        </template>
+      </van-cell>
+      <van-cell class="basic-info-item" title="个人简介" size="large" is-link @click="basicInfoItemClick('user_signature')">
+        <template #default>
+          <div class="user-signature">{{userInfo.user_signature || "暂无"}}</div>
+        </template>
+      </van-cell>
+      <van-cell class="basic-info-item" title="城市" size="large" is-link @click="basicInfoItemClick('user_locat')">
+        <template #default>
+          <div class="user-locat">{{showUserLocal(userInfo.user_locat) || "暂无"}}</div>
         </template>
       </van-cell>
     </van-cell-group>
@@ -95,120 +113,17 @@
   import { showToast } from "vant";
   import { areaList } from "@vant/area-data";
   import { ref, reactive, computed, getCurrentInstance } from "vue";
-  import { store } from "@/stores/stores";
+  import { useStore } from "@/stores/stores";
   import { useRoute, useRouter } from "vue-router";
   import base_url from "@/request/base_url";
-  import { storeToRefs } from "pinia";
-  const _store = store();
+  const _store = useStore();
+
   const router = useRouter();
   const instance = getCurrentInstance();
   const baseURL = base_url;
+  let userInfo = _store.userInfo;
 
-  // let { userInfo } = storeToRefs(_store);
-
-  const userInfo = reactive(_store.userInfo);
-  // let userInfo = computed(() => _store.userInfo); // 用户信息
-  // console.log(userInfo.value)
-  const user_column_arr = reactive([
-    {
-      name: "头像",
-      key: "user_avatar",
-      class: "user-avatar",
-      value: userInfo["user_avatar"],
-      html: "",
-    },
-    {
-      name: "昵称",
-      key: "user_nickname",
-      class: "user-nickname",
-      value: userInfo["user_nickname"],
-      html: "",
-    },
-    {
-      name: "性别",
-      key: "user_sex",
-      class: "user-sex",
-      value: userInfo["user_sex"],
-      html: "",
-    },
-    {
-      name: "出生年月",
-      key: "user_birth",
-      class: "user-birth",
-      value: userInfo["user_birth"],
-      html: "",
-    },
-    {
-      name: "个性签名",
-      key: "user_signature",
-      class: "user-signature",
-      value: userInfo["user_signature"],
-      html: "",
-    },
-    {
-      name: "地址",
-      key: "user_locat",
-      class: "user-locat",
-      value: userInfo["user_locat"],
-      html: "",
-    },
-  ]);
-  let user_info_list = computed(() => {
-    user_column_arr.forEach((item) => {
-      switch (item.key) {
-        case "user_avatar":
-          item.html = `<div class="${item.class}" style="background-image:url('${baseURL}${item.value}')" ></div>`;
-          break;
-        case "user_sex":
-          item.html = `<div class="${item.class}">${
-            { 1: "男", 2: "女" }[item.value] || "保密"
-          }</div>`;
-          break;
-        case "user_locat":
-          item.html = `<div class="${item.class}">${
-            showUserLocal(item.value) || "暂无"
-          }</div>`;
-          break;
-        default:
-          item.html = `<div class="${item.class}">${item.value || "暂无"}</div>`;
-          break;
-      }
-    });
-    return user_column_arr;
-  });
-  // 基本信息条目修改点击
-  function basicInfoItemClick(v) {
-    if (v.key == "user_avatar") {
-      avatar_mask.value = true;
-    } else if (v.key == "user_sex") {
-      sex_choice = v.value;
-      sex_overlay.value = true;
-    } else if (v.key == "user_birth") {
-      current_birth_date = new Date(userInfo.user_birth);
-      birth_choice_show = true;
-    } else if (v.key == "user_locat") {
-      current_address_code = userInfo.user_locat;
-      address_choice_show = true;
-    } else {
-      let str_userInfo = JSON.stringify(userInfo);
-      let param_name = v.name;
-      let param_key = v.param_key;
-      let param_val = v.value;
-      let type = "input";
-      if (param_key == "user_nickname") type = "input";
-      if (param_key == "user_signature") type = "textarea";
-      router.push({
-        name: "UpdateInfoDetail",
-        params: {
-          param_name,
-          param_key,
-          param_val,
-          type,
-          userInfo: str_userInfo,
-        },
-      });
-    }
-  }
+  
 
   let avatar_mask = ref(false);
   let avatar_mask_list = [
@@ -224,10 +139,10 @@
       _API.updateUserAvatar(param).then((res) => {
         showToast(res.data.msg);
 
-        userInfo.value.user_avatar = res.data.user_avatar;
-
-        _store.userInfoAction(userInfo);
-        console.log(store);
+        // 修补方式
+        _store.$patch((state) => {
+          state.userInfo.user_avatar = res.data.user_avatar
+        })
       });
     }
     avatar_mask.value = false;
@@ -243,7 +158,10 @@
     formData.append("avatar_file", avatar_file);
     _API.updateUserAvatar(formData).then((res) => {
       showToast(res.data.msg);
-      userInfo.user_avatar = res.data.user_avatar;
+      // 修补方式
+      _store.$patch((state) => {
+        state.userInfo.user_avatar = res.data.user_avatar
+      })
     });
   }
 
@@ -349,6 +267,41 @@
         birth_choice_show = false;
       }
     });
+  }
+
+
+  // 基本信息条目修改点击
+  function basicInfoItemClick(key) {
+    if (key == "user_avatar") {
+      avatar_mask.value = true;
+    } else if (key == "user_sex") {
+      sex_choice = value;
+      sex_overlay.value = true;
+    } else if (key == "user_birth") {
+      current_birth_date = new Date(userInfo.user_birth);
+      birth_choice_show = true;
+    } else if (key == "user_locat") {
+      current_address_code = userInfo.user_locat;
+      address_choice_show = true;
+    } else {
+      let str_userInfo = JSON.stringify(userInfo);
+      let param_name = v.name;
+      let param_key = v.param_key;
+      let param_val = v.value;
+      let type = "input";
+      if (param_key == "user_nickname") type = "input";
+      if (param_key == "user_signature") type = "textarea";
+      router.push({
+        name: "UpdateInfoDetail",
+        params: {
+          param_name,
+          param_key,
+          param_val,
+          type,
+          userInfo: str_userInfo,
+        },
+      });
+    }
   }
 </script>
 

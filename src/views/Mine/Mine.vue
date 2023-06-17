@@ -26,13 +26,13 @@
 <script>
 import { ref, reactive ,getCurrentInstance} from 'vue'
 import { useRouter } from 'vue-router';
-import { store } from '@/stores/stores';
+import { useStore }  from '@/stores/stores';
 import $tool from "@/utils/tool";
 import base_url from '@/request/base_url'
 export default {
   name:'MinePage',
   setup () {
-    const _store = store();
+    const _store = useStore();
     const router = useRouter();
     const userInfo = reactive(_store.userInfo);
 

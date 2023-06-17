@@ -4,7 +4,7 @@ import { showToast } from "vant"; // 引入vant中的提示信息
 import router from "@/router"; // Vue Router
 import codeMessage from "./error_code.json" // 状态码错误信息
 import baseURL from './base_url'
-import { store } from '@/stores/stores'
+import { useStore }  from '@/stores/stores'
 import $tool from "@/utils/tool"
 // 创建axios实例
 const service = axios.create({
@@ -61,7 +61,7 @@ service.interceptors.response.use(
   }
 );
 // loading开关函数
-const _store = store()
+const _store = useStore()
 function loadingSwitch(state) {
   if (state === "open") _store.loadingSwitch = true;
   if (state === "close") _store.loadingSwitch = false;

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 // 不能直接解构赋值,需要使用storeToRefs
 
-const store = defineStore('counter', {
+const useStore = defineStore('main', {
   state: () => {
     return {
       userInfo: {}, // 用户信息
@@ -10,7 +10,7 @@ const store = defineStore('counter', {
     } 
   },
   actions: {
-    userInfoAction(data) {
+    userInfoAction(data = {}) {
       this.userInfo = data
     },
     loadingSwitchAction(data){
@@ -24,4 +24,4 @@ const store = defineStore('counter', {
 })
 
 
-export { store }
+export { useStore }

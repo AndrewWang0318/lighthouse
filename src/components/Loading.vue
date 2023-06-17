@@ -7,9 +7,9 @@
 </template>
 
 <script setup>
-  import { store } from '@/stores/stores';
+  import { useStore }  from '@/stores/stores';
   // import { ref } from 'vue'
-  const _store = store();
+  const _store = useStore();
   let loadingSwitch = _store.loadingSwitch
 </script>
 
