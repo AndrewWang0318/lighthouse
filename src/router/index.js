@@ -60,11 +60,6 @@ const router = createRouter({
       component: () => import('@/views/Mine/UpdateInfo.vue'),
     },
     {
-      path: '/UpdateInfoDetail',
-      name: 'UpdateInfoDetail',
-      component: () => import('@/views/Mine/UpdateInfoDetail.vue'),
-    },
-    {
       path:'/Error',
       name: 'Error',
       component: () => import('@/views/Error/Error.vue')

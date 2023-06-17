@@ -40,7 +40,7 @@
       </van-cell>
     </van-cell-group>
 
-    <!-- 头像选择底部遮罩 -->
+    <!-- 头像修改遮罩 -->
     <van-action-sheet
       v-model:show="avatar_mask"
       :actions="avatar_mask_list"
@@ -56,39 +56,40 @@
       :after-read="uploaderAfterRead"
       :max-count="1"
     />
-    <!-- 遮罩层弹出框 -->
-    <van-overlay :show="sex_overlay" @click="sex_overlay.value = false">
+
+    <!-- 昵称修改遮罩-->
+    <van-popup
+      v-model:show="nickname_show"
+      position="right"
+      :style="{ width: '100%', height: '100%' }"
+    >
+      <div>
+        <van-field v-model="user_baseinfo_form.user_nickname" placeholder="请输入昵称" />
+      </div>
+      <div>
+        <van-button type="success" @click="userBaseInfoUpdate('user_nickname')">确定</van-button>
+        <van-button type="default" @click="nickname_show = false">取消</van-button>
+      </div>
+      
+    </van-popup>
+    
+    <!-- 性别修改弹出框 -->
+    <van-overlay :show="sex_dialog_show" @click="sex_dialog_show = false">
       <div class="wrapper">
         <div class="sex-choice" @click.stop>
           <div class="title">性别选择</div>
           <div class="choice-content">
             <div
               class="choice-item"
-              :style="`background-image:url(${v.img});opacity: ${
-                sex_choice == v.type ? '1' : '0.2'
-              };`"
               v-for="(v, i) in sex_choice_data"
-              :key="i"
-              @click="sex_change(v, i)"
+              :style="`background-image:url(${v.img});opacity: ${ sex_choice == v.type ? '1' : '0.2'}`"
+              @click="sex_choice = v.type"
             ></div>
           </div>
           <div class="btn-insure" @click="sex_insure">确定</div>
         </div>
       </div>
     </van-overlay>
-
-    <!-- 地址选择遮罩 -->
-    <van-popup
-      v-model:show="address_choice_show"
-      position="bottom"
-      :style="{ height: '40%' }"
-    >
-      <van-area
-        :area-list="areaList"
-        :value="current_address_code"
-        @confirm="address_confirm"
-      />
-    </van-popup>
     <!-- 出生日期选择遮罩 -->
     <van-popup
       v-model:show="birth_choice_show"
@@ -101,12 +102,48 @@
         title="年-月-日"
         :min-date="min_date"
         :max-date="max_date"
-        @confirm="birth_confirm"
+        @confirm="userBaseInfoUpdate"
         @cancel="birth_choice_show = false"
       />
     </van-popup>
+    <!-- 个人简介修改遮罩 -->
+    <van-popup
+      v-model:show="signature_show"
+      position="right"
+      :style="{ width: '100%', height: '100%' }"
+    >
+      <div>
+      <van-field v-model="input_value" rows="2" autosize type="textarea" maxlength="50" placeholder="请输入个人简介" show-word-limit />
+      </div>
+      <div>
+        <van-button type="success" @click="userBaseInfoUpdate('user_nickname')">确定</van-button>
+        <van-button type="default" @click="signature_show = false">取消</van-button>
+      </div>
+    </van-popup>
+    <!-- 城市选择遮罩 -->
+    <van-popup
+      v-model:show="address_choice_show"
+      position="bottom"
+      :style="{ height: '40%' }"
+    >
+      <van-area
+        :area-list="areaList"
+        :value="current_address_code"
+        @confirm="address_confirm"
+      />
+    </van-popup>
+    
+
+    
+    
   </div>
 </template>
+
+<script>
+export default {
+  name: "UpdateInfoPage"
+}
+</script>
 
 <script setup>
   import _API from "@/request/api";
@@ -117,14 +154,12 @@
   import { useRoute, useRouter } from "vue-router";
   import base_url from "@/request/base_url";
   const _store = useStore();
-
   const router = useRouter();
   const instance = getCurrentInstance();
   const baseURL = base_url;
   let userInfo = _store.userInfo;
 
   
-
   let avatar_mask = ref(false);
   let avatar_mask_list = [
     { name: "从相册选择", type: 1, avatar_type: 1 },
@@ -165,7 +200,18 @@
     });
   }
 
-  let sex_overlay = ref(false); // 修改性别遮罩
+  let user_baseinfo_form = reactive({
+    user_id:userInfo.user_id,
+    user_nickname:userInfo.user_nickname,
+    user_sex:userInfo.user_sex,
+    user_birth:userInfo.user_birth,
+    user_signature:userInfo.user_signature,
+    user_locat:showUserLocal(userInfo.user_locat)
+  });
+   // 修改昵称
+  let nickname_show = ref(false);
+  // 修改性别
+  let sex_dialog_show = ref(false);
   let sex_choice = ref(0);
   let sex_choice_data = [
     {
@@ -181,12 +227,16 @@
       img: new URL("@/assets/images/sex_female.png", import.meta.url).href,
     },
   ];
-  let address_choice_show = false;
-  let current_address_code = "";
-  let birth_choice_show = false;
+  // 修改出日期
+  let birth_choice_show = ref(false);
   let min_date = new Date(1912, 1, 12);
   let max_date = new Date();
-  let current_birth_date = new Date();
+  let current_birth_date = new Date(userInfo.user_birth);
+  // 修改个人简介
+  let signature_show = ref(false);
+  // 修改城市
+  let address_choice_show = ref(false);
+  let current_address_code = "";
   function showUserLocal(v) {
     if (!v) {
       return v;
@@ -198,110 +248,60 @@
       return `${province}/${city}/${county}`;
     }
   }
-
-  function sex_change(v) {
-    sex_choice.value = v.type;
-  }
-  function sex_insure() {
-    user_sex = sex_choice;
-    let param = {
-      user_id: userInfo.user_id,
-      user_name: userInfo.user_name,
-      user_nickname: userInfo.user_nickname,
-      user_sex: userInfo.user_sex,
-      user_birth: userInfo.user_birth,
-      user_signature: userInfo.user_signature,
-      user_locat: userInfo.user_locat,
-    };
-    _API.updateUser(param).then((res) => {
-      showToast(res.data.msg);
-      if (res.status == 200 && res.data.status == 200) {
-        let new_userInfo = Object.assign({}, userInfo, { user_sex });
-        _store.userInfoAction(new_userInfo);
-        sex_overlay.value = false;
-      }
-    });
-  }
-  function address_confirm(result) {
-    let address_code = [];
-    result.forEach((item) => {
-      address_code.push(item.code);
-    });
-    current_address_code = address_code.join();
-    user_locat = current_address_code;
-    let param = {
-      user_id: userInfo.user_id,
-      user_name: userInfo.user_name,
-      user_nickname: userInfo.user_nickname,
-      user_sex: userInfo.user_sex,
-      user_birth: userInfo.user_birth,
-      user_signature: userInfo.user_signature,
-      user_locat: userInfo.user_locat,
-    };
-    _API.updateUser(param).then((res) => {
-      showToast(res.data.msg);
-      if (res.status == 200 && res.data.status == 200) {
-        let new_userInfo = Object.assign({}, userInfo, { user_locat });
-        _store.userInfoAction(new_userInfo);
-        address_choice_show = false;
-      }
-    });
-  }
-  function birth_confirm(result) {
-    current_birth_date = $moment(result).format("YYYY-MM-DD");
-    user_birth = current_birth_date;
-    let param = {
-      user_id: userInfo.user_id,
-      user_name: userInfo.user_name,
-      user_nickname: userInfo.user_nickname,
-      user_sex: userInfo.user_sex,
-      user_birth: userInfo.user_birth,
-      user_signature: userInfo.user_signature,
-      user_locat: userInfo.user_locat,
-    };
-    _API.updateUser(param).then((res) => {
-      showToast(res.data.msg);
-      if (res.status == 200 && res.data.status == 200) {
-        let new_userInfo = Object.assign({}, userInfo, { user_birth });
-        _store.userInfoAction(new_userInfo);
-        birth_choice_show = false;
-      }
-    });
-  }
-
-
   // 基本信息条目修改点击
   function basicInfoItemClick(key) {
     if (key == "user_avatar") {
       avatar_mask.value = true;
+    }else if(key == "user_nickname"){
+      nickname_show.value = true;
     } else if (key == "user_sex") {
-      sex_choice = value;
-      sex_overlay.value = true;
+      sex_dialog_show.value = true;
     } else if (key == "user_birth") {
-      current_birth_date = new Date(userInfo.user_birth);
-      birth_choice_show = true;
+      birth_choice_show.value = true;
+    }else if(key == "user_signature"){
+      signature_show.value = true
     } else if (key == "user_locat") {
-      current_address_code = userInfo.user_locat;
-      address_choice_show = true;
-    } else {
-      let str_userInfo = JSON.stringify(userInfo);
-      let param_name = v.name;
-      let param_key = v.param_key;
-      let param_val = v.value;
-      let type = "input";
-      if (param_key == "user_nickname") type = "input";
-      if (param_key == "user_signature") type = "textarea";
-      router.push({
-        name: "UpdateInfoDetail",
-        params: {
-          param_name,
-          param_key,
-          param_val,
-          type,
-          userInfo: str_userInfo,
-        },
-      });
+      address_choice_show.value = true;
     }
+  }
+
+  // 修改基本信息提交
+  function userBaseInfoUpdate(key){
+    // current_birth_date = $moment(result).format("YYYY-MM-DD");
+
+    // let address_code = [];
+    // result.forEach((item) => {
+    //   address_code.push(item.code);
+    // });
+    // current_address_code = address_code.join();
+    // user_locat = current_address_code;
+
+    let param = user_baseinfo_form
+    _API.updateUserInfo(param).then((res) => {
+      showToast(res.data.msg);
+      if (res.data.status == 200) {
+        
+        
+        if(key == "user_nickname"){
+          _store.$patch((state) => {
+            state.userInfo.user_nickname = param.user_nickname
+          })
+        } else if (key == "user_sex") {
+          _store.$patch((state) => {
+            state.userInfo.user_sex = param.user_sex
+          })
+        } else if (key == "user_birth") {
+
+          _store.$patch((state) => {
+            state.userInfo.user_birth = param.user_birth
+          })
+        } else if (key == "user_locat") {
+          _store.$patch((state) => {
+            state.userInfo.user_locat = param.user_locat
+          })
+        }
+      }
+    });
   }
 </script>
 
