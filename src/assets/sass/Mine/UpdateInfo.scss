@@ -1,49 +1,28 @@
-.user-basic-info {
-  padding-top: 0.26rem;
-}
-.basic-info-item {
-  background-color: white;
-  padding-left: 0.18rem;
-  padding-right: 0.18rem;
-  box-sizing: border-box;
-}
-.user_avatar {
-  width: 1rem;
-  height: 1rem;
-  background-color: gray;
-  border-radius: 50%;
-  background-size: cover;
-  background-position: center;
-}
-.item-content {
-  min-height: 0.6rem;
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
-  padding-right: 0.3rem;
-  box-sizing: border-box;
-  border-bottom: 0.01rem solid rgb(223, 223, 223);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  position: relative;
-  .value {
-    max-width: 3rem;
-    line-height: 1;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+.page-update-info{
+  // 用户基本信息
+  .user-basic-info{
+    .basic-info-item {
+      :deep(.user-avatar) {
+        width: 1rem;
+        height: 1rem;
+        background-color: gray;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        background-image: 'http://127.0.0.1:3000/image/avatar/default_avatar2.jpeg';
+      }
+    }
+    
   }
-}
-.arrow {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.basic-info-item:last-of-type .item-content {
-  border-bottom: none;
+  // 修改vant公用样式
+  :deep(.van-cell__value){
+    display: flex;
+    justify-content: flex-end;
+  }
+  :deep(.van-cell){
+    display: flex;
+    align-items: center;
+  }
 }
 
 // 选择性别框

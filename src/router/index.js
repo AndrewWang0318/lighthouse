@@ -1,7 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { showToast } from "vant"; //引入Vant ui
 import { store } from '@/stores/stores'
-import $tool from "@/utils/tool"
+import $tool from "@/utils/tool";
+
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -39,9 +40,15 @@ const router = createRouter({
       component: () => import('@/views/Login/Login.vue'),
       beforeEnter: (to, from) => {
         let user_cookie = $tool.operatCookie("get", "user_info");
-        if (from.path != "/" && user_cookie && user_cookie != "{}") {
-          showToast("当前已登录~");
-          return false
+        const _store = store();
+        let user_pina = _store.userInfo;
+        if (from.path != "/" ) {
+          if((user_cookie && user_cookie != "{}") || (user_pina && JSON.stringify(user_pina) != "{}")){
+            showToast("当前已登录~");
+            return false
+          }else{
+            return true
+          }
         }else{
           return true
         }

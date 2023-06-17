@@ -3,10 +3,10 @@
     <div class="login-content" v-if="isLogin" @click="route_to_updateinfo">
       <div
         class="user-avatar"
-        :style="`background-image:url(${user_info.user_avatar})`"
+        :style="`background-image:url(${baseURL}${userInfo.user_avatar})`"
       ></div>
       <div class="user-info">
-        <div class="user-nickname">{{ user_info.user_nickname }}</div>
+        <div class="user-nickname">{{ userInfo.user_nickname }}</div>
       </div>
     </div>
     <div class="unlogin-content" v-else>
@@ -24,18 +24,22 @@
 </template>
 
 <script>
-import { ref, reactive } from 'vue'
+import { ref, reactive ,getCurrentInstance} from 'vue'
 import { useRouter } from 'vue-router';
-import { store } from '@/stores/stores'
-import $tool from "@/utils/tool"
+import { store } from '@/stores/stores';
+import $tool from "@/utils/tool";
+import base_url from '@/request/base_url'
 export default {
   name:'MinePage',
   setup () {
     const _store = store();
     const router = useRouter();
-    const user_info = reactive(_store.userInfo);
+    const userInfo = reactive(_store.userInfo);
+
+    const baseURL = base_url;
+    
     let isLogin = ref(false);
-    if(JSON.stringify(user_info) !== "{}"){
+    if(JSON.stringify(userInfo) !== "{}"){
       isLogin.value = true
     }
 
@@ -50,12 +54,14 @@ export default {
       _store.userInfoAction({}) // 存入状态管理
       $tool.operatCookie("del", "user_info");
       $tool.operatCookie("del", "token");
+
       router.replace("/login");
     }
     
     return {
+      baseURL,
       isLogin,
-      user_info,
+      userInfo,
       jumpLogin,
       route_to_updateinfo,
       exit

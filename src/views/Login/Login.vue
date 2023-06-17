@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <div class="top-bar" style="width: 100%;height: 0.1rem;background-color: #1989fa;"></div>
     <van-swipe class="login-swipe" :autoplay="3000" indicator-color="white" :show-indicators="false" :touchable="false">
       <van-swipe-item v-for="(v, i) in swiperList" :key="i">
         <div class="image-item" :style="`background-image:url(${v.imgSrc})`"></div>
@@ -69,11 +70,11 @@ export default {
       user_password: "",
     })
     const swiperList = reactive([
-      { imgSrc: `${baseUrl}/image/swiper1.jpg` },
-      { imgSrc: `${baseUrl}/image/swiper2.jpg` },
-      { imgSrc: `${baseUrl}/image/swiper3.jpg` },
-      { imgSrc: `${baseUrl}/image/swiper4.jpg` },
-      { imgSrc: `${baseUrl}/image/swiper5.jpg` },
+      { imgSrc: `${baseUrl}/image/banner/swiper1.jpg` },
+      { imgSrc: `${baseUrl}/image/banner/swiper2.jpg` },
+      { imgSrc: `${baseUrl}/image/banner/swiper3.jpg` },
+      { imgSrc: `${baseUrl}/image/banner/swiper4.jpg` },
+      { imgSrc: `${baseUrl}/image/banner/swiper5.jpg` },
     ])
     const onLoginSubmit = (form) => {// 用户登录
       let params = form
@@ -82,7 +83,7 @@ export default {
         _store.userInfoAction(res.data.user_info) // 存入状态管理
         if (autoLogin.value) $tool.operatCookie("set", "user_info", JSON.stringify(form), 1000 * 60 * 60 * 24); // 存入cookie用于自动登录
 
-        router.push("/Home/Plan");
+        router.push("/Home");
       });
     }
     const onRegisteSubmit = (form) => {// 注册新用户

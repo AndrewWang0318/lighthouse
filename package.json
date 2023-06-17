@@ -20,6 +20,7 @@
     "vant": "^4.4.1",
     "vconsole": "^3.12.1",
     "vue": "^3.3.2",
+    "vue-fragment-plus": "^1.0.4",
     "vue-router": "^4.2.0"
   },
   "devDependencies": {
