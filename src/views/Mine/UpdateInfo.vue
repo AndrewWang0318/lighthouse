@@ -64,15 +64,13 @@
       :style="{ width: '100%', height: '100%' }"
     >
       <div>
-        <van-field v-model="user_baseinfo_form.user_nickname" placeholder="请输入昵称" />
+        <van-field v-model="userInfo.user_nickname" placeholder="请输入昵称" />
       </div>
       <div>
         <van-button type="success" @click="userBaseInfoUpdate('user_nickname')">确定</van-button>
         <van-button type="default" @click="nickname_show = false">取消</van-button>
       </div>
-      
     </van-popup>
-    
     <!-- 性别修改弹出框 -->
     <van-overlay :show="sex_dialog_show" @click="sex_dialog_show = false">
       <div class="wrapper">
@@ -200,16 +198,17 @@ export default {
     });
   }
 
-  let user_baseinfo_form = reactive({
+  let user_baseinfo_form = {
     user_id:userInfo.user_id,
     user_nickname:userInfo.user_nickname,
     user_sex:userInfo.user_sex,
     user_birth:userInfo.user_birth,
     user_signature:userInfo.user_signature,
     user_locat:showUserLocal(userInfo.user_locat)
-  });
+  };
    // 修改昵称
   let nickname_show = ref(false);
+  let nickname_value = ref(userInfo.user_nickname)
   // 修改性别
   let sex_dialog_show = ref(false);
   let sex_choice = ref(0);
@@ -276,16 +275,17 @@ export default {
     // current_address_code = address_code.join();
     // user_locat = current_address_code;
 
-    let param = user_baseinfo_form
+    let param = userInfo
     _API.updateUserInfo(param).then((res) => {
       showToast(res.data.msg);
-      if (res.data.status == 200) {
+      if (res.data.code == 0) {
         
         
         if(key == "user_nickname"){
-          _store.$patch((state) => {
-            state.userInfo.user_nickname = param.user_nickname
-          })
+          // _store.$patch((state) => {
+          //   state.userInfo.user_nickname = param.user_nickname
+          // })
+          nickname_show.value = false
         } else if (key == "user_sex") {
           _store.$patch((state) => {
             state.userInfo.user_sex = param.user_sex
