@@ -64,7 +64,7 @@
       :style="{ width: '100%', height: '100%' }"
     >
       <div>
-        <van-field v-model="userInfo.user_nickname" placeholder="请输入昵称" />
+        <van-field v-model="user_info_form.user_nickname" placeholder="请输入昵称" />
       </div>
       <div>
         <van-button type="success" @click="userBaseInfoUpdate('user_nickname')">确定</van-button>
@@ -80,11 +80,12 @@
             <div
               class="choice-item"
               v-for="(v, i) in sex_choice_data"
-              :style="`background-image:url(${v.img});opacity: ${ sex_choice == v.type ? '1' : '0.2'}`"
-              @click="sex_choice = v.type"
+              :style="`background-image:url(${v.img});opacity: ${ user_info_form.user_sex == v.type ? '1' : '0.2'}`"
+              
+              @click="user_info_form.user_sex = v.type"
             ></div>
           </div>
-          <div class="btn-insure" @click="sex_insure">确定</div>
+          <div class="btn-insure" @click="userBaseInfoUpdate('user_sex')">确定</div>
         </div>
       </div>
     </van-overlay>
@@ -130,10 +131,6 @@
         @confirm="address_confirm"
       />
     </van-popup>
-    
-
-    
-    
   </div>
 </template>
 
@@ -198,20 +195,19 @@ export default {
     });
   }
 
-  let user_baseinfo_form = {
+  // 用户信息表单
+  let user_info_form = reactive({
     user_id:userInfo.user_id,
     user_nickname:userInfo.user_nickname,
     user_sex:userInfo.user_sex,
     user_birth:userInfo.user_birth,
     user_signature:userInfo.user_signature,
     user_locat:showUserLocal(userInfo.user_locat)
-  };
-   // 修改昵称
+  });
+  // 修改昵称
   let nickname_show = ref(false);
-  let nickname_value = ref(userInfo.user_nickname)
   // 修改性别
   let sex_dialog_show = ref(false);
-  let sex_choice = ref(0);
   let sex_choice_data = [
     {
       type: 1,
@@ -226,6 +222,7 @@ export default {
       img: new URL("@/assets/images/sex_female.png", import.meta.url).href,
     },
   ];
+  
   // 修改出日期
   let birth_choice_show = ref(false);
   let min_date = new Date(1912, 1, 12);
@@ -236,7 +233,7 @@ export default {
   // 修改城市
   let address_choice_show = ref(false);
   let current_address_code = "";
-  function showUserLocal(v) {
+  function showUserLocal(v) { // 格式化城市信息显示
     if (!v) {
       return v;
     } else {
@@ -247,24 +244,29 @@ export default {
       return `${province}/${city}/${county}`;
     }
   }
-  // 基本信息条目修改点击
+  // 修改条目点击
   function basicInfoItemClick(key) {
     if (key == "user_avatar") {
       avatar_mask.value = true;
     }else if(key == "user_nickname"){
+      user_info_form.user_nickname = userInfo.user_nickname
       nickname_show.value = true;
     } else if (key == "user_sex") {
+      user_info_form.user_sex = userInfo.user_sex
       sex_dialog_show.value = true;
     } else if (key == "user_birth") {
+      user_info_form.user_birth = userInfo.user_birth
       birth_choice_show.value = true;
     }else if(key == "user_signature"){
+      user_info_form.user_signature = userInfo.user_signature
       signature_show.value = true
     } else if (key == "user_locat") {
+      user_info_form.user_locat = userInfo.user_locat
       address_choice_show.value = true;
     }
   }
 
-  // 修改基本信息提交
+  // 修改信息提交
   function userBaseInfoUpdate(key){
     // current_birth_date = $moment(result).format("YYYY-MM-DD");
 
@@ -275,31 +277,28 @@ export default {
     // current_address_code = address_code.join();
     // user_locat = current_address_code;
 
-    let param = userInfo
-    _API.updateUserInfo(param).then((res) => {
+    let params = user_info_form
+    _API.updateUserInfo(params).then((res) => {
       showToast(res.data.msg);
       if (res.data.code == 0) {
-        
-        
         if(key == "user_nickname"){
-          // _store.$patch((state) => {
-          //   state.userInfo.user_nickname = param.user_nickname
-          // })
-          nickname_show.value = false
+          nickname_show.value = false;
         } else if (key == "user_sex") {
-          _store.$patch((state) => {
-            state.userInfo.user_sex = param.user_sex
-          })
+          sex_dialog_show.value = false;
         } else if (key == "user_birth") {
 
-          _store.$patch((state) => {
-            state.userInfo.user_birth = param.user_birth
-          })
+
         } else if (key == "user_locat") {
-          _store.$patch((state) => {
-            state.userInfo.user_locat = param.user_locat
-          })
+
         }
+
+        _store.$patch((state) => {
+          state.userInfo.user_nickname = user_info_form.user_nickname;
+          state.userInfo.user_sex = user_info_form.user_sex;
+          state.userInfo.user_birth = user_info_form.user_birth;
+          state.userInfo.user_signature = user_info_form.user_signature;
+          state.userInfo.user_locat = user_info_form.user_locat;
+        })
       }
     });
   }
