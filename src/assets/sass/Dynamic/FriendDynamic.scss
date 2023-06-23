@@ -1,7 +1,44 @@
-.friend-dynamic {
+.page-friend-dynamic {
   min-height: 88vh;
+  .user-background-area{
+    height: 4.4rem;
+    background-color: gray;
+    position: relative;
+    .user-info-content{
+      position: absolute;
+      right:0.4rem;
+      bottom: -0.5rem;
+      display: flex;
+      .user-name{
+        line-height: 0.6rem;
+        margin-right: 0.2rem;
+        color: #fff;
+        font-size: 0.3rem;
+      }
+      .user-avatar{
+        width: 1.2rem;
+        height: 1.2rem;
+        background-size: 100% 100%;
+        border-radius: 6%;
+      }
+    }
+    // 发动态按钮
+    .btn-upload-dynamic{
+      width: 0.8rem;
+      height: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 0.4rem;
+      right: 0.4rem;
+      background: linear-gradient(to right, #ff6034, #ee0a24);
+    }
+  }
+
+
   .dynamic-area {
-    padding: 0.1rem 0.5rem 1rem 0.3rem;
+    padding: 0.48rem 0.5rem 1rem 0.3rem;
     box-sizing: border-box;
   }
   .dynamic-item {
@@ -185,17 +222,5 @@
       color: white;
     }
   }
-  // 发动态按钮
-  .btn-upload-dynamic{
-    width: 0.8rem;
-    height: 0.8rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    bottom: 1.6rem;
-    right: 0.4rem;
-    background: linear-gradient(to right, #ff6034, #ee0a24);
-    border-radius: 50%;
-  }
+  
 }

@@ -27,7 +27,7 @@ export default {
 </script>
 
 <script setup>
-  import { ref, reactive, getCurrentInstance } from 'vue'
+  import { ref, reactive } from 'vue'
   import { useRouter } from 'vue-router';
   import { useStore } from '@/stores/stores';
   import $tool from "@/utils/tool";
@@ -49,7 +49,7 @@ export default {
     router.push("/login");
   }
   const route_to_updateinfo = () => {
-    router.push("/updateInfo");
+    router.push("/UserInfoEdit");
   }
   const exit = () => { // 退出登录
     _store.userInfoAction({}) // 存入状态管理
