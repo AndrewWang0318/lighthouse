@@ -139,7 +139,7 @@ export default {
     };
   },
   mounted() {
-    this.initData()
+    // this.initData()
   },
   methods: {
     initData() { // 初始化数据

@@ -47,80 +47,71 @@
 </template>
 
 <script>
-import { useStore }  from '@/stores/stores'
-import { showToast } from "vant"
-import { ref, reactive, onBeforeMount , onMounted,getCurrentInstance } from 'vue'
-import { useRoute,useRouter } from 'vue-router';
-import _API from "@/request/api"
-import baseUrl from '@/request/base_url'
-import $tool from "@/utils/tool"
-import router from '@/router'
 export default {
-  name: 'LoginPage',
-  setup() {
-    const _store = useStore();
-    let status = ref("login");
-    let autoLogin = ref(false) // 免登录开关
-    let loginForm = reactive({
-      user_name: "",
-      user_password: "",
-    })
-    let registeForm = reactive({
-      user_name: "",
-      user_password: "",
-    })
-    const swiperList = reactive([
-      { imgSrc: `${baseUrl}/image/banner/swiper1.jpg` },
-      { imgSrc: `${baseUrl}/image/banner/swiper2.jpg` },
-      { imgSrc: `${baseUrl}/image/banner/swiper3.jpg` },
-      { imgSrc: `${baseUrl}/image/banner/swiper4.jpg` },
-      { imgSrc: `${baseUrl}/image/banner/swiper5.jpg` },
-    ])
-    const onLoginSubmit = (form) => {// 用户登录
-      let params = form
-      _API.login(params).then((res) => {
-        showToast(res.data.msg);
-        _store.userInfoAction(res.data.user_info) // 存入状态管理
-        // 如果自动登录存在
-        if (autoLogin.value){
-          $tool.operatCookie("set", "user_info", JSON.stringify(form), 1000 * 60 * 60 * 24); // 存入cookie用于自动登录
-        }
-        router.push("/Home");
-      });
-    }
-    const onRegisteSubmit = (form) => {// 注册新用户
-      _API.register(form).then((res) => {
-        showToast(res.data.msg);
-        if (res.data.code == 0) {
-          status.value = "login";
-          registeForm = {
-            user_name: "",
-            user_password: "",
-          };
-          loginForm = form;
-        }
-      })
-    }
-    onBeforeMount(() => {
-      // 校验cookie后自动登录
-      let user_cookie = $tool.operatCookie("get", "user_info");
-      if (user_cookie && user_cookie != "{}") {
-        let params = JSON.parse(user_cookie)
-        onLoginSubmit(params);
+  name: 'LoginPage'
+}
+</script>
+
+<script setup>
+  import { useStore } from '@/stores/stores'
+  import { showToast } from "vant"
+  import { ref, reactive, onBeforeMount, onMounted, getCurrentInstance } from 'vue'
+  import { useRoute, useRouter } from 'vue-router';
+  import _API from "@/request/api"
+  import baseUrl from '@/request/base_url'
+  import $tool from "@/utils/tool"
+  import router from '@/router'
+  const _store = useStore();
+  let status = ref("login");
+  let autoLogin = ref(false) // 免登录开关
+  let loginForm = reactive({
+    user_name: "",
+    user_password: "",
+  })
+  let registeForm = reactive({
+    user_name: "",
+    user_password: "",
+  })
+  const swiperList = reactive([
+    { imgSrc: `${baseUrl}/image/banner/swiper1.jpg` },
+    { imgSrc: `${baseUrl}/image/banner/swiper2.jpg` },
+    { imgSrc: `${baseUrl}/image/banner/swiper3.jpg` },
+    { imgSrc: `${baseUrl}/image/banner/swiper4.jpg` },
+    { imgSrc: `${baseUrl}/image/banner/swiper5.jpg` },
+  ])
+  const onLoginSubmit = (form) => {// 用户登录
+    let params = form
+    _API.login(params).then((res) => {
+      showToast(res.data.msg);
+      _store.userInfoAction(res.data.user_info) // 存入状态管理
+      // 如果自动登录存在
+      if (autoLogin.value) {
+        $tool.operatCookie("set", "user_info", JSON.stringify(form), 1000 * 60 * 60 * 24); // 存入cookie用于自动登录
+      }
+      router.push("/Home");
+    });
+  }
+  const onRegisteSubmit = (form) => {// 注册新用户
+    _API.register(form).then((res) => {
+      showToast(res.data.msg);
+      if (res.data.code == 0) {
+        status.value = "login";
+        registeForm = {
+          user_name: "",
+          user_password: "",
+        };
+        loginForm = form;
       }
     })
-    return {
-      status,
-      autoLogin,
-      loginForm,
-      registeForm,
-      swiperList,
-      onLoginSubmit,
-      onRegisteSubmit,
-      onMounted
+  }
+  onBeforeMount(() => {
+    // 校验cookie后自动登录
+    let user_cookie = $tool.operatCookie("get", "user_info");
+    if (user_cookie && user_cookie != "{}") {
+      let params = JSON.parse(user_cookie)
+      onLoginSubmit(params);
     }
-  },
-}
+  })
 </script>
 
 <style scoped lang="scss">

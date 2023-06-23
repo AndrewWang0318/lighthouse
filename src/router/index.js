@@ -43,7 +43,7 @@ const router = createRouter({
         const _store = useStore();
         let user_pina = _store.userInfo;
         if (from.path != "/" ) {
-          if((user_cookie && user_cookie != "{}") || (user_pina && JSON.stringify(user_pina) != "{}")){
+          if((user_cookie && user_cookie != "{}") && (user_pina && JSON.stringify(user_pina) != "{}")){
             showToast("当前已登录~");
             return false
           }else{
