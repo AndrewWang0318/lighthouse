@@ -1,7 +1,7 @@
 <template>
   <div class="page-home">
-    <RouterView />
-    <BottomBar />
+    <RouterView id="home-view"/>
+    <BottomBar id="bottom-bar"/>
   </div>
 </template>
 
@@ -11,5 +11,12 @@ import BottomBar from '@/components/BottomBar.vue'
 </script>
 
 <style lang="scss" scoped>
-
+#home-view{
+  height: calc(100vh - 1.2rem);
+  padding-bottom: 1rem;
+  overflow-y: scroll;
+}
+#bottom-bar{
+  height: 1.2rem;
+}
 </style>

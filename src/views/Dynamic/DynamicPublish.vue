@@ -2,13 +2,7 @@
   <div class="page-dynamic-publish">
     <van-nav-bar title="发动态" left-text="返回" left-arrow @click-left="$router.go(-1)" >
       <template #right>
-        <van-button 
-          class="btn-public"
-          type="primary" 
-          size="small"
-          block
-          @click="dynamicPublick"
-        >
+        <van-button  class="btn-public" type="primary" size="small" block @click="dynamicPublick">
           <span>发布</span>
         </van-button>
       </template>
@@ -16,7 +10,7 @@
     <div class="dynamic-content">
       <div class="dynamic-text">
         <van-field 
-          v-model="share_text" 
+          v-model="dynamic_content" 
           rows="4" 
           autosize 
           type="textarea" 
@@ -26,7 +20,13 @@
         />
       </div>
       <div class="dynamic-image">
-        <van-uploader v-model="fileList" multiple :max-count="9" accept="image/*" />
+        <van-uploader
+          multiple 
+          :max-count="9" 
+          accept="image/*"
+          preview-size="1.6rem"
+          v-model="dynamic_file_list"
+        />
       </div>
     </div>
   </div>
@@ -41,41 +41,30 @@ export default {
 <script setup>
 import { ref, reactive } from 'vue';
 import { useStore } from '@/stores/stores';
+import { useRouter } from "vue-router";
 import { showToast } from "vant";
-import _API from "@/request/api";
+import API from "@/request/api";
 import compressor from "@/utils/compressor"
 
-const _store = useStore();
-let share_text = ref('');
-let fileList = reactive([]);
-let userInfo = _store.userInfo; //用户信息
-
+const store = useStore();
+const router = useRouter();
+let dynamic_content = ref(''); // 发布动态的文字
+let dynamic_file_list = ref([]); // 发布动态的文件
 async function dynamicPublick() {
-  let upload_file = fileList.map(item => item.file); // 将所有文件推如数组
-  let compressionPromise = [];
-  
-  upload_file.forEach((item) => {
-    compressionPromise.push(compressor(item))
-  });
-  // let fileData = await Promise.all(compressionPromise).then(fileData => {
-  //   fileData.forEach(item => {
-  //     formData.append("dynamic_media_file", item);
-  //   })
-  // })
-  let fileData = await Promise.all(compressionPromise);
-  let formData = new FormData();
-  formData.append("user_id", userInfo.user_id);
-  formData.append("dynamic_text", share_text);
-  fileData.forEach(file => {
-    formData.append("dynamic_media_file", file);
+  let upload_files = dynamic_file_list.value.map(item => item.file); // 将所有文件推如数组
+  let compressor_promise = upload_files.map((item) => compressor(item,0.3));
+  let image_data = await Promise.all(compressor_promise);
+  let params = new FormData();
+  params.append("user_id", store.userInfo.user_id);
+  params.append("dynamic_content", dynamic_content.value);
+  image_data.forEach(file => {
+    params.append("dynamic_media_file", file);
   })
 
-  _API.uploadDynamic(formData).then((res) => {
+  API.addDynamic(params).then((res) => {
     showToast(res.data.msg);
-    if (res.data.status == 200) {
-      share_text = null; // 图书描述
-      fileList = []; // 图片数据
-      $router.go(-1)
+    if (res.data.code == 0) {
+      router.go(-1)
     }
   });
 }

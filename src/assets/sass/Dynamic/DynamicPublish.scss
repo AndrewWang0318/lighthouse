@@ -9,12 +9,16 @@
       border-bottom: 0.01rem solid rgb(245, 245, 245);
     }
     .dynamic-image{
-      padding: 0 0.2rem;
+      padding: 0 0.8rem;
       margin: 0 auto;
     }
   }
   .btn-public{
     width: 1rem;
+  }
+
+  :deep(.van-uploader__wrapper){
+    // justify-content: space-between;
   }
 }
   

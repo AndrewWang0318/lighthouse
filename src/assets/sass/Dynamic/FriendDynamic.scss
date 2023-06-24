@@ -1,8 +1,9 @@
-.page-friend-dynamic {
-  min-height: 88vh;
+.page-friend-dynamic {  
   .user-background-area{
     height: 4.4rem;
     background-color: gray;
+    background-size: 100% auto;
+    background-position: center center;
     position: relative;
     .user-info-content{
       position: absolute;
@@ -32,7 +33,8 @@
       position: absolute;
       top: 0.4rem;
       right: 0.4rem;
-      background: linear-gradient(to right, #ff6034, #ee0a24);
+      background-color: #1989fa;
+      border: 0.01rem solid rgb(95, 194, 255);
     }
   }
 
@@ -71,7 +73,7 @@
       font-size: 0.3rem;
       color: #586c92;
     }
-    .dynamic-title {
+    .dynamic-content {
       line-height: 0.46rem;
       font-size: 0.28rem;
       color: #080808;
