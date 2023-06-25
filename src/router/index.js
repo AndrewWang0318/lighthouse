@@ -34,16 +34,20 @@ const router = createRouter({
         },
       ],
     },
+
     {
       path: '/Login',
       name: 'Login',
       component: () => import('@/views/Login/Login.vue'),
+      meta:{
+        name:'登录'
+      },
       beforeEnter: (to, from) => {
         let user_cookie = $tool.operatCookie("get", "user_info");
         const _store = useStore();
         let user_pina = _store.userInfo;
         if (from.path != "/" ) {
-          if((user_cookie && user_cookie != "{}") || (user_pina && JSON.stringify(user_pina) != "{}")){
+          if((user_cookie && user_cookie != "{}") && (user_pina && JSON.stringify(user_pina) != "{}")){
             showToast("当前已登录~");
             return false
           }else{
@@ -54,16 +58,34 @@ const router = createRouter({
         }
       },
     },
+
     {
-      path: '/UpdateInfo',
-      name: 'UpdateInfo',
-      component: () => import('@/views/Mine/UpdateInfo.vue'),
+      path: '/UserInfoEdit',
+      name: 'UserInfoEdit',
+      component: () => import('@/views/Mine/UserInfoEdit.vue'),
+      meta:{
+        name:'用户信息修改'
+      }
     },
+
+    {
+      path: '/DynamicPublish',
+      name: 'DynamicPublish',
+      component: () => import('@/views/Dynamic/DynamicPublish.vue'),
+      meta:{
+        name:'动态发布'
+      }
+    },
+
     {
       path:'/Error',
       name: 'Error',
-      component: () => import('@/views/Error/Error.vue')
+      component: () => import('@/views/Error/Error.vue'),
+      meta:{
+        name:'错误'
+      }
     },
+
     {
       path: "/:catchAll(.*)",
       redirect: "/Error",

@@ -1,37 +1,38 @@
 .page-mine {
   min-height: 100%;
   background-color: white;
-}
-.login-content,
-.unlogin-content {
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  padding-left: 0.2rem;
-  padding-right: 0.2rem;
-  box-sizing: border-box;
-}
-.user-avatar {
-  width: 1.2rem;
-  height: 1.2rem;
-  margin-left: 0.2rem;
-  margin-right: 0.2rem;
-  background-color: gray;
-  border-radius: 50%;
-  background-size: cover;
-  background-position: center center;
-  overflow: hidden;
-}
-.user-info {
-  width: 4rem;
-}
+  .login-content,
+  .unlogin-content {
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgb(230, 230, 230);
+  }
+  .user-avatar {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-left: 0.2rem;
+    margin-right: 0.2rem;
+    background-color: gray;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center center;
+    overflow: hidden;
+  }
+  .user-info {
+    width: 4rem;
+  }
 
-.setting-item {
-  min-height: 0.6rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.26rem;
-  font-weight: bold;
-  border-bottom: 0.02rem solid rgb(230, 230, 230);
+  .setting-item {
+    min-height: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.26rem;
+    font-weight: bold;
+    border-bottom: 0.02rem solid rgb(230, 230, 230);
+  }
 }

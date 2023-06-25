@@ -1,6 +1,6 @@
-.page-update-info{
+.page-update-info {
   // 用户基本信息
-  .user-basic-info{
+  .user-basic-info {
     .basic-info-item {
       :deep(.user-avatar) {
         width: 1rem;
@@ -9,64 +9,77 @@
         border-radius: 50%;
         background-size: cover;
         background-position: center;
-        background-image: 'http://127.0.0.1:3000/image/avatar/default_avatar2.jpeg';
+        background-image: "http://127.0.0.1:3000/image/avatar/default_avatar2.jpeg";
       }
     }
-    
   }
+  .btn-group{
+    display: flex;
+    justify-content: space-between;
+    padding-left: 1.6rem;
+    padding-right: 1.6rem;
+    .btn-insure{
+      width: 1.4rem;
+      height: 0.8rem;
+    }
+    .btn-cancel{
+      width: 1.4rem;
+      height: 0.8rem;
+    }
+  }
+  // 选择性别框
+  .wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sex-choice {
+    width: 86%;
+    background-color: white;
+    margin: 0 auto;
+    // 标题
+    .title {
+      height: 0.8rem;
+      line-height: 0.8rem;
+      font-size: 0.26rem;
+      font-weight: bold;
+      text-align: center;
+      border-bottom: 0.02rem solid rgb(230, 230, 230);
+    }
+
+    .choice-content {
+      height: 2rem;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+    .choice-item {
+      width: 1.6rem;
+      height: 1.6rem;
+      border-radius: 50%;
+      // background-color: gray;
+      background-size: auto 100%;
+      background-position: center center;
+    }
+    .btn-insure {
+      height: 0.8rem;
+      line-height: 0.8rem;
+      font-size: 0.26rem;
+      font-weight: bold;
+      text-align: center;
+      border-top: 0.02rem solid rgb(230, 230, 230);
+    }
+  }
+
   // 修改vant公用样式
-  :deep(.van-cell__value){
+  :deep(.van-cell__value) {
     display: flex;
     justify-content: flex-end;
   }
-  :deep(.van-cell){
+  :deep(.van-cell) {
     display: flex;
     align-items: center;
-  }
-}
-
-// 选择性别框
-.wrapper {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.sex-choice {
-  width: 86%;
-  background-color: white;
-  margin: 0 auto;
-  // 标题
-  .title {
-    height: 0.8rem;
-    line-height: 0.8rem;
-    font-size: 0.26rem;
-    font-weight: bold;
-    text-align: center;
-    border-bottom: 0.02rem solid rgb(230, 230, 230);
-  }
-
-  .choice-content {
-    height: 2rem;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-  }
-  .choice-item {
-    width: 1.6rem;
-    height: 1.6rem;
-    border-radius: 50%;
-    // background-color: gray;
-    background-size: auto 100%;
-    background-position: center center;
-  }
-  .btn-insure {
-    height: 0.8rem;
-    line-height: 0.8rem;
-    font-size: 0.26rem;
-    font-weight: bold;
-    text-align: center;
-    border-top: 0.02rem solid rgb(230, 230, 230);
   }
 }

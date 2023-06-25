@@ -63,12 +63,13 @@
       position="right"
       :style="{ width: '100%', height: '100%' }"
     >
+      
       <div>
         <van-field v-model="user_info_form.user_nickname" placeholder="请输入昵称" />
       </div>
-      <div>
-        <van-button type="success" @click="userBaseInfoUpdate('user_nickname')">确定</van-button>
-        <van-button type="default" @click="nickname_show = false">取消</van-button>
+      <div class="btn-group">
+        <van-button class="btn-insure" type="success" @click="userBaseInfoUpdate('user_nickname')">确定</van-button>
+        <van-button class="btn-cancel" type="default" @click="nickname_show = false">取消</van-button>
       </div>
     </van-popup>
     <!-- 性别修改弹出框 -->
@@ -81,8 +82,7 @@
               class="choice-item"
               v-for="(v, i) in sex_choice_data"
               :style="`background-image:url(${v.img});opacity: ${ user_info_form.user_sex == v.type ? '1' : '0.2'}`"
-              
-              @click="user_info_form.user_sex = v.type"
+              @click="sexChange(v)"
             ></div>
           </div>
           <div class="btn-insure" @click="userBaseInfoUpdate('user_sex')">确定</div>
@@ -95,15 +95,18 @@
       position="bottom"
       :style="{ height: '40%' }"
     >
-      <van-datetime-picker
-        v-model="current_birth_date"
-        type="date"
-        title="年-月-日"
-        :min-date="min_date"
-        :max-date="max_date"
-        @confirm="userBaseInfoUpdate"
-        @cancel="birth_choice_show = false"
-      />
+    <van-date-picker
+      v-model="user_info_form.user_birth"
+      type="date"
+      title="年-月-日"
+      :min-date="min_date"
+      :max-date="max_date"
+      @confirm="userBaseInfoUpdate('user_birth')"
+      @cancel="birth_choice_show = false"
+    />
+      <!-- <van-datetime-picker
+        
+      /> -->
     </van-popup>
     <!-- 个人简介修改遮罩 -->
     <van-popup
@@ -112,11 +115,11 @@
       :style="{ width: '100%', height: '100%' }"
     >
       <div>
-      <van-field v-model="input_value" rows="2" autosize type="textarea" maxlength="50" placeholder="请输入个人简介" show-word-limit />
+        <van-field v-model="user_info_form.user_signature" rows="2" autosize type="textarea" maxlength="50" placeholder="请输入个人简介" show-word-limit />
       </div>
-      <div>
-        <van-button type="success" @click="userBaseInfoUpdate('user_nickname')">确定</van-button>
-        <van-button type="default" @click="signature_show = false">取消</van-button>
+      <div class="btn-group">
+        <van-button class="btn-insure" type="success" @click="userBaseInfoUpdate('user_signature')">确定</van-button>
+        <van-button class="btn-cancel" type="default" @click="signature_show = false">取消</van-button>
       </div>
     </van-popup>
     <!-- 城市选择遮罩 -->
@@ -127,8 +130,8 @@
     >
       <van-area
         :area-list="areaList"
-        :value="current_address_code"
-        @confirm="address_confirm"
+        v-model="user_info_form.user_locat"
+        @confirm="(val)=>{userBaseInfoUpdate('user_locat',val)}"
       />
     </van-popup>
   </div>
@@ -144,10 +147,12 @@ export default {
   import _API from "@/request/api";
   import { showToast } from "vant";
   import { areaList } from "@vant/area-data";
-  import { ref, reactive, computed, getCurrentInstance } from "vue";
+  import { ref, reactive, getCurrentInstance } from "vue";
   import { useStore } from "@/stores/stores";
-  import { useRoute, useRouter } from "vue-router";
+  import { useRouter } from "vue-router";
   import base_url from "@/request/base_url";
+  import moment from "moment"; // 引入moment时间处理模块
+
   const _store = useStore();
   const router = useRouter();
   const instance = getCurrentInstance();
@@ -195,16 +200,14 @@ export default {
     });
   }
 
-  // 用户信息表单
   let user_info_form = reactive({
-    user_id:userInfo.user_id,
     user_nickname:userInfo.user_nickname,
     user_sex:userInfo.user_sex,
-    user_birth:userInfo.user_birth,
+    user_birth:(userInfo.user_birth || moment().format('YYYY-MM-DD')).split("-"),
     user_signature:userInfo.user_signature,
-    user_locat:showUserLocal(userInfo.user_locat)
+    user_locat:userInfo.user_locat,
   });
-  // 修改昵称
+   // 修改昵称
   let nickname_show = ref(false);
   // 修改性别
   let sex_dialog_show = ref(false);
@@ -222,18 +225,18 @@ export default {
       img: new URL("@/assets/images/sex_female.png", import.meta.url).href,
     },
   ];
-  
+  const sexChange = (v)=>{
+    user_info_form.user_sex = v.type
+  }
   // 修改出日期
   let birth_choice_show = ref(false);
-  let min_date = new Date(1912, 1, 12);
-  let max_date = new Date();
-  let current_birth_date = new Date(userInfo.user_birth);
+  const min_date = new Date('1923-1-1');
+  const max_date = new Date();
   // 修改个人简介
   let signature_show = ref(false);
   // 修改城市
   let address_choice_show = ref(false);
-  let current_address_code = "";
-  function showUserLocal(v) { // 格式化城市信息显示
+  function showUserLocal(v) { // 用户城市code转文字
     if (!v) {
       return v;
     } else {
@@ -244,7 +247,8 @@ export default {
       return `${province}/${city}/${county}`;
     }
   }
-  // 修改条目点击
+
+  // 基本信息条目修改点击
   function basicInfoItemClick(key) {
     if (key == "user_avatar") {
       avatar_mask.value = true;
@@ -255,7 +259,8 @@ export default {
       user_info_form.user_sex = userInfo.user_sex
       sex_dialog_show.value = true;
     } else if (key == "user_birth") {
-      user_info_form.user_birth = userInfo.user_birth
+      let data = userInfo.user_birth || moment().format('YYYY-MM-DD');
+      user_info_form.user_birth = data.split("-")
       birth_choice_show.value = true;
     }else if(key == "user_signature"){
       user_info_form.user_signature = userInfo.user_signature
@@ -266,30 +271,50 @@ export default {
     }
   }
 
-  // 修改信息提交
-  function userBaseInfoUpdate(key){
-    // current_birth_date = $moment(result).format("YYYY-MM-DD");
+  // 修改基本信息提交
+  function userBaseInfoUpdate(key,value){
 
-    // let address_code = [];
-    // result.forEach((item) => {
-    //   address_code.push(item.code);
-    // });
-    // current_address_code = address_code.join();
-    // user_locat = current_address_code;
-
-    let params = user_info_form
-    _API.updateUserInfo(params).then((res) => {
+    // 用户住址单独处理
+    let user_locat = user_info_form.user_locat;
+    if(key == 'user_locat'){
+      user_locat = value.selectedValues.join(",")
+    }
+    let param = {
+      user_id:userInfo.user_id,
+      user_nickname:user_info_form.user_nickname,
+      user_sex:user_info_form.user_sex,
+      user_birth:user_info_form.user_birth.join("-"),
+      user_signature:user_info_form.user_signature,
+      user_locat,
+    }
+    _API.updateUserInfo(param).then((res) => {
       showToast(res.data.msg);
       if (res.data.code == 0) {
         if(key == "user_nickname"){
-          nickname_show.value = false;
+          _store.$patch((state) => {
+            state.userInfo.user_nickname = param.user_nickname
+          })
+          nickname_show.value = false
         } else if (key == "user_sex") {
-          sex_dialog_show.value = false;
+          _store.$patch((state) => {
+            state.userInfo.user_sex = param.user_sex
+          })
+          sex_dialog_show.value = false
         } else if (key == "user_birth") {
-
-
+          _store.$patch((state) => {
+            state.userInfo.user_birth = param.user_birth
+          })
+          birth_choice_show.value = false
+        } else if (key == "user_signature"){
+          _store.$patch((state) => {
+            state.userInfo.user_signature = param.user_signature
+          })
+          signature_show.value = false
         } else if (key == "user_locat") {
-
+          _store.$patch((state) => {
+            state.userInfo.user_locat = param.user_locat
+          })
+          address_choice_show.value = false
         }
 
         _store.$patch((state) => {
