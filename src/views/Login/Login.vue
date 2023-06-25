@@ -83,12 +83,14 @@ export default {
     let params = form
     _API.login(params).then((res) => {
       showToast(res.data.msg);
-      _store.userInfoAction(res.data.user_info) // 存入状态管理
-      // 如果自动登录存在
-      if (autoLogin.value) {
-        $tool.operatCookie("set", "user_info", JSON.stringify(form), 1000 * 60 * 60 * 24); // 存入cookie用于自动登录
+      if(res.data.code == 0){
+        _store.userInfoAction(res.data.user_info) // 存入状态管理
+        // 如果自动登录存在
+        if (autoLogin.value) {
+          $tool.operatCookie("set", "user_info", JSON.stringify(form), 1000 * 60 * 60 * 24); // 存入cookie用于自动登录
+        }
+        router.push("/Home");
       }
-      router.push("/Home");
     });
   }
   const onRegisteSubmit = (form) => {// 注册新用户
