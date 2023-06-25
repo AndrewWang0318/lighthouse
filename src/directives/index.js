@@ -1,7 +1,7 @@
 import clickout from './clickout' // 引入指令
 
 const directives = { // 指令对象
-    clickout
+  clickout
 }
 
 export default {

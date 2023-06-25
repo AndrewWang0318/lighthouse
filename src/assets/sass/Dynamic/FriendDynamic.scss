@@ -11,6 +11,7 @@
       bottom: -0.5rem;
       display: flex;
       .user-name{
+        height: 0.6rem;
         line-height: 0.6rem;
         margin-right: 0.2rem;
         color: #fff;
@@ -42,6 +43,8 @@
   .dynamic-area {
     padding: 0.48rem 0.5rem 1rem 0.3rem;
     box-sizing: border-box;
+    position: relative;
+    z-index: 2;
   }
   .dynamic-item {
     box-sizing: border-box;

@@ -1,11 +1,12 @@
 <template>
-  <div class="login">
-    <div class="top-bar" style="width: 100%;height: 0.1rem;background-color: #1989fa;"></div>
-    <van-swipe class="login-swipe" :autoplay="3000" indicator-color="white" :show-indicators="false" :touchable="false">
-      <van-swipe-item v-for="(v, i) in swiperList" :key="i">
-        <div class="image-item" :style="`background-image:url(${v.imgSrc})`"></div>
-      </van-swipe-item>
-    </van-swipe>
+  <div class="page-login">
+    <div class="banner-content">
+      <van-swipe class="login-swipe" :autoplay="4000" indicator-color="white" :show-indicators="false" >
+        <van-swipe-item v-for="(v, i) in swiperList" :key="i">
+          <div class="image-item" :style="`background-image:url(${v.imgSrc})`"></div>
+        </van-swipe-item>
+      </van-swipe>
+    </div>
     <!-- 登录表单 -->
     <van-form @submit="onLoginSubmit" v-show="status == 'login'">
       <div class="login-content">
@@ -55,13 +56,14 @@ export default {
 <script setup>
   import { useStore } from '@/stores/stores'
   import { showToast } from "vant"
-  import { ref, reactive, onBeforeMount, onMounted, getCurrentInstance } from 'vue'
-  import { useRoute, useRouter } from 'vue-router';
-  import _API from "@/request/api"
+  import { ref, reactive, onBeforeMount } from 'vue'
+  import { useRouter } from 'vue-router';
+  import API from "@/request/api"
   import baseUrl from '@/request/base_url'
   import $tool from "@/utils/tool"
-  import router from '@/router'
-  const _store = useStore();
+
+  const router = useRouter();
+  const store = useStore();
   let status = ref("login");
   let autoLogin = ref(false) // 免登录开关
   let loginForm = reactive({
@@ -74,17 +76,17 @@ export default {
   })
   const swiperList = reactive([
     { imgSrc: `${baseUrl}/image/banner/swiper1.jpg` },
-    { imgSrc: `${baseUrl}/image/banner/swiper2.jpg` },
+    { imgSrc: `${baseUrl}/image/banner/swiper2.png` },
     { imgSrc: `${baseUrl}/image/banner/swiper3.jpg` },
-    { imgSrc: `${baseUrl}/image/banner/swiper4.jpg` },
+    { imgSrc: `${baseUrl}/image/banner/swiper4.png` },
     { imgSrc: `${baseUrl}/image/banner/swiper5.jpg` },
   ])
   const onLoginSubmit = (form) => {// 用户登录
     let params = form
-    _API.login(params).then((res) => {
+    API.login(params).then((res) => {
       showToast(res.data.msg);
       if(res.data.code == 0){
-        _store.userInfoAction(res.data.user_info) // 存入状态管理
+        store.userInfoAction(res.data.user_info) // 存入状态管理
         // 如果自动登录存在
         if (autoLogin.value) {
           $tool.operatCookie("set", "user_info", JSON.stringify(form), 1000 * 60 * 60 * 24); // 存入cookie用于自动登录
@@ -94,7 +96,7 @@ export default {
     });
   }
   const onRegisteSubmit = (form) => {// 注册新用户
-    _API.register(form).then((res) => {
+    API.register(form).then((res) => {
       showToast(res.data.msg);
       if (res.data.code == 0) {
         status.value = "login";
