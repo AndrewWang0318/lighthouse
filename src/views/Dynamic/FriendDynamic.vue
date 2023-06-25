@@ -28,7 +28,10 @@
         <div class="dynamic-function">
           <div class="dynamic-time">{{ v.dynamic_time }}</div>
           <div class="dynamic-more">
-            <div class="more-ico" @click="jumpInteract(i)">
+            <div class="more-ico" 
+              @click="jumpInteract(i)"
+              v-clickout="jumpInteractOut(i)"
+            >
               <div class="ico"> <van-icon name="ellipsis" /> </div>
             </div>
             <div class="more-content" ref="moreContent">
@@ -112,10 +115,8 @@ let module_id = ref(4);
 let dynamicDataList = computed(() => {
   return dynamicData.value.map(item => {
     const { dynamic_id, dynamic_user, dynamic_content } = item
-    // 当前动态id
-    let dynamic_media = item.dynamic_media || '';
-
     // 媒体文件地址及其信息
+    let dynamic_media = item.dynamic_media || '';
     let dynamic_media_arr = dynamic_media.split(",")
     let dynamic_media_data = dynamic_media_arr.map(v => {
       let file_extension = v.slice(v.lastIndexOf(".") + 1).toLowerCase();// 文件后缀名[小写]
@@ -216,23 +217,28 @@ function mediaPreview(data, idx) { // 预览图大图展示
 }
 
 
-function jumpInteract(i) {// 点赞及评论显示
+function jumpInteract(i) { // 点击点赞及评论按钮
   currentIndex = i;
-  dynamicData.forEach((item, index) => { // 关闭其他的dom
+  dynamicDataList.value.forEach((item, index) => { // 关闭其他的dom
     let dom = instance.refs.moreContent[index]
     if (item.lc_show && index !== i) { // 点赞评论在展示且不是当前目标的dom
       item.lc_show = false
       anime({ targets: dom, easing: "cubicBezier(.18,.07,.24,.99)", width: "0", duration: 150, });
     }
   })
-  dynamicData[i].lc_show = !dynamicData[i].lc_show;
+  dynamicDataList.value[i].lc_show = !dynamicDataList.value[i].lc_show;
   let item = instance.refs.moreContent[i];
-  if (dynamicData[i].lc_show) {
+  if (dynamicDataList.value[i].lc_show) {
     anime({ targets: item, width: "3rem", duration: 300, });
   } else {
     anime({ targets: item, easing: "cubicBezier(.18,.07,.24,.99)", width: "0", duration: 150, });
   }
 }
+function jumpInteractOut(i){ // 点击点赞及评论按钮之外
+  console.log(i)
+}
+
+
 function addLike(v, i) { // 点击赞
   let user_id = store.userInfo.user_id
   let like_guide_id = v.dynamic_id

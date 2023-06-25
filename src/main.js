@@ -7,18 +7,20 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
-import base_url from '@/request/base_url';
 import Pixelfit from 'pixelfit' // 适配组件
 import Vant from "vant"; //引入Vant ui
 import 'vant/lib/index.css';
-import Loading from "@/components/Loading.vue"; // 引入loading组件
 import moment from "moment"; // 引入moment时间处理模块
-moment.locale("zh-cn"); // moment采用中文本地化
 import anime from "animejs"; // 引入动画js库
-import tool from "@/utils/tool"
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'; // pinia 持久化存储
 import { Fragment } from 'vue-fragment-plus'; // 空标签
+import Loading from "@/components/Loading.vue"; // 引入loading组件
+import base_url from '@/request/base_url';
+import tool from "@/utils/tool"
+import directives from '@/directives'; // 引入自己定义的全局指令
 
+
+moment.locale("zh-cn"); // moment采用中文本地化
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
@@ -34,5 +36,6 @@ app.use(pinia)
 app.use(router)
 app.use(Vant)
 app.use(Fragment)
+app.use(directives)
 app.component("Loading", Loading) // 注册全局组件
 app.mount('#app')
