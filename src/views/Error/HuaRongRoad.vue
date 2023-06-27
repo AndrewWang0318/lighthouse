@@ -16,6 +16,11 @@
             border: '0.02rem solid gray',
             boxSizing:'border-box',
           }"
+          v-touch:swipe.left="()=>{swipeHandler('l',v)}"
+          v-touch:swipe.right="()=>{swipeHandler('r',v)}"
+          v-touch:swipe.top="()=>{swipeHandler('t',v)}"
+          v-touch:swipe.bottom="()=>{swipeHandler('b',v)}"
+          v-touch:drag.once="ceshi"
         >{{ v.cn_name }}</div>
       </div>
       <div id="export"></div>
@@ -154,6 +159,13 @@ let all_role_locate = all_role.map( v => v.role_locate ); // 所有人物坐标�
 
 function getImage(url){
   return new URL(url, import.meta.url).href
+}
+
+function swipeHandler(move_direct){
+  console.log(move_direct)
+}
+function ceshi(){
+  console.log(arguments)
 }
 </script>
 

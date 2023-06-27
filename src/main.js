@@ -19,7 +19,7 @@ import Loading from "@/components/Loading.vue"; // 引入loading组件
 import base_url from '@/request/base_url';
 import tool from "@/utils/tool"
 import directives from '@/directives'; // 引入自己定义的全局指令
-
+import Vue3TouchEvents from "vue3-touch-events";
 
 moment.locale("zh-cn"); // moment采用中文本地化
 
@@ -38,6 +38,7 @@ app.use(pinia)
 app.use(router)
 app.use(Vant)
 app.use(Fragment)
+app.use(Vue3TouchEvents)
 app.use(directives)
 app.component("Loading", Loading) // 注册全局组件
 app.mount('#app')
