@@ -60,16 +60,17 @@
     <!-- 昵称修改遮罩-->
     <van-popup
       v-model:show="nickname_show"
-      position="right"
-      :style="{ width: '100%', height: '100%' }"
+      position="bottom"
+      :style="{ width: '100%', height: '40%' }"
     >
-      
-      <div>
-        <van-field v-model="user_info_form.user_nickname" placeholder="请输入昵称" />
-      </div>
       <div class="btn-group">
-        <van-button class="btn-insure" type="success" @click="userBaseInfoUpdate('user_nickname')">确定</van-button>
-        <van-button class="btn-cancel" type="default" @click="nickname_show = false">取消</van-button>
+        <div class="btn-cancel" type="default" @click="nickname_show = false">取消</div>
+        <div class="btn-insure" type="success" @click="userBaseInfoUpdate('user_nickname')">确定</div>
+      </div>
+      <div>
+        <van-cell-group inset>
+          <van-field v-model="user_info_form.user_nickname" placeholder="请输入昵称" />
+        </van-cell-group>
       </div>
     </van-popup>
     <!-- 性别修改弹出框 -->
@@ -104,23 +105,32 @@
       @confirm="userBaseInfoUpdate('user_birth')"
       @cancel="birth_choice_show = false"
     />
-      <!-- <van-datetime-picker
-        
-      /> -->
     </van-popup>
     <!-- 个人简介修改遮罩 -->
     <van-popup
       v-model:show="signature_show"
-      position="right"
-      :style="{ width: '100%', height: '100%' }"
+      position="bottom"
+      :style="{ height: '40%' }"
+      @confirm="userBaseInfoUpdate('user_signature')"
     >
-      <div>
-        <van-field v-model="user_info_form.user_signature" rows="2" autosize type="textarea" maxlength="50" placeholder="请输入个人简介" show-word-limit />
-      </div>
       <div class="btn-group">
-        <van-button class="btn-insure" type="success" @click="userBaseInfoUpdate('user_signature')">确定</van-button>
-        <van-button class="btn-cancel" type="default" @click="signature_show = false">取消</van-button>
+        <div class="btn-cancel" type="default" @click="signature_show = false">取消</div>
+        <div class="btn-insure" type="success" @click="userBaseInfoUpdate('user_signature')">确定</div>
       </div>
+      <div>
+        <van-cell-group inset>
+          <van-field
+            v-model="user_info_form.user_signature"
+            rows="2"
+            autosize
+            type="textarea"
+            maxlength="50"
+            placeholder="请输入个人简介"
+            show-word-limit
+          />
+        </van-cell-group>
+      </div>
+      
     </van-popup>
     <!-- 城市选择遮罩 -->
     <van-popup
@@ -330,5 +340,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@/assets/sass/Mine/UpdateInfo.scss";
+@import "@/assets/sass/Mine/UserInfoEdit.scss";
 </style>

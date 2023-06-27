@@ -18,7 +18,14 @@
           <div class="user-avatar" :style="`background-image:url(${base_url + v.user_avatar})`"></div>
           <div class="dynamic-info">
             <div class="user-nickname">{{ v.user_nickname }}</div>
-            <div class="dynamic-content">{{ v.dynamic_content }}</div>
+            <div class="dynamic-content">
+              <van-text-ellipsis
+                rows="3"
+                :content="v.dynamic_content"
+                expand-text="展开"
+                collapse-text="收起"
+              />
+            </div>
           </div>
         </div>
         <div class="dynamic-show">

@@ -9,7 +9,8 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect:'/Login'
+      redirect:'/Login',
+      
     },
     {
       path: '/Home',
@@ -21,16 +22,25 @@ const router = createRouter({
           path: "Plan",
           name: "Plan",
           component: () => import("@/views/Plan/Plan.vue"),
+          meta:{
+            name:'计划'
+          },
         },
         {
           path: "FriendDynamic",
           name: "FriendDynamic",
           component: () => import("@/views/Dynamic/FriendDynamic.vue"),
+          meta:{
+            name:'动态'
+          },
         },
         {
           path: "Mine",
           name: "Mine",
           component: () => import("@/views/Mine/Mine.vue"),
+          meta:{
+            name:'我的'
+          },
         },
       ],
     },
@@ -64,7 +74,7 @@ const router = createRouter({
       name: 'UserInfoEdit',
       component: () => import('@/views/Mine/UserInfoEdit.vue'),
       meta:{
-        name:'用户信息修改'
+        name:'用户信息'
       }
     },
 
@@ -97,6 +107,11 @@ router.beforeEach((to, from, next) => {
   // 访问部分路由需要校验是否登录
   let checkLoginArr = ["",""];
   const _store = useStore();
+
+
+
+  document.title = `灯塔 | ${to.meta.name}`
+
   if (checkLoginArr.includes(to.path)) {
     let user_info = _store.userInfo;
     if (user_info && JSON.stringify(user_info) !== "{}") {

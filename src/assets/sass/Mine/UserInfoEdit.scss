@@ -16,15 +16,13 @@
   .btn-group{
     display: flex;
     justify-content: space-between;
-    padding-left: 1.6rem;
-    padding-right: 1.6rem;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.26rem;
     .btn-insure{
-      width: 1.4rem;
-      height: 0.8rem;
+      color: #1989fa;
     }
     .btn-cancel{
-      width: 1.4rem;
-      height: 0.8rem;
+      color: #969799;
     }
   }
   // 选择性别框
@@ -81,5 +79,8 @@
   :deep(.van-cell) {
     display: flex;
     align-items: center;
+  }
+  :deep(.van-field__body) {
+    width: 100%;
   }
 }
