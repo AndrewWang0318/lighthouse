@@ -1,3 +1,6 @@
+let debounce_timeout;
+let throttle_timeout;
+let throttle_previous = 0;
 export default {
   getPageParam:function (param_key) { // 获取网页的参数
     // param_key:要获取参数的key
@@ -189,46 +192,42 @@ export default {
     }
     return device_str
   },
-  debounce:function (func,wait,immediate = true) {// 防抖:在 n 秒内函数只能执行一次，如果在 n 秒内又触发了事件，则会重新计算函数执行时间
-    // {func:回调函数,wait:等待时间,immediate:是否立即执行}
-    let timeout;
+  debounce:function (func,wait,immediate = true) {// 防抖：在n秒内函数只能执行一次，如果在 n 秒内又触发了事件，则会重新计算函数执行时间
+    // {func:回调函数,wait:等待时间ms,immediate:是否立即执行}
     return function () {
       let context = this;
       let args = arguments;
-      if (timeout) clearTimeout(timeout);
+      if (debounce_timeout) clearTimeout(debounce_timeout);
 
       if (immediate) {
-        var callNow = !timeout;
-        timeout = setTimeout(() => {
-            timeout = null;
+        var callNow = !debounce_timeout;
+        debounce_timeout = setTimeout(() => {
+          debounce_timeout = null;
         }, wait)
         if (callNow) func.apply(context, args)
       } else {
-        timeout = setTimeout(function(){
+        debounce_timeout = setTimeout(function(){
             func.apply(context, args)
         }, wait);
       }
     }
   },
   throttle:function (func, wait ,type = 'timestamp') {// 节流:在 n 秒中只执行一次函数
-    // {func:回调函数,wait:等待时间,type:时间戳版本或计时器版本}
-    let previous = 0; 
-    let timeout;
+    // {func:回调函数,wait:等待时间ms,type:时间戳版本或计时器版本}
     return function() {
       let context = this;
       let args = arguments;
       if(type=== 'timestamp' ){
         let now = Date.now();
-
-        if (now - previous > wait) {
+        if (now - throttle_previous > wait) {
           func.apply(context, args);
-          previous = now;
+          throttle_previous = now;
         }
       }
       if(type=== 'timer'){
-        if (!timeout) {
-          timeout = setTimeout(() => {
-            timeout = null;
+        if (!throttle_timeout) {
+          throttle_timeout = setTimeout(() => {
+            throttle_timeout = null;
             func.apply(context, args)
           }, wait)
         }
