@@ -9,8 +9,8 @@
           :style="{
             width:v.width,
             height:v.height,
-            top:v.top,
-            left:v.left,
+            top:`${v.top}rem`,
+            left:`${v.left}rem`,
             position: 'absolute',
             backgroundImage: `url( ${ getImage(`../../assets/images/hrd/${v.img}`) } )`,
             border: '0.02rem solid gray',
@@ -28,6 +28,8 @@
 </template>
 
 <script setup>
+import { ref, reactive } from 'vue';
+
 const grid_size = 1.5;// 布局一格的长度
 const wall_w = 4; // 盒子的宽
 const wall_h = 5; // 盒子的高
@@ -38,8 +40,8 @@ class Soldier {
     this.cn_name = cn_name;
     this.width = `${w * grid_size}rem`;
     this.height = `${h * grid_size}rem`;
-    this.top = lt[1] * grid_size + 'rem';
-    this.left = lt[0] * grid_size + 'rem';
+    this.top = lt[1] * grid_size;
+    this.left = lt[0] * grid_size;
     this.img = img_name;
 
     // 出口坐标
@@ -86,6 +88,10 @@ class Soldier {
     let is_block_other = false; // 是否有其他角色阻挡
 
     if(this.role_locate[start_opint][dir] == this.wall_locate[start_opint][dir]) is_block_wall = true;
+    // 如果是曹操在出口则不算墙阻挡
+    if(this.name == 'cc'&& move_direct == 'b' && this.role_locate.lb.x == this.export_locate.lb.x && this.role_locate.rb.x == this.export_locate.rb.x){
+      is_block_wall = false;
+    }
     all_locate.forEach( other_local => {
       // 如果当前角色的 (左上点的y >= .左上点的y && 左上点的y < 坐下点y) && 左上点的x == .右上点的x
       if(move_direct == 'l'){
@@ -124,7 +130,7 @@ class Soldier {
     return cc_locate.lb.y > this.export_locate.lb.y
   }
 
-  move(step = 1,move_direct){ // 坐标改变
+  move(move_direct,step = 1){ // 坐标改变
     let dir = 'x';
     let distence = 1
     if(move_direct == 'l'){
@@ -144,7 +150,8 @@ class Soldier {
       distence = 1;
     }
     Object.keys(this.role_locate).forEach( key => {
-      this.role_locate[key][dir] += (distence * step)
+      this.role_locate[key][dir] += distence
+      console.log(this.role_locate[key][dir])
     })
   }
 }
@@ -162,17 +169,35 @@ let xb2 = new Soldier(1,1,[1,3],'xb.png','xb2','士');
 let xb3 = new Soldier(1,1,[2,3],'xb.png','xb3','士');
 let xb4 = new Soldier(1,1,[3,4],'xb.png','xb4','士');
 
-let all_role = [ cc,gy,zf,zy,mc,hz,xb1,xb2,xb3,xb4 ]; // 所有人物
-let all_role_locate = all_role.map( v => v.role_locate ); // 所有人物坐标点
+let all_role = ref([ cc,gy,zf,zy,mc,hz,xb1,xb2,xb3,xb4 ]); // 所有人物
 
+let __all_role_locate = all_role.value.map( v => v.role_locate ); // 所有人物坐标点
+
+let all_role_locate = ref(__all_role_locate)
 
 function getImage(url){
   return new URL(url, import.meta.url).href
 }
 
 function swipeHandler(move_direct,item){
-  item.itCanMove(all_role_locate,move_direct)
-  console.log(move_direct,item)
+  if(item.itCanMove(all_role_locate.value,move_direct)){
+    if(move_direct == 'l'){
+      item.left -= grid_size
+    }
+    if(move_direct == 'r'){
+      item.left += grid_size
+    }
+    if(move_direct == 't'){
+      item.top -= grid_size
+    }
+    if(move_direct == 'b'){
+      item.top += grid_size
+    }
+
+    item.move(move_direct)
+  }else{
+    return false
+  }
 }
 </script>
 
