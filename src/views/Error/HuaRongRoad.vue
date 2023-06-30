@@ -12,7 +12,7 @@
             top:`${v.top}rem`,
             left:`${v.left}rem`,
             position: 'absolute',
-            backgroundImage: `url( ${ getImage(`../../assets/images/hrd/${v.img}`) } )`,
+            backgroundImage: `url( ${ getImage(`./images/hrd/${v.img}`) } )`,
             border: '0.02rem solid gray',
             boxSizing:'border-box',
           }"
