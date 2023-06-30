@@ -107,7 +107,7 @@ class Soldier {
       // 判断两点坐标 在目标两点之中
       let role_start_point_close = this.isClose(this.role_locate[start_opint],other_local[start_opint],other_local[end_opint])
       let role_end_point_close = this.isClose(this.role_locate[end_opint],other_local[start_opint],other_local[end_opint])
-      if(!role_start_point_close && !role_end_point_close) is_block_other = true;
+      if(role_start_point_close && role_end_point_close) is_block_other = true;
     })
     if(is_block_wall){
       console.log('有墙壁阻挡');
@@ -120,15 +120,10 @@ class Soldier {
     }
   }
   isClose(currPoint,point1,point2){
-    let dxc = currPoint.x - point1.x;
-    let dyc = currPoint.y - point1.y;
+    let x_pass = Math.abs(point1.x) <= Math.abs(currPoint.x) <= Math.abs(point2.x);
+    let y_pass = Math.abs(point1.y) <= Math.abs(currPoint.y) <= Math.abs(point2.y);
 
-    let dxl = point2.x - point1.x;
-    let dyl = point2.y - point1.y;
-
-    let cross = dxc * dyl - dyc * dxl;
-
-    return cross
+    return x_pass && y_pass
   }
   isWin(cc_locate){ // 是否胜利
     return cc_locate.lb.y > this.export_locate.lb.y
