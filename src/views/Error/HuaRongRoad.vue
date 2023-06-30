@@ -95,22 +95,22 @@ class Soldier {
     all_locate.forEach( other_local => {
       // 如果当前角色的 (左上点的y >= .左上点的y && 左上点的y < 坐下点y) && 左上点的x == .右上点的x
       if(move_direct == 'l'){
-        if(this.role_locate.lt.x == other_local.rt.x && ( this.role_locate.lt.y >= other_local.lt.y &&  this.role_locate.lt.y < other_local.lb.y )){
+        if(this.role_locate.lt.x == other_local.rt.x && ( this.role_locate.lt.y == other_local.lt.y || this.role_locate.lt.y == other_local.lb.y )){
           is_block_other = true;
         }
       }
       if(move_direct == 'r'){
-        if(this.role_locate.rt.x == other_local.lt.x && ( this.role_locate.rt.y >= other_local.rt.y &&  this.role_locate.rt.y < other_local.rb.y )){
+        if(this.role_locate.rt.x == other_local.lt.x && ( this.role_locate.rt.y == other_local.lt.y || this.role_locate.rt.y == other_local.rb.y )){
           is_block_other = true;
         }
       }
       if(move_direct == 't'){
-        if(this.role_locate.lt.y == other_local.lb.y && ( this.role_locate.lt.x >= other_local.lb.x &&  this.role_locate.lt.x < other_local.rb.x )){
+        if(this.role_locate.lt.y == other_local.lb.y && ( this.role_locate.lt.x == other_local.lb.x || this.role_locate.lt.x == other_local.rb.x )){
           is_block_other = true;
         }
       }
       if(move_direct == 'b'){
-        if(this.role_locate.lb.y == other_local.lt.y && ( this.role_locate.lb.x >= other_local.lt.x &&  this.role_locate.lb.x < other_local.rt.x )){
+        if(this.role_locate.lb.y == other_local.lt.y && ( this.role_locate.lb.x == other_local.lt.x || this.role_locate.lb.x == other_local.rt.x )){
           is_block_other = true;
         }
       }
@@ -180,6 +180,11 @@ function getImage(url){
 }
 
 function swipeHandler(move_direct,item){
+  if(item.name == 'cc'){
+    if(item.isWin(item.role_locate)){
+      alert('成功')
+    }
+  }
   if(item.itCanMove(all_role_locate.value,move_direct)){
     if(move_direct == 'l'){
       item.left -= grid_size
