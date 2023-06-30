@@ -20,7 +20,6 @@
           v-touch:swipe.right="()=>{swipeHandler('r',v)}"
           v-touch:swipe.top="()=>{swipeHandler('t',v)}"
           v-touch:swipe.bottom="()=>{swipeHandler('b',v)}"
-          v-touch:drag.once="ceshi"
         >{{ v.cn_name }}</div>
       </div>
       <div id="export"></div>
@@ -64,79 +63,89 @@ class Soldier {
       name:name
     }
   }
-  itCanMove(all_locate,move_way,move_direct) { // 是否可以移动 move_way移动方式[前进或后退] move_direct移动方向
-    let is_close_wall = false;
-    let is_close_other = false;
-    if(move_way == "h"){ // h横向
-      if(move_direct){ // 向右走
-        // 是否有墙壁阻挡
-        if(this.role_locate.rt.x == this.wall_locate.rt.x){
-          is_close_wall = true;
-        }
-        // 是否有角色阻挡
-        all_locate.forEach( other_local => {
-          if( this.role_locate.rt.x == other_local.rt.x &&  (this.role_locate.rt.y <= other_local.rt.y &&  this.role_locate.rb.y >= other_local.rb.y)  ){
-            is_close_other = true;
-          }
-        })
-      }else{ // 想左走
-        // 是否有墙壁阻挡
-        if(this.role_locate.lt.x == this.wall_locate.lt.x){
-          is_close_wall = true;
-        }
-        // 是否有角色阻挡
-        all_locate.forEach( other_local => {
-          if( this.role_locate.lt.x == other_local.lt.x &&  (this.role_locate.lt.y <= other_local.lt.y &&  this.role_locate.rb.y >= other_local.rb.y)  ){
-            is_close_other = true;
-          }
-        })
-      }
-      
+  itCanMove(all_locate,move_direct) { // 是否可以移动 move_way移动方式[前进或后退] move_direct移动方向
+    let dir = ''
+    let start_opint = ''
+    if(move_direct == 'l'){
+      dir = 'x'
+      start_opint = 'lt'
     }
-    if(move_way == "v"){ // v竖向
-      if(move_direct){ // 向上走
-        // 是否有墙壁阻挡
-        if(this.role_locate.lt.y == this.wall_locate.lt.y){
-          is_close_wall = true;
-        }
-        // 是否有角色阻挡
-        all_locate.forEach( other_local => {
-          if(other_local.name !== this.role_locate.name && this.role_locate.lt.y == other_local.lt.y &&  (this.role_locate.lt.x >= other_local.lt.x &&  this.role_locate.rt.x <= other_local.rt.x)  ){
-            is_close_other = true;
-          }
-        })
-      }else{ // 向下走
-        // 是否有墙壁阻挡
-        if(this.role_locate.lb.y == this.wall_locate.lb.y){
-          is_close_wall = true;
-        }
-        // 是否是曹操且在出口处
-        if(this.role_locate.name == "cc" && (this.role_locate.lb.x >= this.export_locate.lb.x &&  this.role_locate.rb.x <=  this.export_locate.rb.x)){
-          is_close_wall = false;
-        }
-        // 是否有角色阻挡
-        all_locate.forEach( other_local => {
-          if(other_local.name !== this.role_locate.name && this.role_locate.lb.y == other_local.lb.y &&  (this.role_locate.lb.x >= other_local.lb.x && this.role_locate.rb.x <= other_local.rb.x)  ){
-            // console.log(other_local,this.role_locate.lb.y +'=='+ other_local.lb.y +'&&'+  (this.role_locate.lb.x +'>='+ other_local.lb.x +'&&'+this.role_locate.rb.x +'<='+ other_local.rb.x))
-            is_close_other = true;
-          }
-          
-        })
-      }
+    if(move_direct == 'r'){
+      dir = 'x'
+      start_opint = 'rt'
     }
+    if(move_direct == 't'){
+      dir = 'y'
+      start_opint = 'lt'
+    }
+    if(move_direct == 'b'){
+      dir = 'y'
+      start_opint = 'lb'
+    }
+    let is_block_wall = false; // 是否有墙阻挡
+    let is_block_other = false; // 是否有其他角色阻挡
 
-    if(is_close_wall){
+    if(this.role_locate[start_opint][dir] == this.wall_locate[start_opint][dir]) is_block_wall = true;
+    all_locate.forEach( other_local => {
+      // 如果当前角色的 (左上点的y >= .左上点的y && 左上点的y < 坐下点y) && 左上点的x == .右上点的x
+      if(move_direct == 'l'){
+        if(this.role_locate.lt.x == other_local.rt.x && ( this.role_locate.lt.y >= other_local.lt.y &&  this.role_locate.lt.y < other_local.lb.y )){
+          is_block_other = true;
+        }
+      }
+      if(move_direct == 'r'){
+        if(this.role_locate.rt.x == other_local.lt.x && ( this.role_locate.rt.y >= other_local.rt.y &&  this.role_locate.rt.y < other_local.rb.y )){
+          is_block_other = true;
+        }
+      }
+      if(move_direct == 't'){
+        if(this.role_locate.lt.y == other_local.lb.y && ( this.role_locate.lt.x >= other_local.lb.x &&  this.role_locate.lt.x < other_local.rb.x )){
+          is_block_other = true;
+        }
+      }
+      if(move_direct == 'b'){
+        if(this.role_locate.lb.y == other_local.lt.y && ( this.role_locate.lb.x >= other_local.lt.x &&  this.role_locate.lb.x < other_local.rt.x )){
+          is_block_other = true;
+        }
+      }
+    })
+    if(is_block_wall){
       console.log('有墙壁阻挡');
       return false;
-    }else if(is_close_other){
+    }else if(is_block_other){
       console.log('有人阻挡');
       return false;
     }else{
       return true;
     }
   }
+  
   isWin(cc_locate){ // 是否胜利
     return cc_locate.lb.y > this.export_locate.lb.y
+  }
+
+  move(step = 1,move_direct){ // 坐标改变
+    let dir = 'x';
+    let distence = 1
+    if(move_direct == 'l'){
+      dir = 'x';
+      distence = -1;
+    }
+    if(move_direct == 'r'){
+      dir = 'x';
+      distence = 1;
+    }
+    if(move_direct == 't'){
+      dir = 'y';
+      distence = -1;
+    }
+    if(move_direct == 'b'){
+      dir = 'y';
+      distence = 1;
+    }
+    Object.keys(this.role_locate).forEach( key => {
+      this.role_locate[key][dir] += (distence * step)
+    })
   }
 }
 let cc = new Soldier(2,2,[1,0],'cc.png','cc','曹操');
@@ -161,11 +170,9 @@ function getImage(url){
   return new URL(url, import.meta.url).href
 }
 
-function swipeHandler(move_direct){
-  console.log(move_direct)
-}
-function ceshi(){
-  console.log(arguments)
+function swipeHandler(move_direct,item){
+  item.itCanMove(all_role_locate,move_direct)
+  console.log(move_direct,item)
 }
 </script>
 
