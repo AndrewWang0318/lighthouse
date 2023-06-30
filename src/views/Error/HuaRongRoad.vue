@@ -68,52 +68,46 @@ class Soldier {
   itCanMove(all_locate,move_direct) { // 是否可以移动 move_way移动方式[前进或后退] move_direct移动方向
     let dir = ''
     let start_opint = ''
+    let end_opint = ''
     if(move_direct == 'l'){
       dir = 'x'
       start_opint = 'lt'
+      end_opint = 'lb'
     }
     if(move_direct == 'r'){
       dir = 'x'
       start_opint = 'rt'
+      end_opint = 'rb'
     }
     if(move_direct == 't'){
       dir = 'y'
       start_opint = 'lt'
+      end_opint = 'rt'
     }
     if(move_direct == 'b'){
       dir = 'y'
       start_opint = 'lb'
+      end_opint = 'rb'
     }
+
+    
+
     let is_block_wall = false; // 是否有墙阻挡
     let is_block_other = false; // 是否有其他角色阻挡
 
-    if(this.role_locate[start_opint][dir] == this.wall_locate[start_opint][dir]) is_block_wall = true;
+    let wall_start_point_close = this.isClose(this.role_locate[start_opint],this.wall_locate[start_opint],this.wall_locate[end_opint])
+    let wall_end_point_close = this.isClose(this.role_locate[end_opint],this.wall_locate[start_opint],this.wall_locate[end_opint])
+    if(!wall_start_point_close && !wall_end_point_close) is_block_wall = true;
     // 如果是曹操在出口则不算墙阻挡
     if(this.name == 'cc'&& move_direct == 'b' && this.role_locate.lb.x == this.export_locate.lb.x && this.role_locate.rb.x == this.export_locate.rb.x){
       is_block_wall = false;
     }
     all_locate.forEach( other_local => {
       // 如果当前角色的 (左上点的y >= .左上点的y && 左上点的y < 坐下点y) && 左上点的x == .右上点的x
-      if(move_direct == 'l'){
-        if(this.role_locate.lt.x == other_local.rt.x && ( this.role_locate.lt.y == other_local.lt.y || this.role_locate.lt.y == other_local.lb.y )){
-          is_block_other = true;
-        }
-      }
-      if(move_direct == 'r'){
-        if(this.role_locate.rt.x == other_local.lt.x && ( this.role_locate.rt.y == other_local.lt.y || this.role_locate.rt.y == other_local.rb.y )){
-          is_block_other = true;
-        }
-      }
-      if(move_direct == 't'){
-        if(this.role_locate.lt.y == other_local.lb.y && ( this.role_locate.lt.x == other_local.lb.x || this.role_locate.lt.x == other_local.rb.x )){
-          is_block_other = true;
-        }
-      }
-      if(move_direct == 'b'){
-        if(this.role_locate.lb.y == other_local.lt.y && ( this.role_locate.lb.x == other_local.lt.x || this.role_locate.lb.x == other_local.rt.x )){
-          is_block_other = true;
-        }
-      }
+      // 判断两点坐标 在目标两点之中
+      let role_start_point_close = this.isClose(this.role_locate[start_opint],other_local[start_opint],other_local[end_opint])
+      let role_end_point_close = this.isClose(this.role_locate[end_opint],other_local[start_opint],other_local[end_opint])
+      if(!role_start_point_close && !role_end_point_close) is_block_other = true;
     })
     if(is_block_wall){
       console.log('有墙壁阻挡');
@@ -125,7 +119,17 @@ class Soldier {
       return true;
     }
   }
-  
+  isClose(currPoint,point1,point2){
+    let dxc = currPoint.x - point1.x;
+    let dyc = currPoint.y - point1.y;
+
+    let dxl = point2.x - point1.x;
+    let dyl = point2.y - point1.y;
+
+    let cross = dxc * dyl - dyc * dxl;
+
+    return cross
+  }
   isWin(cc_locate){ // 是否胜利
     return cc_locate.lb.y > this.export_locate.lb.y
   }
