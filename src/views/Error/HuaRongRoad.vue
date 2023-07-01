@@ -6,8 +6,9 @@
         <span>关卡: </span>
         <span style="color: green;">{{ level_name }}</span>
       </div>
-      <div>移动步数: <span style="color: yellow;">{{ move_step }}</span></div>
-      <div>规则</div>
+      <div>移动步数: <span style="color: brown;">{{ move_step }}</span></div>
+      
+      <div class="rank-title">排行榜</div>
     </div>
     <div id="game-content" :style="{
       width: wall_w * grid_size + 'rem',
@@ -33,8 +34,8 @@
         width: export_w * grid_size + 'rem'
       }"></div>
     </div>
-    <div id="game-rank">
-      <div class="rank-title">排行榜</div>
+    <div id="game-rule">
+      <div>规则</div>
     </div>
 
     <van-popup v-model:show="showLevePicker" round position="bottom">
@@ -65,7 +66,9 @@ const wall_h = 5; // 盒子的高
 const export_w = 2; // 出口的宽度
 
 let move_step = ref(0);// 移动步数
-let all_role = ref([]) // 所有人物
+// let all_role = ref([]) // 所有人物
+// let all_role_locate = ref([]); // 所有人物坐标点
+let all_role = [] // 所有人物
 let all_role_locate = ref([]); // 所有人物坐标点
 
 class Soldier {
@@ -203,9 +206,9 @@ class Soldier {
 }
 gameStart('level1')
 
-// 游戏开始
+// 游戏开始 [重新换关卡存在响应丢失问题]
 function gameStart(level) {
-  all_role.value = all_level_data[level].data.map(item => new Soldier(...item)) // 所有人物
+  all_role = ref(all_level_data[level].data.map(item => new Soldier(...item))) // 所有人物
   all_role_locate.value = all_role.value.map(v => v.role_locate); // 所有人物坐标点
 }
 
@@ -245,7 +248,9 @@ function getImage(url) {
   padding-top: 1rem;
   box-sizing: border-box;
   touch-action: none; // 禁止页面拖动
-
+  background-image: url('../../assets/images/hrd/bg2.jpg');
+  background-size: auto 100%;
+  background-position: center center;
   #game-title {
     font-weight: bold;
     font-size: 0.8rem;
@@ -260,16 +265,17 @@ function getImage(url) {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.1rem;
+    font-weight: bold;
   }
 
   #game-content {
     width: 6rem;
     height: 7.5rem;
-    background-color: rgba(0, 0, 0, 0.7);
-    border: 0.08rem solid rgb(0, 0, 0);
+    background-color: rgb(137, 126, 114);
+    border: 0.08rem solid black;
     position: relative;
     margin: 0 auto;
-
+    
     #role-content {
       width: 6rem;
       height: 7.5rem;
@@ -301,14 +307,25 @@ function getImage(url) {
 
     #wall-export {
       width: 3rem;
-      height: 1.5rem;
-      background-color: rgb(201, 177, 147);
+      height: 0.1rem;
+      background-color: rgb(137, 126, 114);
       position: absolute;
       left: 50%;
-      transform: translateX(-50%) translateY(1.5rem);
-      bottom: 0;
+
+      transform: translateX(-50%);
+      bottom: -0.08rem;
       z-index: 2;
     }
+  }
+
+  #game-rule{
+
+
+    position: absolute;
+    right: 0.5rem;
+    top: 0.4rem;
+    // color: #fff;
+    font-weight: bold;
   }
 }
 </style>
