@@ -1,5 +1,11 @@
 <template >
   <div class="page-hrd">
+    <van-nav-bar
+      title=""
+      left-text="返回"
+      left-arrow
+      @click-left="router.go(-1)"
+    />
     <div id="game-title">三国华容道</div>
     <div id="game-guild">
       <div class="level-select" @click="showLevePicker = true">
@@ -49,7 +55,10 @@
 <script setup>
 import all_level_data from "./hrd_level"
 import { ref } from 'vue';
+import { useRouter } from "vue-router";
+const router = useRouter();
 let reflash_game = ref(false);
+
 
 const walk_audio_el = ref('');
 const level_name_columns = Object.keys(all_level_data).map((key, i) => {
@@ -216,7 +225,6 @@ function gameStart(level) {
   all_role = ref(all_role_data)
   all_role_locate = ref(all_role_data.map(v => v.role_locate)); // 所有人物坐标点
 
-
   move_step.value = 0
   setTimeout(()=>{
     reflash_game.value = true
@@ -261,13 +269,14 @@ function getUrl(url) {
 .page-hrd {
   min-height: 100vh;
   background-color: rgb(201, 177, 147);
-  padding-top: 1rem;
+  
   box-sizing: border-box;
   touch-action: none; // 禁止页面拖动
   background-image: url('../../assets/images/hrd/bg2.jpg');
   background-size: auto 100%;
   background-position: center center;
   #game-title {
+    padding-top: 1rem;
     font-weight: bold;
     font-size: 0.8rem;
     text-align: center;
@@ -342,6 +351,9 @@ function getUrl(url) {
     top: 0.4rem;
     // color: #fff;
     font-weight: bold;
+  }
+  :deep(.van-nav-bar){
+    background-color: transparent !important;
   }
 }
 </style>

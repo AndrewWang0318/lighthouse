@@ -26,8 +26,7 @@ const comopnents_arr = [
   'ErrorCode',
   'HuaRongRoad'
 ]
-// let current_components = comopnents_arr[random_num - 1];
-let current_components = comopnents_arr[1];
+let current_components = comopnents_arr[random_num - 1];
 </script>
 
 <style lang="scss" scoped>

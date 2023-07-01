@@ -9,7 +9,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect:'/Error',
+      redirect:'/Login',
       
     },
     {
@@ -78,6 +78,15 @@ const router = createRouter({
       }
     },
 
+    {
+      path: '/HuaRongRoad',
+      name: 'HuaRongRoad',
+      component: () => import('@/views/Error/HuaRongRoad.vue'),
+      meta:{
+        name:'华容道'
+      }
+    },
+    
     {
       path: '/DynamicPublish',
       name: 'DynamicPublish',

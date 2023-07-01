@@ -163,11 +163,11 @@ export default {
   import base_url from "@/request/base_url";
   import moment from "moment"; // 引入moment时间处理模块
 
-  const _store = useStore();
+  const store = useStore();
   const router = useRouter();
   const instance = getCurrentInstance();
   const baseURL = base_url;
-  let userInfo = _store.userInfo;
+  let userInfo = store.userInfo;
 
   
   let avatar_mask = ref(false);
@@ -185,7 +185,7 @@ export default {
         showToast(res.data.msg);
 
         // 修补方式
-        _store.$patch((state) => {
+        store.$patch((state) => {
           state.userInfo.user_avatar = res.data.user_avatar
         })
       });
@@ -204,7 +204,7 @@ export default {
     _API.updateUserAvatar(formData).then((res) => {
       showToast(res.data.msg);
       // 修补方式
-      _store.$patch((state) => {
+      store.$patch((state) => {
         state.userInfo.user_avatar = res.data.user_avatar
       })
     });
@@ -301,33 +301,33 @@ export default {
       showToast(res.data.msg);
       if (res.data.code == 0) {
         if(key == "user_nickname"){
-          _store.$patch((state) => {
+          store.$patch((state) => {
             state.userInfo.user_nickname = param.user_nickname
           })
           nickname_show.value = false
         } else if (key == "user_sex") {
-          _store.$patch((state) => {
+          store.$patch((state) => {
             state.userInfo.user_sex = param.user_sex
           })
           sex_dialog_show.value = false
         } else if (key == "user_birth") {
-          _store.$patch((state) => {
+          store.$patch((state) => {
             state.userInfo.user_birth = param.user_birth
           })
           birth_choice_show.value = false
         } else if (key == "user_signature"){
-          _store.$patch((state) => {
+          store.$patch((state) => {
             state.userInfo.user_signature = param.user_signature
           })
           signature_show.value = false
         } else if (key == "user_locat") {
-          _store.$patch((state) => {
+          store.$patch((state) => {
             state.userInfo.user_locat = param.user_locat
           })
           address_choice_show.value = false
         }
 
-        _store.$patch((state) => {
+        store.$patch((state) => {
           state.userInfo.user_nickname = user_info_form.user_nickname;
           state.userInfo.user_sex = user_info_form.user_sex;
           state.userInfo.user_birth = user_info_form.user_birth;

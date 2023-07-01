@@ -14,6 +14,8 @@
     </div>
     <div class="function-content">
       <div class="setting-area">
+        <div class="setting-item" @click="router.push('/HuaRongRoad')">华容道游戏</div>
+        <div class="setting-item" @click="router.push('/unknow')">未知领域</div>
         <div class="setting-item" @click="exit">退出登录</div>
       </div>
     </div>
@@ -43,8 +45,7 @@ export default {
   if (JSON.stringify(userInfo) !== "{}") {
     isLogin.value = true
   }
-
-
+  
   const jumpLogin = () => {
     router.push("/login");
   }
