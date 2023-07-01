@@ -1,39 +1,73 @@
 <template >
   <div class="page-hrd">
-    <div id="game-title">华容道</div>
-    <div>移动步数{{ move_step }}</div>
-    <div>规则</div>
-    <div id="game-content">
-      <div id="role-content">
-        <div v-for="v in all_role" :class="`role-item ${v.name}`" :style="{
+    <div id="game-title">三国华容道</div>
+    <div id="game-guild">
+      <div class="level-select" @click="showLevePicker = true">
+        <span>关卡: </span>
+        <span style="color: green;">{{ level_name }}</span>
+      </div>
+      <div>移动步数: <span style="color: yellow;">{{ move_step }}</span></div>
+      <div>规则</div>
+    </div>
+    <div id="game-content" :style="{
+      width: wall_w * grid_size + 'rem',
+      height: wall_h * grid_size + 'rem',
+    }">
+      <div id="role-content" :style="{
+        width: wall_w * grid_size + 'rem',
+        height: wall_h * grid_size + 'rem',
+      }">
+        <div v-for="v in all_role" :class="`role-item ${v.class_name}`" :style="{
           width: v.width,
           height: v.height,
+          position: 'absolute',
           top: `${v.top}rem`,
           left: `${v.left}rem`,
-          position: 'absolute',
-          backgroundImage: `url( ${getImage(`/assets/images/hrd/${v.img}`)} )`,
-          border: '0.02rem solid gray',
-          boxSizing: 'border-box',
+          backgroundImage: `url( ${getImage(`../../assets/images/hrd/${v.img}`)} )`,
         }" v-touch:swipe.left="() => { touchMove('l', v) }" v-touch:swipe.right="() => { touchMove('r', v) }"
           v-touch:swipe.top="() => { touchMove('t', v) }" v-touch:swipe.bottom="() => { touchMove('b', v) }">{{
             v.cn_name }}
         </div>
       </div>
-      <div id="export"></div>
+      <div id="wall-export" :style="{
+        width: export_w * grid_size + 'rem'
+      }"></div>
+    </div>
+    <div id="game-rank">
+      <div class="rank-title">排行榜</div>
     </div>
 
-    <div>排行榜</div>
+    <van-popup v-model:show="showLevePicker" round position="bottom">
+      <van-picker :columns="level_name_columns" @cancel="showLevePicker = false" @confirm="levePickerConfirm" />
+    </van-popup>
   </div>
 </template>
 
 <script setup>
 import all_level_data from "./hrd_level"
 import { ref } from 'vue';
+
+const level_name_columns = Object.keys(all_level_data).map((key, i) => {
+  return { text: all_level_data[key].name, value: i }
+})
+let level_name = ref(level_name_columns[0].text)
+let showLevePicker = ref(false);
+const levePickerConfirm = ({ selectedOptions }) => {
+  showLevePicker.value = false;
+  level_name.value = selectedOptions[0].text;
+
+  gameStart(`level${selectedOptions[0].value + 1}`)
+};
+
 const grid_size = 1.5;// 布局一格的长度
 const wall_w = 4; // 盒子的宽
 const wall_h = 5; // 盒子的高
 const export_w = 2; // 出口的宽度
-let move_step = ref(0);
+
+let move_step = ref(0);// 移动步数
+let all_role = ref([]) // 所有人物
+let all_role_locate = ref([]); // 所有人物坐标点
+
 class Soldier {
   constructor(w, h, lt, img_name, name, cn_name) {
     this.class_name = name;
@@ -45,8 +79,8 @@ class Soldier {
     this.img = img_name;
     // 出口坐标
     this.export_locate = {
-      rb: { x: (wall_w - export_w) / 2, y: wall_h },
-      lb: { x: ((wall_w - export_w) / 2) + export_w, y: wall_h }
+      lb: { x: (wall_w - export_w) / 2, y: wall_h },
+      rb: { x: ((wall_w - export_w) / 2) + export_w, y: wall_h }
     }
     // 墙壁坐标
     this.wall_locate = {
@@ -67,9 +101,9 @@ class Soldier {
   itCanMove(all_locate, move_direct) { // 是否可以移动 move_way移动方式[前进或后退] move_direct移动方向
     // 是否有其他角色阻挡
     let is_block_other = false;
-    all_locate.forEach( other_local => {
-      let role_close = this.isCloseRole(move_direct,this.role_locate,other_local)
-      if(role_close) is_block_other = true;
+    all_locate.forEach(other_local => {
+      let role_close = this.isCloseRole(move_direct, this.role_locate, other_local)
+      if (role_close) is_block_other = true;
     })
     // 是否有墙阻挡
     let is_block_wall = this.isCloseWall(move_direct, this.role_locate);
@@ -84,7 +118,7 @@ class Soldier {
     }
   }
   isCloseRole(move_direct, cur_local, tar_local) { // 是否靠近其他角色
-    let c_dir,t_dir; // 接触方向 判断方向
+    let c_dir, t_dir; // 接触方向 判断方向
     let c_p1, c_p2, t_p1, t_p2;
     if (move_direct == 'l') {
       c_p1 = cur_local.lt
@@ -133,13 +167,13 @@ class Soldier {
 
     return is_close || is_inset;
   }
-  isCloseWall(move_direct,cur_local){ // 是否靠近墙壁
+  isCloseWall(move_direct, cur_local) { // 是否靠近墙壁
     let is_close_wall = false
     if (move_direct == 'l') is_close_wall = cur_local.lt.x == this.wall_locate.lt.x;
     if (move_direct == 'r') is_close_wall = cur_local.rt.x == this.wall_locate.rt.x;
     if (move_direct == 't') is_close_wall = cur_local.lt.y == this.wall_locate.lt.y;
     if (move_direct == 'b') is_close_wall = cur_local.rb.y == this.wall_locate.rb.y;
-    if(cur_local.name == 'cc' && move_direct == 'b' &&  cur_local.lb.x == this.export_locate.lb.x && cur_local.rb.x == this.export_locate.rb.x){
+    if (cur_local.name == 'cc' && move_direct == 'b' && cur_local.lb.x == this.export_locate.lb.x && cur_local.rb.x == this.export_locate.rb.x) {
       is_close_wall = false;
     }
     return is_close_wall
@@ -147,7 +181,6 @@ class Soldier {
   isWin(cc_locate) { // 是否胜利
     return cc_locate.lb.y > this.export_locate.lb.y
   }
-
   move(move_direct, step = 1) { // 坐标改变
     let distence = 1
     if (move_direct == 'l' || move_direct == 't') {
@@ -168,13 +201,18 @@ class Soldier {
     })
   }
 }
+gameStart('level1')
 
-let all_role = ref(all_level_data.level1.map(item=> new Soldier(...item))) // 所有人物
-let all_role_locate = ref(all_role.value.map(v => v.role_locate)); // 所有人物坐标点
+// 游戏开始
+function gameStart(level) {
+  all_role.value = all_level_data[level].data.map(item => new Soldier(...item)) // 所有人物
+  all_role_locate.value = all_role.value.map(v => v.role_locate); // 所有人物坐标点
+}
+
 // touchMove事件
 function touchMove(move_direct, item) {
   // 如果不能移动则返回
-  if(!item.itCanMove(all_role_locate.value, move_direct)) return false ;
+  if (!item.itCanMove(all_role_locate.value, move_direct)) return false;
   // 坐标处理
   item.move(move_direct)
   // 视图处理
@@ -186,11 +224,13 @@ function touchMove(move_direct, item) {
   // 判断是否成功
   const cc_role = (all_role_locate.value.filter((item) => item.name == 'cc'))[0]
   if (item.isWin(cc_role)) {
-    alert('成功');
+
+    setTimeout(() => {
+      alert('成功');
+    }, 200)
     return false;
   }
 }
-
 
 // 获取图片
 function getImage(url) {
@@ -214,11 +254,19 @@ function getImage(url) {
     font-family: '楷体';
   }
 
+  #game-guild {
+    margin: 0 auto;
+    width: 6rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.1rem;
+  }
+
   #game-content {
     width: 6rem;
     height: 7.5rem;
     background-color: rgba(0, 0, 0, 0.7);
-    border: 0.1rem solid rgb(0, 0, 0);
+    border: 0.08rem solid rgb(0, 0, 0);
     position: relative;
     margin: 0 auto;
 
@@ -229,22 +277,29 @@ function getImage(url) {
       z-index: 9;
       top: 0;
       left: 0;
-
+      .cc{
+        color: brown !important;
+        border-color: brown !important;
+        font-size: 0.4rem !important;
+      }
       .role-item {
         font-family: '楷体';
         font-size: 0.26rem;
-        line-height: 0.36rem;
-        text-indent: 0.1rem;
+        padding-top: 0.06rem;
+        padding-left: 0.06rem;
         font-weight: bold;
-        color: goldenrod;
+        color: rgb(195, 251, 112);
         background-size: 100% 100%;
         background-repeat: no-repeat;
         background-position: center center;
         transition: all 0.2s;
+        border: 0.03rem solid rgb(113, 152, 51);
+
+        box-sizing: border-box;
       }
     }
 
-    #export {
+    #wall-export {
       width: 3rem;
       height: 1.5rem;
       background-color: rgb(201, 177, 147);
