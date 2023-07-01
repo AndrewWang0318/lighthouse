@@ -10,7 +10,7 @@
       
       <div class="rank-title">排行榜</div>
     </div>
-    <div id="game-content" :style="{
+    <div id="game-content" v-if="!reflash_game" :style="{
       width: wall_w * grid_size + 'rem',
       height: wall_h * grid_size + 'rem',
     }">
@@ -24,7 +24,7 @@
           position: 'absolute',
           top: `${v.top}rem`,
           left: `${v.left}rem`,
-          backgroundImage: `url( ${getImage(`../../assets/images/hrd/${v.img}`)} )`,
+          backgroundImage: `url( ${getUrl(`../../assets/images/hrd/${v.img}`)} )`,
         }" v-touch:swipe.left="() => { touchMove('l', v) }" v-touch:swipe.right="() => { touchMove('r', v) }"
           v-touch:swipe.top="() => { touchMove('t', v) }" v-touch:swipe.bottom="() => { touchMove('b', v) }">{{
             v.cn_name }}
@@ -37,6 +37,8 @@
     <div id="game-rule">
       <div>规则</div>
     </div>
+    <audio hidden ref="walk_audio_el" :src="'../../assets/audio/walk.wav'"></audio>
+
 
     <van-popup v-model:show="showLevePicker" round position="bottom">
       <van-picker :columns="level_name_columns" @cancel="showLevePicker = false" @confirm="levePickerConfirm" />
@@ -47,7 +49,9 @@
 <script setup>
 import all_level_data from "./hrd_level"
 import { ref } from 'vue';
+let reflash_game = ref(false);
 
+const walk_audio_el = ref('');
 const level_name_columns = Object.keys(all_level_data).map((key, i) => {
   return { text: all_level_data[key].name, value: i }
 })
@@ -60,15 +64,15 @@ const levePickerConfirm = ({ selectedOptions }) => {
   gameStart(`level${selectedOptions[0].value + 1}`)
 };
 
+
+
 const grid_size = 1.5;// 布局一格的长度
 const wall_w = 4; // 盒子的宽
 const wall_h = 5; // 盒子的高
 const export_w = 2; // 出口的宽度
 
 let move_step = ref(0);// 移动步数
-// let all_role = ref([]) // 所有人物
-// let all_role_locate = ref([]); // 所有人物坐标点
-let all_role = [] // 所有人物
+let all_role = ref([]) // 所有人物
 let all_role_locate = ref([]); // 所有人物坐标点
 
 class Soldier {
@@ -208,8 +212,18 @@ gameStart('level1')
 
 // 游戏开始 [重新换关卡存在响应丢失问题]
 function gameStart(level) {
-  all_role = ref(all_level_data[level].data.map(item => new Soldier(...item))) // 所有人物
-  all_role_locate.value = all_role.value.map(v => v.role_locate); // 所有人物坐标点
+  const all_role_data = all_level_data[level].data.map(item => new Soldier(...item)) // 所有人物
+  all_role = ref(all_role_data)
+  all_role_locate = ref(all_role_data.map(v => v.role_locate)); // 所有人物坐标点
+
+
+  move_step.value = 0
+  setTimeout(()=>{
+    reflash_game.value = true
+  },400)
+  setTimeout(()=>{
+    reflash_game.value = false
+  },410)
 }
 
 // touchMove事件
@@ -224,6 +238,8 @@ function touchMove(move_direct, item) {
   if (move_direct == 't') item.top -= grid_size;
   if (move_direct == 'b') item.top += grid_size;
   move_step.value += 1
+  walk_audio_el.value.load()
+  walk_audio_el.value.play()
   // 判断是否成功
   const cc_role = (all_role_locate.value.filter((item) => item.name == 'cc'))[0]
   if (item.isWin(cc_role)) {
@@ -236,7 +252,7 @@ function touchMove(move_direct, item) {
 }
 
 // 获取图片
-function getImage(url) {
+function getUrl(url) {
   return new URL(url, import.meta.url).href
 }
 </script>
