@@ -209,6 +209,7 @@
     left: 0;
     display: flex;
     align-items: center;
+    z-index: 2;
     .comment-input{
       border-radius: 0.2rem;
       height: 0.68rem;

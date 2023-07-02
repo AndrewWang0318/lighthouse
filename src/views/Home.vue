@@ -18,5 +18,6 @@ import BottomBar from '@/components/BottomBar.vue'
 }
 #bottom-bar{
   height: 1.2rem;
+  z-index: 9;
 }
 </style>

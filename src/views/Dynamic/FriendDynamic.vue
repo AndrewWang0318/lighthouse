@@ -43,14 +43,14 @@
               </div>
             </div>
             <div class="more-content" ref="moreContent">
-              <div class="like-btn" type-unclose="like-btn" @click="addLike(v, i)">
-                <van-icon name="like-o" ></van-icon>
-                <div class="text">{{ v.is_liked.length > 0 ? '取消' : '赞' }}</div>
+              <div class="like-btn" type-unclose="like-btn" >
+                <van-icon name="like-o"></van-icon>
+                <div class="text" @click="addLike(v, i)">{{ v.is_liked.length > 0 ? '取消' : '赞' }}</div>
               </div>
               <div class="separate"></div>
-              <div class="comment-btn" @click="addComment(v, i)">
+              <div class="comment-btn">
                 <van-icon name="comment-o" ></van-icon>
-                <div class="text">评论</div>
+                <div class="text" @click="addComment(v, i)">评论</div>
               </div>
             </div>
           </div>
@@ -99,7 +99,6 @@ const instance = getCurrentInstance();
 const $global = instance.appContext.app.config.globalProperties;
 const base_url = $global.base_url;
 
-
 // 动态数据
 let dynamicDataList = ref([]);
 let page = ref(1);
@@ -108,18 +107,17 @@ let limit = ref(10);
 let img_preview_arr = reactive([]);
 let img_preview_show = ref(false);
 let img_preview_start = ref(0);
-
-
-let currentIndex = ref(null); // 当前点击的某一项
-
+// 评论数据 
 let comment_text = ref(null);
 let comment_placeholder = ref('请输入...');
 let should_comment_show = ref(false);
-let comment_focus = ref(false);
+
 let current_dynamic_id = ref(null);
+
+let currentIndex = ref(null); // 当前点击的某一项
+let comment_focus = ref(false);
 let comment_to_user_id = ref(0); // 评论的用户的id
 let comment_parent_id = ref(0); // 评论的父级id
-let module_id = ref(4);
 
 
 initData();
@@ -276,14 +274,12 @@ function addLike(v, i) { // 点击赞
 
 
 function addComment(v, i) { // 点击评论
-  jumpInteract(i)
-  comment_placeholder = `请输入...`
-  comment_to_user_id = 0;
-  comment_parent_id = 0;
-  should_comment_show = true;
-
-  setTimeout(() => { instance.refs['commentInput'].focus() }, 30) // 需要先让输入框出现再触发focus事件
-  current_dynamic_id = v.dynamic_id
+  // comment_placeholder = `请输入...`
+  // comment_to_user_id = 0;
+  // comment_parent_id = 0;
+  // current_dynamic_id = v.dynamic_id
+  should_comment_show.value = true;
+  setTimeout(() => { instance.refs['commentInput'].focus() }, 30); // 由于dom显示有延迟使用setTimout延迟focus
 }
 function choiceClick() { // 点击回复评论
   let v = arguments[0]
@@ -303,18 +299,15 @@ function sendComment() { // 发送评论
   let comment_from_user_id = store.userInfo.user_id;
   let comment_to_user_id = comment_to_user_id
   let comment_guide_id = current_dynamic_id;
-  let module_id = module_id;
 
-  let params = { comment_text, comment_from_user_id, comment_to_user_id, comment_parent_id, comment_guide_id, module_id }
+
+  let params = { comment_text, comment_from_user_id, comment_to_user_id, comment_parent_id, comment_guide_id }
   API.addComment(params).then(res => { // 发评论接口请求
     showToast(res.data.message)
     initData()
     comment_text = ''
     should_comment_show = false
   })
-}
-function comment_keyup(e) { // 评论输入框的回车键
-  if (e.key == "Enter") sendComment()
 }
 </script>
 
