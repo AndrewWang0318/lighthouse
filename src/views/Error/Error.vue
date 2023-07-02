@@ -21,7 +21,7 @@ export default {
 import { ref,onBeforeMount,getCurrentInstance } from 'vue'
 const instance = getCurrentInstance();
 const $global = instance.appContext.app.config.globalProperties;
-const random_num = $global.tool.randomNumber(1,2)
+const random_num = $global.tool.randomNumber(1,1)
 const comopnents_arr = [
   'ErrorCode',
   'HuaRongRoad'

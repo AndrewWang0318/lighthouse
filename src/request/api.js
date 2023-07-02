@@ -60,6 +60,15 @@ class Api extends Axios {
     // 获取动态列表
     return await this.axios("GET", "/dynamic/getDynamicList", parmas);
   }
+
+  async addLike(parmas = {}) {
+    // 点赞
+    return await this.axios("POST", "/like/addLike", parmas);
+  }
+  async cancelLike(parmas = {}) {
+    // 取消赞
+    return await this.axios("POST", "/like/cancelLike", parmas);
+  }
 }
 
 const API = new Api();

@@ -224,15 +224,15 @@ export default {
   let sex_choice_data = [
     {
       type: 1,
-      img: new URL("/images/sex_male.png", import.meta.url).href,
+      img: new URL("../../assets/images/sex_male.png", import.meta.url).href,
     },
     {
       type: 0,
-      img: new URL("/images/sex_secret.png", import.meta.url).href,
+      img: new URL("../../assets/images/sex_secret.png", import.meta.url).href,
     },
     {
       type: 2,
-      img: new URL("/images/sex_female.png", import.meta.url).href,
+      img: new URL("../../assets/images/sex_female.png", import.meta.url).href,
     },
   ];
   const sexChange = (v)=>{
