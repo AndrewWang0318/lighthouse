@@ -69,6 +69,11 @@ class Api extends Axios {
     // 取消赞
     return await this.axios("POST", "/like/cancelLike", parmas);
   }
+
+  async addComment(parmas = {}) {
+    // 新增评论
+    return await this.axios("POST", "/comment/addComment", parmas);
+  }
 }
 
 const API = new Api();
