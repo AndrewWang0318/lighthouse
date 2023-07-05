@@ -30,7 +30,7 @@
           position: 'absolute',
           top: `${v.top}rem`,
           left: `${v.left}rem`,
-          backgroundImage: `url( ${getUrl(`/assets/images/hrd/${v.img}`)} )`,
+          backgroundImage: `url(${v.img})`,
         }" v-touch:swipe.left="() => { touchMove('l', v) }" v-touch:swipe.right="() => { touchMove('r', v) }"
           v-touch:swipe.top="() => { touchMove('t', v) }" v-touch:swipe.bottom="() => { touchMove('b', v) }">{{
             v.cn_name }}
@@ -43,7 +43,7 @@
     <div id="game-rule">
       <div>规则</div>
     </div>
-    <audio hidden ref="walk_audio_el" :src="getUrl('/assets/audio/walk.wav')"></audio>
+    <audio hidden ref="walk_audio_el" :src="getUrl('audio/walk.wav')"></audio>
 
 
     <van-popup v-model:show="showLevePicker" round position="bottom">
@@ -56,6 +56,8 @@
 import all_level_data from "./hrd_level"
 import { ref } from 'vue';
 import { useRouter } from "vue-router";
+import { getUrl } from "@/utils/util"
+
 const router = useRouter();
 let reflash_game = ref(false);
 
@@ -92,7 +94,7 @@ class Soldier {
     this.height = `${h * grid_size}rem`;
     this.top = lt[1] * grid_size;
     this.left = lt[0] * grid_size;
-    this.img = img_name;
+    this.img =  getUrl(`images/hrd/${img_name}`);
     // 出口坐标
     this.export_locate = {
       lb: { x: (wall_w - export_w) / 2, y: wall_h },
@@ -259,20 +261,16 @@ function touchMove(move_direct, item) {
   }
 }
 
-// 获取图片
-function getUrl(url) {
-  return new URL(url, import.meta.url).href
-}
+
 </script>
 
 <style scoped lang="scss">
 .page-hrd {
   min-height: 100vh;
   background-color: rgb(201, 177, 147);
-  
   box-sizing: border-box;
   touch-action: none; // 禁止页面拖动
-  background-image: url('../../../public/assets/images/hrd/bg.jpg');
+  background-image: url('../../static/images/hrd/bg.jpg');
   background-size: auto 100%;
   background-position: center center;
   #game-title {

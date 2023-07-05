@@ -162,7 +162,7 @@ export default {
   import { useRouter } from "vue-router";
   import base_url from "@/request/base_url";
   import moment from "moment"; // 引入moment时间处理模块
-
+  import { getUrl } from "@/utils/util"
   const store = useStore();
   const router = useRouter();
   const instance = getCurrentInstance();
@@ -213,10 +213,11 @@ export default {
   let user_info_form = reactive({
     user_nickname:userInfo.user_nickname,
     user_sex:userInfo.user_sex,
-    user_birth:(userInfo.user_birth || moment().format('YYYY-MM-DD')).split("-"),
+    user_birth: (userInfo.user_birth || moment().format('YYYY-MM-DD') ).split("-"),
     user_signature:userInfo.user_signature,
     user_locat:userInfo.user_locat,
   });
+  
    // 修改昵称
   let nickname_show = ref(false);
   // 修改性别
@@ -224,15 +225,15 @@ export default {
   let sex_choice_data = [
     {
       type: 1,
-      img: new URL("/assets/images/sex_male.png", import.meta.url).href,
+      img: getUrl("images/sex_male.png"),
     },
     {
       type: 0,
-      img: new URL("/assets/images/sex_secret.png", import.meta.url).href,
+      img: getUrl("images/sex_secret.png"),
     },
     {
       type: 2,
-      img: new URL("/assets/images/sex_female.png", import.meta.url).href,
+      img: getUrl("images/sex_female.png"),
     },
   ];
   const sexChange = (v)=>{
@@ -328,11 +329,11 @@ export default {
         }
 
         store.$patch((state) => {
-          state.userInfo.user_nickname = user_info_form.user_nickname;
-          state.userInfo.user_sex = user_info_form.user_sex;
-          state.userInfo.user_birth = user_info_form.user_birth;
-          state.userInfo.user_signature = user_info_form.user_signature;
-          state.userInfo.user_locat = user_info_form.user_locat;
+          state.userInfo.user_nickname = param.user_nickname;
+          state.userInfo.user_sex = param.user_sex;
+          state.userInfo.user_birth = param.user_birth;
+          state.userInfo.user_signature = param.user_signature;
+          state.userInfo.user_locat = param.user_locat;
         })
       }
     });
