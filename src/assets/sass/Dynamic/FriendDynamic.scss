@@ -20,7 +20,9 @@
       .user-avatar{
         width: 1.2rem;
         height: 1.2rem;
-        background-size: 100% 100%;
+        background-size: 100% auto;
+        background-position: center center;
+        background-repeat: no-repeat;
         border-radius: 6%;
       }
     }
