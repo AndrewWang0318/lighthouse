@@ -30,7 +30,7 @@
           position: 'absolute',
           top: `${v.top}rem`,
           left: `${v.left}rem`,
-          backgroundImage: `url( ${getUrl(`../../assets/images/hrd/${v.img}`)} )`,
+          backgroundImage: `url( ${getUrl(`/assets/images/hrd/${v.img}`)} )`,
         }" v-touch:swipe.left="() => { touchMove('l', v) }" v-touch:swipe.right="() => { touchMove('r', v) }"
           v-touch:swipe.top="() => { touchMove('t', v) }" v-touch:swipe.bottom="() => { touchMove('b', v) }">{{
             v.cn_name }}
@@ -43,7 +43,7 @@
     <div id="game-rule">
       <div>规则</div>
     </div>
-    <audio hidden ref="walk_audio_el" :src="'../../assets/audio/walk.wav'"></audio>
+    <audio hidden ref="walk_audio_el" :src="getUrl('/assets/audio/walk.wav')"></audio>
 
 
     <van-popup v-model:show="showLevePicker" round position="bottom">
@@ -272,7 +272,7 @@ function getUrl(url) {
   
   box-sizing: border-box;
   touch-action: none; // 禁止页面拖动
-  background-image: url('../../assets/images/hrd/bg2.jpg');
+  background-image: url('../../../public/assets/images/hrd/bg.jpg');
   background-size: auto 100%;
   background-position: center center;
   #game-title {

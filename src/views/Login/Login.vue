@@ -39,9 +39,10 @@
         </van-cell-group>
       </div>
       <div style="margin: 16px">
-        <van-button block type="primary" native-type="submit">
+        <van-button style="margin-bottom: 0.2rem;" block type="primary" native-type="submit">
           点击注册
         </van-button>
+        <van-button block type="primary" @click="status = 'login'"> 返回 </van-button>
       </div>
     </van-form>
   </div>

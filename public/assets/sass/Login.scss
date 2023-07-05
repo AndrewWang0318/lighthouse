@@ -1,0 +1,25 @@
+.page-login{
+  .banner-content{
+    background-color: #2e2e2e;
+    padding: 0.04rem;
+    box-sizing: border-box;
+  }
+}
+.my-swipe .van-swipe-item {
+  color: #fff;
+  font-size: 20px;
+  height: 3rem;
+  line-height: 3rem;
+  text-align: center;
+  background-color: #fff;
+}
+.login-content,
+.register-content {
+  background-color: white;
+  padding: 0.2rem 0.1rem;
+}
+.image-item {
+  height: 3rem;
+  background-position: center center;
+  background-size: cover;
+}
