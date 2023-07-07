@@ -7,8 +7,8 @@
 
 <script setup>
 /**
- * @author pikayin
- * 参考来源：谷歌相关源码
+ * @author Andrew
+ * 参考来源：用户@pikayin 相关源码
  * 仅学习用途
  */
  (function () {
