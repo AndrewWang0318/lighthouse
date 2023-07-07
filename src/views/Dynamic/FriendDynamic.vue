@@ -60,7 +60,7 @@
             <van-icon class="like-ico" name="like-o" size="0.16rem"></van-icon>
             <div class="like-user">{{ v.liked_user.join(",") }}</div>
           </div>
-          <!-- <Reply :dynamicItem="v" :commentData="v.comment_content" @transfer_data="choiceClick" /> -->
+          <Reply :dynamicItem="v" :commentData="v.comment_data" @transfer_data="choiceClick" />
         </div>
       </div>
       <div class="dynamic-block" v-if="dynamicDataList.length <= 0">
@@ -127,7 +127,7 @@ function initData() { // 初始化数据
     if (res.data.code == 0) {
       let dynamicData = res.data.data;
       dynamicDataList.value = dynamicData.map(item => {
-        const { dynamic_id, dynamic_user, dynamic_content,dynamic_like } = item
+        const { dynamic_id, dynamic_user, dynamic_content,dynamic_like,dynamic_comment } = item
         // 媒体文件地址及其信息
         let dynamic_media = item.dynamic_media;
         let dynamic_media_arr = dynamic_media ? dynamic_media.split(",") : [];
@@ -140,6 +140,25 @@ function initData() { // 初始化数据
         //点赞数据
         let liked_user = dynamic_like.map( v => v.like_user.user_nickname) // 点赞人名文本
         let is_liked = dynamic_like.filter( v => store.userInfo.user_id == v.like_user.user_id ); // 是否已经点过赞
+        // 评论的数据
+        let comment_data = dynamic_comment.filter( (v) => v.comment_father_id == 0 );
+        let reply_data = dynamic_comment.filter( (v) => v.comment_father_id !== 0 );
+        const dealDeepCommentData = (comment_data, reply_data)=>{
+          if (reply_data.length <= 0) return; // 所有评论都已经处理完成
+          comment_data.forEach(v => { // 第一层
+            v.reply_comment_data = []
+            reply_data.forEach((vv, ii) => { // 所有的回复
+              let comment_parent_id = vv.comment_parent_id
+              let comment_id = v.comment_id
+              if (comment_parent_id == comment_id) {
+                v.reply_comment_data.push(vv)
+                reply_data.splice(ii, 1)
+              }
+            })
+            dealReply(v.reply_comment_data, reply_data)
+          })
+        }
+        dealDeepCommentData(comment_data,reply_data);
 
 
 
@@ -207,9 +226,7 @@ function initData() { // 初始化数据
           liked_user,
           is_liked,
 
-          // dynamic_show,
-          // dynamic_time,
-          // comment_content,
+          comment_data,
         }
       })
     }

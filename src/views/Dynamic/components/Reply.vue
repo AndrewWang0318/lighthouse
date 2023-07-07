@@ -1,6 +1,6 @@
 <template>
-  <div class="comment-show" v-show="commentData.length > 0">
-    <div class="comment-item" v-for="(vv, ii) in commentData" :key="ii">
+  <div class="comment-show" v-show="comment_data.length > 0">
+    <div class="comment-item" v-for="(vv, ii) in comment_data" :key="ii">
       <div class="comment-main" @click="commentClick(vv)">
         <span class="main-name">{{ vv.main_comment.name }}</span>
         <span v-if="vv.main_comment.comment_parent">
@@ -15,7 +15,7 @@
       <div class="comment-minor">
         <Reply
           v-if="vv.minor_comment.length > 0"
-          :commentData="vv.minor_comment"
+          :comment_data="vv.minor_comment"
           :dynamicItem="dynamicItem"
           v-bind="$attrs"
         />
@@ -25,26 +25,22 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { toRefs, toRef } from 'vue'
 export default {
-  name: 'Replay',
-  props: {
-    commentData: { // 评论数据
-      type: Object,
-      default() {
-        return {}
-      }
-    },
-    dynamicItem: {}
-  },
-  // setup (props) {
-  //   props.dynamicItem.value
-  //   props.commentData.value
-
-  //   return {}
-  // }
+  name: 'Replay'
 }
+</script>
+<script setup>
+import { ref  } from 'vue';
+const props = defineProps({
+  comment_data:{
+    type: Object,
+    default:()=> []
+  },
+  dynamicItem: {
+    type: Object,
+    default:()=> {}
+  }
+})
 </script>
 
 <style lang="scss" scoped>
