@@ -16,12 +16,12 @@ const router = createRouter({
       path: '/Home',
       name: 'Home',
       component: () => import('@/views/Home.vue'),
-      redirect:'/Home/Plan',
+      redirect:'/Home/PlanDetail',
       children: [
         {
-          path: "Plan",
-          name: "Plan",
-          component: () => import("@/views/Plan/Plan.vue"),
+          path: "PlanDetail",
+          name: "PlanDetail",
+          component: () => import("@/views/Plan/PlanDetail.vue"),
           meta:{
             name:'计划'
           },
