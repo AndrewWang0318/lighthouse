@@ -60,7 +60,7 @@
             <van-icon class="like-ico" name="like-o" size="0.16rem"></van-icon>
             <div class="like-user">{{ v.liked_user.join(",") }}</div>
           </div>
-          <Reply :dynamicItem="v" :commentData="v.comment_data" @transfer_data="choiceClick" />
+          <Reply :comment_data="v.dynamic_comment" @transfer_data="(vv)=>{choiceClick(v,vv)}" />
         </div>
       </div>
       <div class="dynamic-block" v-if="dynamicDataList.length <= 0">
@@ -115,7 +115,6 @@ let comment_form = reactive({
   comment_content:'',
 })
 
-let comment_text = ref(null);
 let comment_placeholder = ref('请输入...');
 let should_comment_show = ref(false);
 
@@ -140,80 +139,7 @@ function initData() { // 初始化数据
         //点赞数据
         let liked_user = dynamic_like.map( v => v.like_user.user_nickname) // 点赞人名文本
         let is_liked = dynamic_like.filter( v => store.userInfo.user_id == v.like_user.user_id ); // 是否已经点过赞
-        // 评论的数据
-        let comment_data = dynamic_comment.filter( (v) => v.comment_father_id == 0 );
-        let reply_data = dynamic_comment.filter( (v) => v.comment_father_id !== 0 );
-        const dealDeepCommentData = (comment_data, reply_data)=>{
-          if (reply_data.length <= 0) return; // 所有评论都已经处理完成
-          comment_data.forEach(v => { // 第一层
-            v.reply_comment_data = []
-            reply_data.forEach((vv, ii) => { // 所有的回复
-              let comment_parent_id = vv.comment_parent_id
-              let comment_id = v.comment_id
-              if (comment_parent_id == comment_id) {
-                v.reply_comment_data.push(vv)
-                reply_data.splice(ii, 1)
-              }
-            })
-            dealReply(v.reply_comment_data, reply_data)
-          })
-        }
-        dealDeepCommentData(comment_data,reply_data);
 
-
-
-        // // 评论的数据
-        // let comment_content = []
-        // // 回复的数据
-        // let reply_content = []
-        // item.dynamic_comment.forEach((item) => {
-        //   if (item.comment_parent_id == 0) {
-        //     comment_content.push({
-        //       main_comment: {
-        //         comment_id: item.comment_id,
-        //         comment_parent: item.comment_parent,
-        //         comment_parent_id: item.comment_parent_id,
-        //         comment_user: item.comment_user,
-        //         from_user_id: item.comment_user.user_id,
-        //         to_user_id: item.comment_to_user_id,
-        //         name: item.comment_user.user_nickname,
-        //         text: item.comment_text,
-        //       },
-        //       minor_comment: []
-        //     })
-        //   } else {
-        //     reply_content.push({
-        //       main_comment: {
-        //         comment_id: item.comment_id,
-        //         comment_parent: item.comment_parent,
-        //         comment_parent_id: item.comment_parent_id,
-        //         comment_user: item.comment_user,
-        //         from_user_id: item.comment_user.user_id,
-        //         to_user_id: item.comment_to_user_id,
-        //         name: item.comment_user.user_nickname,
-        //         text: item.comment_text,
-        //       },
-        //       minor_comment: []
-        //     })
-        //   }
-        // })
-        // dealReply(comment_content, reply_content)
-        // function dealReply(comment_content, reply_content) { // 递归展示
-        //   if (reply_content.length <= 0) return;
-        //   comment_content.forEach(v => { // 第一层
-        //     reply_content.forEach((vv, ii) => { // 所有的回复
-        //       let comment_parent_id = vv.main_comment.comment_parent_id
-        //       let comment_id = v.main_comment.comment_id
-        //       if (comment_parent_id == comment_id) {
-        //         v.minor_comment.push(vv)
-        //         reply_content.splice(ii, 1)
-        //       }
-        //     })
-        //     dealReply(v.minor_comment, reply_content)
-        //   })
-
-        // }
-        
         return {
           lc_show: false,
           dynamic_id,
@@ -226,7 +152,7 @@ function initData() { // 初始化数据
           liked_user,
           is_liked,
 
-          comment_data,
+          dynamic_comment,
         }
       })
     }
@@ -290,6 +216,7 @@ function addLike(v, i) { // 点击赞
 
 
 function addComment(v, i) { // 点击评论
+  comment_placeholder.value = `请输入...`;
   comment_form.dynamic_id = v.dynamic_id;
   comment_form.comment_father_id = 0;
   comment_form.comment_to_user_id = 0;
@@ -297,17 +224,15 @@ function addComment(v, i) { // 点击评论
 
   setTimeout(() => { instance.refs['commentInput'].focus() }, 30); // 由于dom显示有延迟使用setTimout延迟focus
 }
-function choiceClick() { // 点击回复
-  comment_placeholder.value = `回复${comment_item.main_comment.name}:`;
+function choiceClick(v,vv) { // 点击回复
+  comment_placeholder.value = `回复${vv.comment_user.user_nickname}:`;
 
-  let dyanmic_item = arguments[0]
-  let comment_item = arguments[1]
-  comment_form.dynamic_id = dyanmic_item.dynamic_id
-  comment_form.comment_father_id = comment_item.main_comment.comment_id
-  comment_form.comment_to_user_id = comment_item.main_comment.from_user_id;
+  comment_form.dynamic_id = v.dynamic_id;
+  comment_form.comment_father_id = vv.comment_id;
+  comment_form.comment_to_user_id = vv.comment_user.user_id;
+  should_comment_show.value = true;
 
-  should_comment_show = true
-  setTimeout(() => { instance.refs['commentInput'].focus() }, 30) // 需要先让输入框出现再触发focus事件
+  setTimeout(() => { instance.refs['commentInput'].focus() }, 30) // 由于dom显示有延迟使用setTimout延迟focus
 }
 
 
@@ -315,10 +240,10 @@ function sendComment() { // 发送评论
   let params = comment_form
   API.addComment(params).then(res => { // 发评论接口请求
     if(res.data.code == 0){
-      showToast(res.data.msg)
-      initData()
+      showToast(res.data.msg);
+      initData();
       comment_form.comment_content = ''
-      should_comment_show = false
+      should_comment_show.value = false
     }
   })
 }
