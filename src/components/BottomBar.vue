@@ -19,7 +19,7 @@
   let bottomBarList = ref([
     {
       title: "计划",
-      route: "/Home/Plan",
+      route: "/Home/PlanDetail",
       icon: "wap-home",
     },
     {

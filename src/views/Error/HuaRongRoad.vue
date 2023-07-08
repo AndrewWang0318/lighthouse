@@ -43,6 +43,10 @@
     <div id="game-rule">
       <div>规则</div>
     </div>
+
+    <div id="game-btn" style="display: flex;justify-content: center;margin-top: 1rem;">
+      <van-button type="success" @click="reStart">重新来过</van-button>
+    </div>
     <audio hidden ref="walk_audio_el" :src="getUrl('audio/walk.wav')"></audio>
 
 
@@ -57,22 +61,23 @@ import all_level_data from "./hrd_level"
 import { ref } from 'vue';
 import { useRouter } from "vue-router";
 import { getUrl } from "@/utils/util"
-
+import { showDialog,showConfirmDialog } from 'vant';
 const router = useRouter();
+
+
 let reflash_game = ref(false);
-
-
 const walk_audio_el = ref('');
-const level_name_columns = Object.keys(all_level_data).map((key, i) => {
-  return { text: all_level_data[key].name, value: i }
+const level_name_columns = all_level_data.map((v, i) => {
+  return { text: v.name, value: i }
 })
-let level_name = ref(level_name_columns[0].text)
+let current_level = ref(0)
+let level_name = ref(level_name_columns[current_level.value].text)
 let showLevePicker = ref(false);
 const levePickerConfirm = ({ selectedOptions }) => {
   showLevePicker.value = false;
   level_name.value = selectedOptions[0].text;
-
-  gameStart(`level${selectedOptions[0].value + 1}`)
+  current_level.value = selectedOptions[0].value
+  gameStart(current_level.value)
 };
 
 
@@ -219,7 +224,7 @@ class Soldier {
     })
   }
 }
-gameStart('level1')
+gameStart(current_level.value)
 
 // 游戏开始 [重新换关卡存在响应丢失问题]
 function gameStart(level) {
@@ -235,10 +240,19 @@ function gameStart(level) {
     reflash_game.value = false
   },410)
 }
-
+function reStart(){
+  showConfirmDialog({
+    message: '确认重新来过',
+    theme: 'round-button',
+  }).then(() => {
+    gameStart(current_level.value)
+  })
+}
 // touchMove事件
 function touchMove(move_direct, item) {
   // 如果不能移动则返回
+  // 判断是否成功
+
   if (!item.itCanMove(all_role_locate.value, move_direct)) return false;
   // 坐标处理
   item.move(move_direct)
@@ -247,16 +261,18 @@ function touchMove(move_direct, item) {
   if (move_direct == 'r') item.left += grid_size;
   if (move_direct == 't') item.top -= grid_size;
   if (move_direct == 'b') item.top += grid_size;
-  move_step.value += 1
-  walk_audio_el.value.load()
-  walk_audio_el.value.play()
+  move_step.value += 1;
+  walk_audio_el.value.load();
+  walk_audio_el.value.play();
   // 判断是否成功
   const cc_role = (all_role_locate.value.filter((item) => item.name == 'cc'))[0]
   if (item.isWin(cc_role)) {
-
-    setTimeout(() => {
-      alert('成功');
-    }, 200)
+    showDialog({
+      message: '天不灭我曹!!!',
+      theme: 'round-button',
+    }).then(() => {
+      // on close
+    });
     return false;
   }
 }
@@ -267,12 +283,12 @@ function touchMove(move_direct, item) {
 <style scoped lang="scss">
 .page-hrd {
   min-height: 100vh;
-  background-color: rgb(201, 177, 147);
+  background-color: rgb(104, 127, 131);
   box-sizing: border-box;
   touch-action: none; // 禁止页面拖动
-  background-image: url('../../static/images/hrd/bg.jpg');
   background-size: auto 100%;
   background-position: center center;
+  background-image: url('../../static/images/hrd/bg.jpg');
   #game-title {
     padding-top: 1rem;
     font-weight: bold;
