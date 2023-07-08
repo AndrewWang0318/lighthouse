@@ -32,7 +32,6 @@
           <div class="dynamic-show-item" v-for="(vv, ii) in v.dynamic_media_data"
             :style="`background-image:url(${base_url + vv.url})`" @click="mediaPreview(v.dynamic_media_data, ii)">
           </div>
-
         </div>
         <div class="dynamic-function">
           <div class="dynamic-time">{{ v.dynamic_time }}</div>
@@ -67,12 +66,13 @@
         <van-empty image="search" description="暂时没有动态哦~快发一条吧" />
       </div>
     </div>
-    
+
     <!-- 评论输入框弹窗 -->
     <div class="comment-public" v-show="should_comment_show">
       <van-field class="comment-input" ref="commentInput" v-model="comment_form.comment_content" :placeholder="comment_placeholder" />
       <div class="btn-send" @click="sendComment">发送</div>
     </div>
+    
     <!-- 浏览图片弹窗 -->
     <van-image-preview v-model:show="img_preview_show" :images="img_preview_arr" :start-position="img_preview_start" />
   </div>
@@ -98,7 +98,12 @@ const instance = getCurrentInstance();
 const $global = instance.appContext.app.config.globalProperties;
 const base_url = $global.base_url;
 
+
+
+
+
 // 动态数据
+let AllDynamicDataList = [];
 let dynamicDataList = ref([]);
 let page = ref(1);
 let limit = ref(10);
@@ -119,13 +124,13 @@ let comment_placeholder = ref('请输入...');
 let should_comment_show = ref(false);
 
 initData();
-
 function initData() { // 初始化数据
   let parmas = { limit: limit.value, page: page.value };
+  
   API.getDynamicList(parmas).then((res) => {
     if (res.data.code == 0) {
       let dynamicData = res.data.data;
-      dynamicDataList.value = dynamicData.map(item => {
+      let dynamicList = dynamicData.map(item => {
         const { dynamic_id, dynamic_user, dynamic_content,dynamic_like,dynamic_comment } = item
         // 媒体文件地址及其信息
         let dynamic_media = item.dynamic_media;
@@ -155,6 +160,13 @@ function initData() { // 初始化数据
           dynamic_comment,
         }
       })
+      AllDynamicDataList[page.value-1] = dynamicList;
+
+      let data = []
+      AllDynamicDataList.forEach( arr => {
+        data.push(...arr)
+      })
+      dynamicDataList.value = data;
     }
   });
 }
@@ -218,13 +230,18 @@ function addLike(v, i) { // 点击赞
 function addComment(v, i) { // 点击评论
   comment_placeholder.value = `请输入...`;
   comment_form.dynamic_id = v.dynamic_id;
-  comment_form.comment_father_id = 0;
-  comment_form.comment_to_user_id = 0;
+  comment_form.comment_father_id = null;
+  comment_form.comment_to_user_id = null;
   should_comment_show.value = true;
 
   setTimeout(() => { instance.refs['commentInput'].focus() }, 30); // 由于dom显示有延迟使用setTimout延迟focus
 }
 function choiceClick(v,vv) { // 点击回复
+  if(vv.comment_user.user_id == store.userInfo.user_id){
+    showToast("不能回复自己哦~");
+    return false;
+  } 
+
   comment_placeholder.value = `回复${vv.comment_user.user_nickname}:`;
 
   comment_form.dynamic_id = v.dynamic_id;
@@ -234,9 +251,13 @@ function choiceClick(v,vv) { // 点击回复
 
   setTimeout(() => { instance.refs['commentInput'].focus() }, 30) // 由于dom显示有延迟使用setTimout延迟focus
 }
-
-
 function sendComment() { // 发送评论
+  if(comment_form.comment_content==""){
+    showToast("发送内容不能为空哦");
+    setTimeout(() => { instance.refs['commentInput'].focus() }, 30) // 由于dom显示有延迟使用setTimout延迟focus
+    return false;
+  }
+
   let params = comment_form
   API.addComment(params).then(res => { // 发评论接口请求
     if(res.data.code == 0){
@@ -247,6 +268,26 @@ function sendComment() { // 发送评论
     }
   })
 }
+
+// 触底刷新
+const loading = ref(false);
+const finished = ref(false);
+const onLoad = () => {
+  
+  // page.value +=1;
+  // initData();
+  // 加载状态结束
+  loading.value = false;
+
+  console.log(11)
+  // finished.value = true;
+  // 数据全部加载完成
+  // let _dynamicDataList = dynamicDataList.value; // 获取其引用类型
+  //     dynamicDataList.value = _dynamicDataList.concat(dynamicList)
+  if (dynamicDataList.value.length >= 20) {
+    finished.value = true;
+  }
+};
 </script>
 
 <style lang="scss" scoped>

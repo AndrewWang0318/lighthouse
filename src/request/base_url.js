@@ -3,7 +3,6 @@
 // process.env.VUE_APP_FLAG 用于通过build命令生成后文件环境配置
 // vite模式下
 // import.meta.env.MODE
-console.log(import.meta.env)
 let baseURL;
 import VConsole from 'vconsole'; // 引入VConsole
 if (import.meta.env.MODE == "development") {
