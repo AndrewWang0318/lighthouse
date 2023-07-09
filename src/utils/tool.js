@@ -207,7 +207,7 @@ export default {
         if (callNow) func.apply(context, args)
       } else {
         debounce_timeout = setTimeout(function(){
-            func.apply(context, args)
+          func.apply(context, args)
         }, wait);
       }
     }
