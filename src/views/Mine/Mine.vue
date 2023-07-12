@@ -14,7 +14,7 @@
     </div>
     <div class="function-content">
       <div class="setting-area">
-        <div class="setting-item" @click="router.push('/Demand')">摸鱼办</div>
+        <div class="setting-item" @click="router.push('/FishOffice')">摸鱼办</div>
         <div class="setting-item" @click="router.push('/Game')">小游戏</div>
         <div class="setting-item" @click="router.push('/Demand')">反馈</div>
         <div class="setting-item" @click="router.push('/404')">其他</div>

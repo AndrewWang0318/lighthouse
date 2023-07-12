@@ -77,9 +77,6 @@ const router = createRouter({
         name:'用户信息'
       }
     },
-
-    
-    
     {
       path: '/DynamicPublish',
       name: 'DynamicPublish',
@@ -88,7 +85,14 @@ const router = createRouter({
         name:'动态发布'
       }
     },
-
+    {
+      path: '/FishOffice',
+      name: 'FishOffice',
+      component: () => import('@/views/Mine/FishOffice.vue'),
+      meta:{
+        name:'摸鱼办'
+      }
+    },
     {
       path: '/Demand',
       name: 'Demand',
@@ -130,7 +134,6 @@ const router = createRouter({
         name:'错误'
       }
     },
-
     {
       path: "/:catchAll(.*)",
       redirect: "/Error",
