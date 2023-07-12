@@ -1,0 +1,14 @@
+.page-game {
+    min-height: 100%;
+    background-color: white;
+    .game-item {
+      min-height: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.28rem;
+      font-weight: bold;
+      border-bottom: 0.02rem solid rgb(230, 230, 230);
+    }
+  }
+  

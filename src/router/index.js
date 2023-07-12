@@ -78,14 +78,7 @@ const router = createRouter({
       }
     },
 
-    {
-      path: '/HuaRongRoad',
-      name: 'HuaRongRoad',
-      component: () => import('@/views/Error/HuaRongRoad.vue'),
-      meta:{
-        name:'华容道'
-      }
-    },
+    
     
     {
       path: '/DynamicPublish',
@@ -96,6 +89,39 @@ const router = createRouter({
       }
     },
 
+    {
+      path: '/Demand',
+      name: 'Demand',
+      component: () => import('@/views/Mine/Demand.vue'),
+      meta:{
+        name:'提建议'
+      }
+    },
+
+    {
+      path: '/Game',
+      name: 'Game',
+      component: () => import('@/views/Mine/Game/Game.vue'),
+      meta:{
+        name:'小游戏'
+      }
+    },
+    {
+      path: '/HuaRongRoad',
+      name: 'HuaRongRoad',
+      component: () => import('@/views/Mine/Game/HRD/HuaRongRoad.vue'),
+      meta:{
+        name:'华容道'
+      }
+    },
+    {
+      path: '/GoogleDr',
+      name: 'GoogleDr',
+      component: () => import('@/views/Mine/Game/GoogleDr/GoogleDr.vue'),
+      meta:{
+        name:'404恐龙'
+      }
+    },
     {
       path:'/Error',
       name: 'Error',

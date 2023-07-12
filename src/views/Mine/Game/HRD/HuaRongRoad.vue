@@ -57,6 +57,7 @@
 </template>
 
 <script setup>
+
 import all_level_data from "./hrd_level"
 import { ref } from 'vue';
 import { useRouter } from "vue-router";
@@ -288,7 +289,7 @@ function touchMove(move_direct, item) {
   touch-action: none; // 禁止页面拖动
   background-size: auto 100%;
   background-position: center center;
-  background-image: url('../../static/images/hrd/bg.jpg');
+  background-image: url('../../../../static/images/hrd/bg.jpg');
   #game-title {
     padding-top: 1rem;
     font-weight: bold;

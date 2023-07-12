@@ -14,8 +14,10 @@
     </div>
     <div class="function-content">
       <div class="setting-area">
-        <div class="setting-item" @click="router.push('/HuaRongRoad')">华容道游戏</div>
-        <div class="setting-item" @click="router.push('/unknow')">未知领域</div>
+        <div class="setting-item" @click="router.push('/Demand')">摸鱼办</div>
+        <div class="setting-item" @click="router.push('/Game')">小游戏</div>
+        <div class="setting-item" @click="router.push('/Demand')">反馈</div>
+        <div class="setting-item" @click="router.push('/404')">其他</div>
         <div class="setting-item" @click="exit">退出登录</div>
       </div>
     </div>
@@ -29,6 +31,7 @@ export default {
 </script>
 
 <script setup>
+  import { showConfirmDialog } from 'vant';
   import { ref, reactive } from 'vue'
   import { useRouter } from 'vue-router';
   import { useStore } from '@/stores/stores';
@@ -53,11 +56,15 @@ export default {
     router.push("/UserInfoEdit");
   }
   const exit = () => { // 退出登录
-    _store.userInfoAction({}) // 存入状态管理
-    $tool.operatCookie("del", "user_info");
-    $tool.operatCookie("del", "token");
+    showConfirmDialog({
+      title: '确定退出？',
+    }).then(() => {
+      _store.userInfoAction({}) // 存入状态管理
+      $tool.operatCookie("del", "user_info");
+      $tool.operatCookie("del", "token");
 
-    router.replace("/login");
+      router.replace("/login");
+    })
   }
 </script>
 
