@@ -6,9 +6,9 @@
 
     <div class="row-plan-list">
       <van-swipe-cell v-for="v in plan_list">
-        <template #left>
+        <!-- <template #left>
           <van-button square type="primary" text="选择" />
-        </template>
+        </template> -->
         <van-cell class="item-row-plan-list" :border="false" :title="v.title" :value="v.is_done ? '已完成' : '未完成'" />
         <template #right>
           <van-button square type="danger" text="删除" />
@@ -44,11 +44,11 @@ export default {
   const time = ref(diff_milliseconds);
   const plan_list = ref([
     {
-      title:"刷牙",
+      title:"睡前刷牙,洗脚,护肤",
       is_done:0,
     },
     {
-      title:"看书",
+      title:"看书一小时",
       is_done:0,
     },
     {
@@ -56,7 +56,7 @@ export default {
       is_done:0,
     },
     {
-      title:"写代码",
+      title:"练吉他半小时",
       is_done:0,
     },
   ])
