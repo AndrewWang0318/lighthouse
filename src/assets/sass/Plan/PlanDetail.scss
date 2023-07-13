@@ -1,12 +1,15 @@
 .page-plan-detail {
   background-color: #808080;
   .row-banner {
-    height: 2rem;
+    height: 0.6rem;
     background-color: rgb(0, 78, 78);
     margin-bottom: 0.1rem;
     display: flex;
     align-items: center;
-    justify-content: center;
+    // justify-content: center;
+    justify-content: flex-end;
+    padding-right: 0.4rem;
+    box-sizing: border-box;
   }
   .row-plan-list{
     .item-row-plan-list {
@@ -20,7 +23,7 @@
   
   .van-count-down {
     color: #ffff;
-    font-size: 1rem;
+    font-size: 0.32rem;
     line-height: normal;
   }
 }

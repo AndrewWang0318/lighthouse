@@ -3,6 +3,7 @@
     <div class="row-banner">
       <van-count-down millisecond :time="time" format="HH:mm:ss:SS" />
     </div>
+
     <div class="row-plan-list">
       <van-swipe-cell v-for="v in plan_list">
         <template #left>
@@ -34,9 +35,13 @@ export default {
   import { useStore } from '@/stores/stores';
   import $tool from "@/utils/tool";
   import base_url from '@/request/base_url'
+  import moment from 'moment';
 
-  const time = ref(30 * 60 * 60 * 1000);
+  const now_time = moment();
+  const end_time = moment().endOf('day') //当天23点59分59秒以13位Unix时间戳输出（毫秒）;
+  const diff_milliseconds = end_time.diff(now_time,"milliseconds")
 
+  const time = ref(diff_milliseconds);
   const plan_list = ref([
     {
       title:"刷牙",
