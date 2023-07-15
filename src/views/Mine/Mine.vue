@@ -13,13 +13,12 @@
       </div>
     </div>
     <div class="function-content">
-      <div class="setting-area">
-        <div class="setting-item" @click="router.push('/FishOffice')">摸鱼办</div>
-        <div class="setting-item" @click="router.push('/Game')">小游戏</div>
-        <div class="setting-item" @click="router.push('/Demand')">反馈</div>
-        <div class="setting-item" @click="router.push('/404')">其他</div>
-        <div class="setting-item" @click="exit">退出登录</div>
-      </div>
+      <van-grid class="setting-area" square :column-num="3">
+        <van-grid-item icon="underway" text="摸鱼办" @click="router.push('/FishOffice')"/>
+        <van-grid-item icon="flower-o" text="游戏合集" @click="router.push('/Game')"/>
+        <van-grid-item icon="service-o" text="反馈建议"  @click="router.push('/Demand')"/>
+        <van-grid-item icon="revoke" text="退出登录" @click="exit"/>
+      </van-grid>
     </div>
   </div>
 </template>

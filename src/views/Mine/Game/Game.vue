@@ -9,8 +9,20 @@
       />
     </div>
     <div class="game-content">
-      <div class="game-item" @click="router.push('/HuaRongRoad')">华容道</div>
-      <div class="game-item" @click="router.push('/GoogleDr')">404恐龙</div>
+      <van-grid square :column-num="4">
+        <van-grid-item>
+          <div class="grid-image"  @click="router.push('/HuaRongRoad')">
+            <van-icon name="underway"></van-icon>
+          </div>
+          <div class="grid-text">华容道</div>
+        </van-grid-item>
+        <van-grid-item>
+          <div class="grid-image" @click="router.push('/GoogleDr')">
+            <van-icon name="underway"></van-icon>
+          </div>
+          <div class="grid-text">谷歌恐龙</div>
+        </van-grid-item>
+      </van-grid>
     </div>
   </div>
 </template>
