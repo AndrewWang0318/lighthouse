@@ -2,7 +2,7 @@
   <div class="page-addplan">
     <div class="page-nav">
       <van-nav-bar
-        title="添加计划"
+        :title="title"
         left-text="返回"
         left-arrow
         @click-left="router.go(-1)"
@@ -40,7 +40,6 @@
             />
             
             <van-cell
-              v-if="add_plan_form.detail[i].timeType == 'custom'"
               is-link
               @click="dateTimeClick(i)" 
             >
@@ -74,6 +73,9 @@
       <van-button block plain type="primary" @click="addBlock()">添加模块</van-button>
     </div>
 
+    <div style="margin: 24px 12px;" v-if="route.query.id">
+      <van-button block type="warning" @click="deletePlan()">删除计划</van-button>
+    </div>
 
     <!-- 周期类型弹窗 -->
     <van-popup v-model:show="datetype_pop_show" position="bottom">
@@ -100,32 +102,30 @@ export default {
 </script>
 
 <script setup>
-  import { ref, reactive } from 'vue'
-  import { useRouter } from 'vue-router';
-  import { useStore } from '@/stores/stores';
-  import $tool from "@/utils/tool";
-  import base_url from '@/request/base_url'
+  import { ref } from 'vue'
+  import { useRouter,useRoute } from 'vue-router';
   import moment from 'moment';
+  import { showToast,showConfirmDialog } from "vant";
 
   const router = useRouter();
+  const route = useRoute();
+  let title = ref('添加计划')
+
   const max_date = moment(moment().add(3,'year')).toDate(); // 最大日期
   const datetime_pop_show = ref(false); // 周期区间弹窗展示
   let datetype_pop_show = ref(false); // 周期类型弹窗展示
   let current_datetype_idx = ref(0); // 当前日期类型点击的哪一项
   let current_datetime_idx = ref(0); // 当前日期区间点击的哪一项
-  
-  // 周期类型
-  const datetype_columns = [
-    { text: '全天', value: 'all' },
+  const datetype_columns = [  // 周期类型
+    { text: '每天', value: 'every' },
     { text: '周末', value: 'week' },
-    { text: '周内', value: 'work' },
-    { text: '自定义', value: 'custom' }
+    { text: '周内', value: 'work' }
   ];
-  let add_plan_form = ref({
+  let add_plan_form = ref({ // 添加的表单
     name:'',
     detail:[
       {
-        timeType:'all',
+        timeType:'every',
         customTime:'',
         task:[
           '',
@@ -133,7 +133,43 @@ export default {
       }
     ]
   })
+  // 是查询界面
+  if(route.query.id){
+    let plan_list = localStorage.getItem('plan_list');
+    let plan_list_data = JSON.parse(plan_list)
+    let data = plan_list_data.filter( v => v.id == route.query.id )
+    add_plan_form.value = data[0]
+    title.value = data[0].name
+  }
+  // 删除计划
+  function deletePlan(){
+    showConfirmDialog({
+      title: '确认删除?',
+    }).then(() => {
+      // on confirm
+      let plan_list = localStorage.getItem('plan_list');
+      let plan_list_data = JSON.parse(plan_list)
+      let data = plan_list_data.filter( v => v.id != route.query.id )
+      localStorage.setItem('plan_list',JSON.stringify(data));
 
+      add_plan_form.value = {
+        name:'',
+        detail:[
+          {
+            timeType:'every',
+            customTime:'',
+            task:[
+              '',
+            ]
+          }
+        ]
+      }
+      showToast('删除成功');
+      router.push('/PlanList')
+    })
+    
+    
+  }
   // 周期类型点击
   function datetypePopClick(i){
     current_datetype_idx.value = i;
@@ -183,9 +219,6 @@ export default {
   }
   // 提交
   function submit(){
-    
-
-
     let plan_list = localStorage.getItem('plan_list');
     add_plan_form.value.id = moment().valueOf();
     if(plan_list){
@@ -197,11 +230,22 @@ export default {
       data.push(add_plan_form.value);
       localStorage.setItem('plan_list',JSON.stringify(data))
     }
+
+    add_plan_form.value = {
+      name:'',
+      detail:[
+        {
+          timeType:'every',
+          customTime:'',
+          task:[
+            '',
+          ]
+        }
+      ]
+    }
+    showToast('添加成功');
+    router.push('/PlanList')
   }
-    
-    
-    
-    
 </script>
 
 

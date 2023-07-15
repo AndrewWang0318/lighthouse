@@ -12,8 +12,12 @@
       </template>
     </van-nav-bar>
     <div class="plan-list">
-      <van-cell title="单元格" is-link />
-
+      <van-cell 
+        v-for="(v,i) in plan_list_data" 
+        :title="v.name" 
+        is-link
+        @click="jumpToDetail(v)"
+      />
     </div>
   </div>
 </template>
@@ -25,14 +29,14 @@ export default {
 </script>
 
 <script setup>
-  import { ref, reactive } from 'vue'
   import { useRouter } from 'vue-router';
-  import { useStore } from '@/stores/stores';
-  import $tool from "@/utils/tool";
-  import base_url from '@/request/base_url'
-  import moment from 'moment';
-
   const router = useRouter();
+  let plan_list = localStorage.getItem('plan_list');
+
+  let plan_list_data = plan_list ? JSON.parse(plan_list) : [];
+  function jumpToDetail(v){
+    router.push({name:'AddPlan',query:{id:v.id}})
+  }
 </script>
 
 <style lang="scss" scoped>
