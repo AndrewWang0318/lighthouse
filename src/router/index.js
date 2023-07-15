@@ -13,39 +13,6 @@ const router = createRouter({
       
     },
     {
-      path: '/Home',
-      name: 'Home',
-      component: () => import('@/views/Home.vue'),
-      redirect:'/Home/PlanDetail',
-      children: [
-        {
-          path: "PlanDetail",
-          name: "PlanDetail",
-          component: () => import("@/views/Plan/PlanDetail.vue"),
-          meta:{
-            name:'计划'
-          },
-        },
-        {
-          path: "FriendDynamic",
-          name: "FriendDynamic",
-          component: () => import("@/views/Dynamic/FriendDynamic.vue"),
-          meta:{
-            name:'动态'
-          },
-        },
-        {
-          path: "Mine",
-          name: "Mine",
-          component: () => import("@/views/Mine/Mine.vue"),
-          meta:{
-            name:'我的'
-          },
-        },
-      ],
-    },
-
-    {
       path: '/Login',
       name: 'Login',
       component: () => import('@/views/Login/Login.vue'),
@@ -77,6 +44,55 @@ const router = createRouter({
         name:'用户信息'
       }
     },
+    {
+      path: '/Home',
+      name: 'Home',
+      component: () => import('@/views/Home.vue'),
+      redirect:'/Home/PlanDetail',
+      children: [
+        {
+          path: "PlanDetail",
+          name: "PlanDetail",
+          component: () => import("@/views/Plan/PlanDetail.vue"),
+          meta:{
+            name:'计划'
+          },
+        },
+        {
+          path: "FriendDynamic",
+          name: "FriendDynamic",
+          component: () => import("@/views/Dynamic/FriendDynamic.vue"),
+          meta:{
+            name:'动态'
+          },
+        },
+        {
+          path: "Mine",
+          name: "Mine",
+          component: () => import("@/views/Mine/Mine.vue"),
+          meta:{
+            name:'我的'
+          },
+        },
+      ],
+    },
+    {
+      path: '/PlanList',
+      name: 'PlanList',
+      component: () => import('@/views/Plan/PlanList.vue'),
+      meta:{
+        name:'计划列表'
+      }
+    },
+    {
+      path: '/AddPlan',
+      name: 'AddPlan',
+      component: () => import('@/views/Plan/AddPlan.vue'),
+      meta:{
+        name:'添加计划'
+      }
+    },
+    
     {
       path: '/DynamicPublish',
       name: 'DynamicPublish',

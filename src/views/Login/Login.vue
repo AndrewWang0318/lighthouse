@@ -26,6 +26,9 @@
       <div style="margin: 16px; display: flex">
         <van-button style="margin-right: 0.2rem" type="primary" block native-type="submit">登陆</van-button>
         <van-button type="primary" block plain @click="status = 'registe'">注册</van-button>
+      </div >
+      <div style="margin: 16px; display: flex">
+        <van-button type="primary" block plain @click="downLoadApp">下载APP</van-button>
       </div>
     </van-form>
     <!-- 注册表单 -->
@@ -117,6 +120,9 @@ export default {
       onLoginSubmit(params);
     }
   })
+  const downLoadApp = ()=>{
+    location.href = "http://101.35.193.41/Glight.apk"
+  }
 </script>
 
 <style scoped lang="scss">

@@ -1,5 +1,11 @@
 <template>
-    <div>
+    <div class="page-FishOffice">
+      <van-nav-bar
+        title="摸鱼办"
+        left-text="返回"
+        left-arrow
+        @click-left="router.go(-1)"
+      />
       <p>[摸鱼办]提醒您
       今天是2023年7月12日，星期三。早上好，摸鱼人!即使今天是开工第[165天也一定不要忘记摸鱼哦!有事没事起身去茶水间，去厕所，去廊道走走，别总在工位上坐着，钱是老板的，但健康是自己的。
       </p>
@@ -16,8 +22,21 @@
     </div>
   </template>
   
-  <script setup>
+  <script>
+  export default {
+    name: 'FishOffice'
+  }
+  </script>
   
+  <script setup>
+    import { ref, reactive } from 'vue'
+    import { useRouter } from 'vue-router';
+    import { useStore } from '@/stores/stores';
+    import $tool from "@/utils/tool";
+    import base_url from '@/request/base_url'
+    import moment from 'moment';
+  
+    const router = useRouter();
   </script>
   
   <style></style>
