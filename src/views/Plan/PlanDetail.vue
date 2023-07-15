@@ -70,7 +70,7 @@ if (plan_detail_list_local) {
         if (vv.customTime.length !== 0) {
           let time = vv.customTime.split(",");
           // 当前日期在此之间
-          if (now_time.isAfter(time[0]) && now_time.isBefore(time[1])) {
+          if (now_time.isSameOrAfter(time[0]) && now_time.isSameOrBefore(time[1])) {
             if (vv.timeType == "every") {
               detail_data.push({
                 title: vvv,
@@ -133,10 +133,12 @@ if (plan_detail_list_local) {
 // 一份大小
 const one_point = Number((100 / plan_detail_list.value.length).toFixed(2))
 let is_done_list = plan_detail_list.value.filter(v => v.is_done == true)
-let text = ref(is_done_list.length * one_point + '%')
+let text = ref('')
 let currentRate = ref(0);
-
-currentRate.value = Math.round(is_done_list.length * one_point);
+if(plan_detail_list.value.length > 0){
+  text.value = is_done_list.length * one_point + '%'
+  currentRate.value = Math.round(is_done_list.length * one_point);
+}
 function swiperRight(v) {
   v.is_done = !v.is_done;
 
