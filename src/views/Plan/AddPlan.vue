@@ -5,7 +5,7 @@
         :title="title"
         left-text="返回"
         left-arrow
-        @click-left="router.go(-1)"
+        @click-left="router.replace('/PlanList')"
         @click-right="submit"
       >
         <template #right>

@@ -4,8 +4,8 @@
       title="计划列表"
       left-text="返回"
       left-arrow
-      @click-left="router.go(-1)"
-      @click-right="router.push('/AddPlan')"
+      @click-left="router.replace('/Home/PlanDetail')"
+      @click-right="router.replace('/AddPlan')"
     >
       <template #right>
         <van-icon name="plus" size="24" />

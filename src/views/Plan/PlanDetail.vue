@@ -57,7 +57,8 @@ let plan_list = localStorage.getItem('plan_list');
 let plan_list_data = JSON.parse(plan_list) || [];
 
 let plan_detail_list_local = localStorage.getItem(`plan_detail_list${now_time.format('YYYYMMDD')}`);
-if (plan_detail_list_local) {
+if (plan_detail_list_local && plan_detail_list_local !== "[]") {
+
   let plan_detail_list_data = JSON.parse(plan_detail_list_local) || [];
 
   plan_detail_list.value = plan_detail_list_data
