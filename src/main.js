@@ -1,11 +1,7 @@
-import './assets/main.css' // 导入公用样式
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-
-
 import App from './App.vue'
-import router from './router'
+import router from '@/router'
 
 import Pixelfit from 'pixelfit' // 适配组件
 import Vant from "vant"; //引入Vant ui
@@ -15,12 +11,12 @@ import 'moment/dist/locale/zh-cn'; // 引入中文环境
 import anime from "animejs"; // 引入动画js库
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'; // pinia 持久化存储
 import { Fragment } from 'vue-fragment-plus'; // 空标签
-import Loading from "@/components/Loading.vue"; // 引入loading组件
-import base_url from '@/request/base_url';
+import Loading from "@/components/loading.vue"; // 引入loading组件
+import base_url from '@/server/base_url';
 import tool from "@/utils/tool"
-import directives from '@/directives'; // 引入自己定义的全局指令
+import directives from '@/utils/directives'; // 引入自己定义的全局指令
 import Vue3TouchEvents from "vue3-touch-events";
-
+import '@/assets/index.css' // 导入公用样式
 moment.locale("zh-cn"); // moment采用中文本地化
 
 const pinia = createPinia()
