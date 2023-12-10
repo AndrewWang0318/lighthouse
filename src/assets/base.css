@@ -3,6 +3,12 @@
   padding: 0;
 }
 
+:root{
+  --base-color:"#fff";
+  --base-light-color:"#fafafa";
+  --base-dark-color:"#389327"
+}
+
 img {
   display: block;
   
