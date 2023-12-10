@@ -55,7 +55,7 @@ const router = createRouter({
           name: "PlanDetail",
           component: () => import("@/views/Plan/PlanDetail.vue"),
           meta:{
-            name:'计划'
+            name:'首页'
           },
         },
         {
