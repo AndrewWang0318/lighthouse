@@ -18,7 +18,7 @@
   import { ref } from "vue";
   let bottomBarList = ref([
     {
-      title: "计划",
+      title: "首页",
       route: "/Home/PlanDetail",
       icon: "wap-home",
     },
