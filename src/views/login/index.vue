@@ -121,10 +121,9 @@ onBeforeMount(() => {
 })
 beforeEnter((to, from) => {
   let user_cookie = $tool.operatCookie("get", "user_info");
-  const _store = useStore();
-  let user_pina = _store.userInfo;
+  let userInfo = store.userInfo;
   if (from.path != "/") {
-    if ((user_cookie && user_cookie != "{}") && (user_pina && JSON.stringify(user_pina) != "{}")) {
+    if ((user_cookie && user_cookie != "{}") && (userInfo && JSON.stringify(userInfo) != "{}")) {
       showToast("当前已登录~");
       return false
     } else {

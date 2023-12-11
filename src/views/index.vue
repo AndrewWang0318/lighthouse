@@ -1,8 +1,8 @@
 <template>
   <div class="page-home">
-    <TopBar id="top-bar"/>
-    <RouterView id="home-view"/>
-    <BottomBar id="bottom-bar"/>
+    <TopBar id="top-bar" />
+    <RouterView id="home-view" />
+    <BottomBar id="bottom-bar" />
   </div>
 </template>
 
@@ -13,12 +13,13 @@ import TopBar from '@/components/topBar.vue'
 </script>
 
 <style lang="scss" scoped>
-#home-view{
+#home-view {
   height: calc(100vh - 1.2rem);
   padding-bottom: 1rem;
   overflow-y: scroll;
 }
-#bottom-bar{
+
+#bottom-bar {
   height: 1.2rem;
   z-index: 9;
 }
