@@ -12,6 +12,7 @@
   "dependencies": {
     "@vant/area-data": "^1.2.2",
     "animejs": "^3.2.1",
+    "aw-util": "^1.0.0",
     "axios": "^1.4.0",
     "compressorjs": "^1.1.1",
     "moment": "^2.29.1",

@@ -1,7 +1,7 @@
 <template>
   <div class="page-login">
     <div class="banner-content">
-      <van-swipe class="login-swipe" :autoplay="4000" indicator-color="white" :show-indicators="false" >
+      <van-swipe class="login-swipe" :autoplay="4000" indicator-color="white" :show-indicators="false">
         <van-swipe-item v-for="(v, i) in swiperList" :key="i">
           <div class="image-item" :style="`background-image:url(${v.imgSrc})`"></div>
         </van-swipe-item>
@@ -26,7 +26,7 @@
       <div style="margin: 16px; display: flex">
         <van-button style="margin-right: 0.2rem" type="primary" block native-type="submit">登陆</van-button>
         <van-button type="primary" block plain @click="status = 'registe'">注册</van-button>
-      </div >
+      </div>
       <div style="margin: 16px; display: flex">
         <van-button type="primary" block plain @click="downLoadApp">下载APP</van-button>
       </div>
@@ -58,71 +58,85 @@ export default {
 </script>
 
 <script setup>
-  import { useStore } from '@/stores/stores'
-  import { showToast } from "vant"
-  import { ref, reactive, onBeforeMount } from 'vue'
-  import { useRouter } from 'vue-router';
-  import API from "@/request/api"
-  import baseUrl from '@/request/base_url'
-  import $tool from "@/utils/tool"
-
-  const router = useRouter();
-  const store = useStore();
-  let status = ref("login");
-  let autoLogin = ref(false) // 免登录开关
-  let loginForm = reactive({
-    user_name: "",
-    user_password: "",
-  })
-  let registeForm = reactive({
-    user_name: "",
-    user_password: "",
-  })
-  const swiperList = reactive([
-    { imgSrc: `${baseUrl}/image/banner/swiper1.jpg` },
-    { imgSrc: `${baseUrl}/image/banner/swiper2.png` },
-    { imgSrc: `${baseUrl}/image/banner/swiper3.jpg` },
-    { imgSrc: `${baseUrl}/image/banner/swiper4.png` },
-    { imgSrc: `${baseUrl}/image/banner/swiper5.jpg` },
-  ])
-  const onLoginSubmit = (form) => {// 用户登录
-    let params = form
-    API.login(params).then((res) => {
-      showToast(res.data.msg);
-      if(res.data.code == 0){
-        store.userInfoAction(res.data.user_info) // 存入状态管理
-        // 如果自动登录存在
-        if (autoLogin.value) {
-          $tool.operatCookie("set", "user_info", JSON.stringify(form), 1000 * 60 * 60 * 24); // 存入cookie用于自动登录
-        }
-        router.push("/Home");
+import { useStore } from '@/stores/stores'
+import { showToast } from "vant"
+import { ref, reactive, onBeforeMount, beforeRouteEnter } from 'vue'
+import { useRouter } from 'vue-router';
+import API from "@/request/api"
+import baseUrl from '@/request/base_url'
+import $tool from "@/utils/tool"
+const router = useRouter();
+const store = useStore();
+let status = ref("login");
+let autoLogin = ref(false) // 免登录开关
+let loginForm = reactive({
+  user_name: "",
+  user_password: "",
+})
+let registeForm = reactive({
+  user_name: "",
+  user_password: "",
+})
+const swiperList = reactive([
+  { imgSrc: `${baseUrl}/image/banner/swiper1.jpg` },
+  { imgSrc: `${baseUrl}/image/banner/swiper2.png` },
+  { imgSrc: `${baseUrl}/image/banner/swiper3.jpg` },
+  { imgSrc: `${baseUrl}/image/banner/swiper4.png` },
+  { imgSrc: `${baseUrl}/image/banner/swiper5.jpg` },
+])
+const onLoginSubmit = (form) => {// 用户登录
+  let params = form
+  API.login(params).then((res) => {
+    showToast(res.data.msg);
+    if (res.data.code == 0) {
+      store.userInfoAction(res.data.user_info) // 存入状态管理
+      // 如果自动登录存在
+      if (autoLogin.value) {
+        $tool.operatCookie("set", "user_info", JSON.stringify(form), 1000 * 60 * 60 * 24); // 存入cookie用于自动登录
       }
-    });
-  }
-  const onRegisteSubmit = (form) => {// 注册新用户
-    API.register(form).then((res) => {
-      showToast(res.data.msg);
-      if (res.data.code == 0) {
-        status.value = "login";
-        registeForm = {
-          user_name: "",
-          user_password: "",
-        };
-        loginForm = form;
-      }
-    })
-  }
-  onBeforeMount(() => {
-    // 校验cookie后自动登录
-    let user_cookie = $tool.operatCookie("get", "user_info");
-    if (user_cookie && user_cookie != "{}") {
-      let params = JSON.parse(user_cookie)
-      onLoginSubmit(params);
+      router.push("/Home");
+    }
+  });
+}
+const onRegisteSubmit = (form) => {// 注册新用户
+  API.register(form).then((res) => {
+    showToast(res.data.msg);
+    if (res.data.code == 0) {
+      status.value = "login";
+      registeForm = {
+        user_name: "",
+        user_password: "",
+      };
+      loginForm = form;
     }
   })
-  const downLoadApp = ()=>{
-    location.href = "http://101.35.193.41/Glight.apk"
+}
+onBeforeMount(() => {
+  // 校验cookie后自动登录
+  let user_cookie = $tool.operatCookie("get", "user_info");
+  if (user_cookie && user_cookie != "{}") {
+    let params = JSON.parse(user_cookie)
+    onLoginSubmit(params);
   }
+})
+beforeEnter((to, from) => {
+  let user_cookie = $tool.operatCookie("get", "user_info");
+  const _store = useStore();
+  let user_pina = _store.userInfo;
+  if (from.path != "/") {
+    if ((user_cookie && user_cookie != "{}") && (user_pina && JSON.stringify(user_pina) != "{}")) {
+      showToast("当前已登录~");
+      return false
+    } else {
+      return true
+    }
+  } else {
+    return true
+  }
+})
+const downLoadApp = () => {
+  location.href = "http://101.35.193.41/Glight.apk"
+}
 </script>
 
 <style scoped lang="scss">

@@ -1,5 +1,6 @@
 <template>
   <div class="page-home">
+    <TopBar id="top-bar"/>
     <RouterView id="home-view"/>
     <BottomBar id="bottom-bar"/>
   </div>
@@ -7,7 +8,8 @@
 
 <script setup>
 import { RouterView } from 'vue-router'
-import BottomBar from '@/components/BottomBar.vue'
+import BottomBar from '@/components/bottomBar.vue'
+import TopBar from '@/components/topBar.vue'
 </script>
 
 <style lang="scss" scoped>
