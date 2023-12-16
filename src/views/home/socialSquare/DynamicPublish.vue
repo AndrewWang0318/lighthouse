@@ -43,7 +43,7 @@ import { ref, reactive } from 'vue';
 import { useStore } from '@/stores/stores';
 import { useRouter } from "vue-router";
 import { showToast } from "vant";
-import API from "@/request/api";
+import API from "@/server/api";
 import compressor from "@/utils/compressor"
 
 const store = useStore();

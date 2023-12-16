@@ -60,10 +60,10 @@ export default {
 <script setup>
 import { useStore } from '@/stores/stores'
 import { showToast } from "vant"
-import { ref, reactive, onBeforeMount, beforeRouteEnter } from 'vue'
+import { ref, reactive, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router';
-import API from "@/request/api"
-import baseUrl from '@/request/base_url'
+import API from "@/server/api"
+import baseUrl from '@/server/base_url'
 import $tool from "@/utils/tool"
 const router = useRouter();
 const store = useStore();
@@ -119,7 +119,7 @@ onBeforeMount(() => {
     onLoginSubmit(params);
   }
 })
-beforeEnter((to, from) => {
+onBeforeRouteLeave((to, from) => {
   let user_cookie = $tool.operatCookie("get", "user_info");
   let userInfo = store.userInfo;
   if (from.path != "/") {
@@ -134,7 +134,7 @@ beforeEnter((to, from) => {
   }
 })
 const downLoadApp = () => {
-  location.href = "http://101.35.193.41/Glight.apk"
+  // location.href = "http://101.35.193.41/Glight.apk"
 }
 </script>
 

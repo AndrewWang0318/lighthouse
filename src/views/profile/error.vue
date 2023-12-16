@@ -1,11 +1,35 @@
 <template >
   <div class="page-error">
-    
+    <!-- <rain></rain> -->
+    <component :is="current_page"></component>
   </div>
 </template>
 
-<script setup>
+<script>
+export default {
+  name: 'errorPage'
+}
+</script>
 
+<script setup>
+import codeRain from '@/components/codeRain.vue'
+import rain from '@/components/rain.vue'
+import $util from "aw-util"
+import { onMounted, shallowRef, onBeforeUnmount } from "vue"
+const timer = {};
+const page = [codeRain, rain];
+let page_num = $util.randomNumber(0, page.length - 1);
+const current_page = shallowRef(page[page_num]);
+
+onMounted(() => {
+  setInterval(() => {
+    page_num = $util.randomNumber(0, page.length - 1)
+    current_page.value = page[page_num]
+  }, 30 * 1000)
+})
+onBeforeUnmount(()=>{
+  console.log(111) 
+})
 </script>
 
 <style lang="scsss">

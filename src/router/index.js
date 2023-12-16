@@ -14,16 +14,15 @@ const router = createRouter({
     {
       path: '/home',
       name: 'home',
-      redirect:'/login',
       children: [
-        // {
-        //   path: "PlanDetail",
-        //   name: "PlanDetail",
-        //   component: () => import("@/views/Plan/PlanDetail.vue"),
-        //   meta:{
-        //     name:'首页'
-        //   },
-        // },
+        {
+          path: "index",
+          name: "Index",
+          component: () => import("@/views/home/home.vue"),
+          meta:{
+            name:'首页'
+          },
+        },
         // {
         //   path: "FriendDynamic",
         //   name: "FriendDynamic",
@@ -43,11 +42,11 @@ const router = createRouter({
       ],
     },
     {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/views/login/index.vue'),
+      path: '/error',
+      name: 'error',
+      component: () => import('@/views/profile/error.vue'),
       meta:{
-        name:'登录'
+        name:'错误'
       }
     },
     {

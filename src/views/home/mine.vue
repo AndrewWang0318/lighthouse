@@ -35,7 +35,7 @@ export default {
   import { useRouter } from 'vue-router';
   import { useStore } from '@/stores/stores';
   import $tool from "@/utils/tool";
-  import base_url from '@/request/base_url'
+  import base_url from '@/server/base_url'
 
   const _store = useStore();
   const router = useRouter();

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    
+  <div class="page-home">
+    主页
   </div>
 </template>
 <script setup>

@@ -85,7 +85,7 @@ import { useStore } from '@/stores/stores';
 import { useRouter } from "vue-router";
 import { showToast } from "vant";
 import Reply from '@/views/Dynamic/components/Reply.vue'
-import API from "@/request/api";
+import API from "@/server/api";
 
 let debounce_timeout;
 

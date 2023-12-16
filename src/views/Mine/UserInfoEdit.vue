@@ -154,13 +154,13 @@ export default {
 </script>
 
 <script setup>
-  import _API from "@/request/api";
+  import _API from "@/server/api";
   import { showToast } from "vant";
   import { areaList } from "@vant/area-data";
   import { ref, reactive, getCurrentInstance } from "vue";
   import { useStore } from "@/stores/stores";
   import { useRouter } from "vue-router";
-  import base_url from "@/request/base_url";
+  import base_url from "@/server/base_url";
   import moment from "moment"; // 引入moment时间处理模块
   import { getUrl } from "@/utils/util"
   const store = useStore();

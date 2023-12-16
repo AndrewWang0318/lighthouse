@@ -1,249 +1,253 @@
 <template>
   <div class="scene"></div>
 </template>
-<script>
-/*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
+<script setup>
+import { onMounted } from "vue";
+onMounted(() => {
+  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
+  
+  Vars
+  
+  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
 
-Vars
+  var c = document.createElement('canvas'),
+    ctx = c.getContext('2d'),
+    dpr = window.devicePixelRatio,
+    w = 400,
+    h = 400,
+    particles = [],
+    particleCount = 1000,
+    particlePath = 4,
+    pillars = [],
+    pillarCount = 60,
+    hue = 0,
+    hueRange = 60,
+    hueChange = 1,
+    gravity = 0.1,
+    lineWidth = 1.1,
+    lineCap = 'butt',
+    PI = Math.PI,
+    TWO_PI = PI * 2;
 
-=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
+  c.width = w * dpr;
+  c.height = h * dpr;
+  ctx.scale(dpr, dpr);
 
-var c = document.createElement('canvas'),
-  ctx = c.getContext('2d'),
-  dpr = window.devicePixelRatio,
-  w = 400,
-  h = 400,
-  particles = [],
-  particleCount = 1000,
-  particlePath = 4,
-  pillars = [],
-  pillarCount = 60,
-  hue = 0,
-  hueRange = 60,
-  hueChange = 1,
-  gravity = 0.1,
-  lineWidth = 1.1,
-  lineCap = 'butt',
-  PI = Math.PI,
-  TWO_PI = PI * 2;
+  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
+  
+  Utility
+  
+  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
 
-c.width = w * dpr;
-c.height = h * dpr;
-ctx.scale(dpr, dpr);
-
-/*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-
-Utility
-
-=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
-function rand(min, max) {
-  return Math.random() * (max - min) + min;
-}
-
-function distance(a, b) {
-  var dx = a.x - b.x,
-    dy = a.y - b.y;
-  return Math.sqrt(dx * dx + dy * dy);
-}
-
-/*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-
-Particle
-
-=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
-function Particle(opt) {
-  this.path = [];
-  this.reset();
-}
-
-Particle.prototype.reset = function () {
-  this.radius = 1;
-  this.x = rand(0, w);
-  this.y = 0;
-  this.vx = 0;
-  this.vy = 0;
-  this.hit = 0;
-  this.path.length = 0;
-};
-
-Particle.prototype.step = function () {
-  this.hit = 0;
-
-  this.path.unshift([this.x, this.y]);
-  if (this.path.length > particlePath) {
-    this.path.pop();
+  function rand(min, max) {
+    return Math.random() * (max - min) + min;
   }
 
-  this.vy += gravity;
+  function distance(a, b) {
+    var dx = a.x - b.x,
+      dy = a.y - b.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
 
-  this.x += this.vx;
-  this.y += this.vy;
+  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
+  
+  Particle
+  
+  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
 
-  if (this.y > h + 10) {
+  function Particle(opt) {
+    this.path = [];
     this.reset();
   }
 
-  var i = pillarCount;
-  while (i--) {
-    var pillar = pillars[i];
-    if (distance(this, pillar) < this.radius + pillar.renderRadius) {
-      this.vx = -(pillar.x - this.x) * rand(0.01, 0.03);
-      this.vy = -(pillar.y - this.y) * rand(0.01, 0.03);
-      pillar.radius -= 0.1;
-      this.hit = 1;
+  Particle.prototype.reset = function () {
+    this.radius = 1;
+    this.x = rand(0, w);
+    this.y = 0;
+    this.vx = 0;
+    this.vy = 0;
+    this.hit = 0;
+    this.path.length = 0;
+  };
+
+  Particle.prototype.step = function () {
+    this.hit = 0;
+
+    this.path.unshift([this.x, this.y]);
+    if (this.path.length > particlePath) {
+      this.path.pop();
     }
-  }
-};
 
-Particle.prototype.draw = function () {
-  ctx.beginPath();
-  ctx.moveTo(this.x, ~~this.y);
-  for (var i = 0, length = this.path.length; i < length; i++) {
-    var point = this.path[i];
-    ctx.lineTo(point[0], ~~point[1]);
-  }
-  ctx.strokeStyle = 'hsla(' + rand(hue + (this.x / 3), hue + (this.x / 3) + hueRange) + ', 50%, 30%, 0.6)';
-  ctx.stroke();
+    this.vy += gravity;
 
-  if (this.hit) {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, rand(1, 25), 0, TWO_PI);
-    ctx.fillStyle = 'hsla(' + rand(hue + (this.x / 3), hue + (this.x / 3) + hueRange) + ', 80%, 15%, 0.1)'
-    ctx.fill();
-  }
-};
+    this.x += this.vx;
+    this.y += this.vy;
 
-/*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-
-Pillar
-
-=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
-function Pillar() {
-  this.reset();
-}
-
-Pillar.prototype.reset = function () {
-  this.radius = rand(50, 100);
-  this.renderRadius = 0;
-  this.x = rand(0, w);
-  this.y = rand(h / 2 - h / 4, h);
-  this.active = 0;
-};
-
-Pillar.prototype.step = function () {
-  if (this.active) {
-    if (this.radius <= 1) {
+    if (this.y > h + 10) {
       this.reset();
-    } else {
-      this.renderRadius = this.radius;
     }
-  } else {
-    if (this.renderRadius < this.radius) {
-      this.renderRadius += 0.5;
+
+    var i = pillarCount;
+    while (i--) {
+      var pillar = pillars[i];
+      if (distance(this, pillar) < this.radius + pillar.renderRadius) {
+        this.vx = -(pillar.x - this.x) * rand(0.01, 0.03);
+        this.vy = -(pillar.y - this.y) * rand(0.01, 0.03);
+        pillar.radius -= 0.1;
+        this.hit = 1;
+      }
+    }
+  };
+
+  Particle.prototype.draw = function () {
+    ctx.beginPath();
+    ctx.moveTo(this.x, ~~this.y);
+    for (var i = 0, length = this.path.length; i < length; i++) {
+      var point = this.path[i];
+      ctx.lineTo(point[0], ~~point[1]);
+    }
+    ctx.strokeStyle = 'hsla(' + rand(hue + (this.x / 3), hue + (this.x / 3) + hueRange) + ', 50%, 30%, 0.6)';
+    ctx.stroke();
+
+    if (this.hit) {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, rand(1, 25), 0, TWO_PI);
+      ctx.fillStyle = 'hsla(' + rand(hue + (this.x / 3), hue + (this.x / 3) + hueRange) + ', 80%, 15%, 0.1)'
+      ctx.fill();
+    }
+  };
+
+  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
+  
+  Pillar
+  
+  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
+
+  function Pillar() {
+    this.reset();
+  }
+
+  Pillar.prototype.reset = function () {
+    this.radius = rand(50, 100);
+    this.renderRadius = 0;
+    this.x = rand(0, w);
+    this.y = rand(h / 2 - h / 4, h);
+    this.active = 0;
+  };
+
+  Pillar.prototype.step = function () {
+    if (this.active) {
+      if (this.radius <= 1) {
+        this.reset();
+      } else {
+        this.renderRadius = this.radius;
+      }
     } else {
-      this.active = 1;
+      if (this.renderRadius < this.radius) {
+        this.renderRadius += 0.5;
+      } else {
+        this.active = 1;
+      }
+    }
+  };
+
+  Pillar.prototype.draw = function () {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.renderRadius, 0, TWO_PI, false);
+    ctx.fill();
+  };
+
+  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
+  
+  Init
+  
+  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
+
+  function init() {
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = lineCap;
+
+    var i = pillarCount;
+    while (i--) {
+      pillars.push(new Pillar());
+    }
+
+    document.querySelector('.scene').appendChild(c);
+    loop();
+  }
+
+  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
+  
+  Step
+  
+  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
+
+  function step() {
+    hue += hueChange;
+
+    if (particles.length < particleCount) {
+      particles.push(new Particle());
+    }
+
+    var i = particles.length;
+    while (i--) {
+      particles[i].step();
+    }
+
+    i = pillarCount;
+    while (i--) {
+      pillars[i].step();
     }
   }
-};
 
-Pillar.prototype.draw = function () {
-  ctx.beginPath();
-  ctx.arc(this.x, this.y, this.renderRadius, 0, TWO_PI, false);
-  ctx.fill();
-};
+  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
+  
+  Draw
+  
+  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
 
-/*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
+  function draw() {
+    ctx.fillStyle = 'hsla(0, 0%, 0%, 0.3)';
+    ctx.fillRect(0, 0, w, h);
 
-Init
+    ctx.globalCompositeOperation = 'lighter';
+    var i = particles.length;
+    while (i--) {
+      particles[i].draw();
+    }
 
-=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
-function init() {
-  ctx.lineWidth = lineWidth;
-  ctx.lineCap = lineCap;
-
-  var i = pillarCount;
-  while (i--) {
-    pillars.push(new Pillar());
+    ctx.globalCompositeOperation = 'source-over';
+    i = pillarCount;
+    ctx.fillStyle = 'rgba(20, 20, 20, 0.3)';
+    while (i--) {
+      pillars[i].draw();
+    }
   }
 
-  document.querySelector('.scene').appendChild(c);
-  loop();
-}
+  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
+  
+  Loop
+  
+  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
 
-/*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-
-Step
-
-=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
-function step() {
-  hue += hueChange;
-
-  if (particles.length < particleCount) {
-    particles.push(new Particle());
+  function loop() {
+    requestAnimationFrame(loop);
+    step();
+    draw();
   }
 
-  var i = particles.length;
-  while (i--) {
-    particles[i].step();
-  }
+  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
+  
+  Blast Off
+  
+  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
 
-  i = pillarCount;
-  while (i--) {
-    pillars[i].step();
-  }
-}
+  init();
+})
 
-/*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-
-Draw
-
-=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
-function draw() {
-  ctx.fillStyle = 'hsla(0, 0%, 0%, 0.3)';
-  ctx.fillRect(0, 0, w, h);
-
-  ctx.globalCompositeOperation = 'lighter';
-  var i = particles.length;
-  while (i--) {
-    particles[i].draw();
-  }
-
-  ctx.globalCompositeOperation = 'source-over';
-  i = pillarCount;
-  ctx.fillStyle = 'rgba(20, 20, 20, 0.3)';
-  while (i--) {
-    pillars[i].draw();
-  }
-}
-
-/*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-
-Loop
-
-=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
-function loop() {
-  requestAnimationFrame(loop);
-  step();
-  draw();
-}
-
-/*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-
-Blast Off
-
-=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
-init();
 </script>
-<style lang="">
-    html,
+<style lang="scss">
+html,
 body {
   height: 100%;
 }
@@ -253,6 +257,7 @@ body {
   background: radial-gradient(#222, #000);
   overflow: hidden;
 }
+
 /*
 canvas {
   background: #000;
@@ -277,8 +282,7 @@ canvas {
   bottom: 0;
   box-shadow:
     0 0 0 10px #222,
-    0 30px 30px -20px #000
-  ;
+    0 30px 30px -20px #000;
   height: 80vmin;
   left: 0;
   max-height: 400px;

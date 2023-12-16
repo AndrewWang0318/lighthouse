@@ -13,9 +13,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'; // pinia �
 import { Fragment } from 'vue-fragment-plus'; // 空标签
 import Loading from "@/components/loading.vue"; // 引入loading组件
 import base_url from '@/server/base_url';
-// import tool from "@/utils/tool"
 import tool from 'aw-util'
-console.log(tool)
 import directives from '@/utils/directives'; // 引入自己定义的全局指令
 import Vue3TouchEvents from "vue3-touch-events";
 import '@/assets/index.css' // 导入公用样式
