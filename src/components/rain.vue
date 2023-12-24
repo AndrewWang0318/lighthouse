@@ -4,12 +4,7 @@
 <script setup>
 import { onMounted } from "vue";
 onMounted(() => {
-  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-  
-  Vars
-  
-  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
+  // Vars
   var c = document.createElement('canvas'),
     ctx = c.getContext('2d'),
     dpr = window.devicePixelRatio,
@@ -32,34 +27,20 @@ onMounted(() => {
   c.width = w * dpr;
   c.height = h * dpr;
   ctx.scale(dpr, dpr);
-
-  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-  
-  Utility
-  
-  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
+  // Utility
   function rand(min, max) {
     return Math.random() * (max - min) + min;
   }
-
   function distance(a, b) {
     var dx = a.x - b.x,
       dy = a.y - b.y;
     return Math.sqrt(dx * dx + dy * dy);
   }
-
-  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-  
-  Particle
-  
-  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
+  // Particle
   function Particle(opt) {
     this.path = [];
     this.reset();
   }
-
   Particle.prototype.reset = function () {
     this.radius = 1;
     this.x = rand(0, w);
@@ -69,7 +50,6 @@ onMounted(() => {
     this.hit = 0;
     this.path.length = 0;
   };
-
   Particle.prototype.step = function () {
     this.hit = 0;
 
@@ -98,7 +78,6 @@ onMounted(() => {
       }
     }
   };
-
   Particle.prototype.draw = function () {
     ctx.beginPath();
     ctx.moveTo(this.x, ~~this.y);
@@ -116,17 +95,10 @@ onMounted(() => {
       ctx.fill();
     }
   };
-
-  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-  
-  Pillar
-  
-  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
+  // Pillar
   function Pillar() {
     this.reset();
   }
-
   Pillar.prototype.reset = function () {
     this.radius = rand(50, 100);
     this.renderRadius = 0;
@@ -134,7 +106,6 @@ onMounted(() => {
     this.y = rand(h / 2 - h / 4, h);
     this.active = 0;
   };
-
   Pillar.prototype.step = function () {
     if (this.active) {
       if (this.radius <= 1) {
@@ -150,19 +121,12 @@ onMounted(() => {
       }
     }
   };
-
   Pillar.prototype.draw = function () {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.renderRadius, 0, TWO_PI, false);
     ctx.fill();
   };
-
-  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-  
-  Init
-  
-  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
+  // Init
   function init() {
     ctx.lineWidth = lineWidth;
     ctx.lineCap = lineCap;
@@ -175,13 +139,7 @@ onMounted(() => {
     document.querySelector('.scene').appendChild(c);
     loop();
   }
-
-  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-  
-  Step
-  
-  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
+  // Step
   function step() {
     hue += hueChange;
 
@@ -199,13 +157,7 @@ onMounted(() => {
       pillars[i].step();
     }
   }
-
-  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-  
-  Draw
-  
-  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
+  // Draw
   function draw() {
     ctx.fillStyle = 'hsla(0, 0%, 0%, 0.3)';
     ctx.fillRect(0, 0, w, h);
@@ -223,25 +175,13 @@ onMounted(() => {
       pillars[i].draw();
     }
   }
-
-  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-  
-  Loop
-  
-  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
+  // Loop
   function loop() {
     requestAnimationFrame(loop);
     step();
     draw();
   }
-
-  /*/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/
-  
-  Blast Off
-  
-  =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=*/
-
+  // Blast Off
   init();
 })
 
@@ -258,24 +198,24 @@ body {
   overflow: hidden;
 }
 
-/*
-canvas {
-  background: #000;
-  bottom: 0;
-  box-shadow:
-    0 0 0 10px #222,
-    0 30px 30px -20px #000
-  ;
-  height: 400px;
-  left: 0;
-  margin: auto;
-  max-height: 100%;
-  max-width: 100%;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 600px;
-}*/
+
+// canvas {
+//   background: #000;
+//   bottom: 0;
+//   box-shadow:
+//     0 0 0 10px #222,
+//     0 30px 30px -20px #000
+//   ;
+//   height: 400px;
+//   left: 0;
+//   margin: auto;
+//   max-height: 100%;
+//   max-width: 100%;
+//   position: absolute;
+//   right: 0;
+//   top: 0;
+//   width: 600px;
+// }
 
 .scene {
   background: #000;

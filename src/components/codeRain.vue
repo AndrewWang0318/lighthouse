@@ -18,7 +18,7 @@ onMounted(() => {
   let win_width = window.innerWidth;
   let win_height = window.innerHeight;
   let drop_code_canvas = drop_code_dom.getContext("2d");
-  let font_size = 12;
+  let font_size = 18;
   let font_num = (win_width / font_size) | 0;
   let arrIndex = []; // 保存y坐标数组
   drop_code_dom.width = win_width;
@@ -30,7 +30,8 @@ onMounted(() => {
     drop_code_canvas.fillStyle = "rgba(0,0,0,0.15)";
     drop_code_canvas.fillRect(0, 0, win_width, win_height);
     for (let i = 0; i < font_num; i++) {
-      let str = ((Math.random() * 36) | 0).toString(36)[Math.random() > 0.5 ? "toLocaleLowerCase" : "toLocaleUpperCase"]();
+      // let str = ((Math.random() * 36) | 0).toString(36)[Math.random() > 0.5 ? "toLocaleLowerCase" : "toLocaleUpperCase"]();
+      let str = getRandomChineseWord();
       drop_code_canvas.font = `${font_size}px 黑体 bold`;
       drop_code_canvas.fillStyle = "#0c3";
       drop_code_canvas.fillText(
@@ -43,6 +44,14 @@ onMounted(() => {
       }
     }
   }
-  setInterval(hua, 35);
+  setInterval(hua, 80);
+
+  // 生成随机汉字
+  function getRandomChineseWord () {
+    var rsl = "";
+    var randomUniCode = Math.floor(Math.random() * (40870 - 19968) + 19968).toString(16);
+    eval("rsl=" + '"\\u' + randomUniCode + '"');
+    return rsl;
+  }
 });
 </script>
