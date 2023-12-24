@@ -6,14 +6,25 @@
     <!-- 登录表单 -->
     <div class="row-form">
       <van-form @submit="onLoginSubmit">
-        <van-field v-model="login_form.user_name" input-align="center" name="user_name" placeholder="请输入账户" />
-        <van-field v-model="login_form.user_password" input-align="center" type="password" name="user_password" placeholder="请输入密码" clearable />
-        <van-button type="primary" block native-type="submit">登录</van-button>
+        <div class="form-content">
+          <van-field class="item-form-content" v-model="login_form.user_name" input-align="center" name="user_name" placeholder="请输入账户" />
+          <van-field class="item-form-content" v-model="login_form.user_password" input-align="center" type="password" name="user_password"
+            placeholder="请输入密码" clearable />
+        </div>
+        <div class="form-function">
+          <van-button type="primary" disabled block native-type="submit">登录</van-button>
+        </div>
+
+
       </van-form>
     </div>
     <div class="row-function">
-      <div>注册</div>
-      <div>游客登录</div>
+      <div class="item-function btn-register" @click="routeToRegister">
+        <div class="icon around">
+          <van-icon name="plus" />
+        </div>
+        <div class="text">注册</div>
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +64,11 @@ const onLoginSubmit = (form) => {// 用户登录
     }
   });
 }
+const routeToRegister = () => {
+
+  router.push({ path: "/register" })
+}
+
 onBeforeMount(() => {
   // 校验cookie后自动登录
   let user_cookie = $tool.operatCookie("get", "user_info");
