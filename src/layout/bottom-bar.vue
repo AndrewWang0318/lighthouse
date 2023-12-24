@@ -16,20 +16,24 @@
 
 <script setup>
   import { ref } from "vue";
+  import { useRouter,useRoute } from "vue-router";
+  const router = useRouter();
+
+
   let bottomBarList = ref([
     {
       title: "首页",
-      route: "/Home/PlanDetail",
+      route: "/home/index",
       icon: "wap-home",
     },
     {
       title: "动态",
-      route: "/Home/FriendDynamic",
+      route: "/home/socialSquare",
       icon: "fire",
     },
     {
       title: "我的",
-      route: "/Home/Mine",
+      route: "/home/mine",
       icon: "manager",
     },
   ]);

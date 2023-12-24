@@ -84,7 +84,7 @@ import { getCurrentInstance, ref, reactive, computed, onMounted } from 'vue';
 import { useStore } from '@/stores/stores';
 import { useRouter } from "vue-router";
 import { showToast } from "vant";
-import Reply from '@/views/Dynamic/components/Reply.vue'
+import Reply from '@/views/social-square/components/reply.vue'
 import API from "@/server/api";
 
 let debounce_timeout;
@@ -98,7 +98,7 @@ const tool = $global.tool;
 // 动态数据
 let AllDynamicDataList = [];
 let dynamicDataList = ref([]);
-let page_info = ref({})
+let page_info = ref({});
 let page = ref(1);
 let limit = ref(10);
 // 动态图片预览图展示
@@ -279,5 +279,5 @@ const handleScroll = (v)=>{
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/sass/Dynamic/FriendDynamic.scss";
+@import "@/assets/sass/FriendDynamic.scss";
 </style>

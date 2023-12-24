@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { showToast } from "vant"; //引入Vant ui
 import { useStore } from '@/stores/stores'
-import $tool from "@/utils/tool";
+
 
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,32 +14,33 @@ const router = createRouter({
     {
       path: '/home',
       name: 'home',
+      redirect:'/index',
       component: () => import("@/views/index.vue"),
       children: [
         {
           path: "index",
-          name: "Index",
+          name: "index",
           component: () => import("@/views/index/index.vue"),
           meta:{
             name:'首页'
           },
         },
-        // {
-        //   path: "FriendDynamic",
-        //   name: "FriendDynamic",
-        //   component: () => import("@/views/Dynamic/FriendDynamic.vue"),
-        //   meta:{
-        //     name:'动态'
-        //   },
-        // },
-        // {
-        //   path: "Mine",
-        //   name: "Mine",
-        //   component: () => import("@/views/Mine/Mine.vue"),
-        //   meta:{
-        //     name:'我的'
-        //   },
-        // },
+        {
+          path: "socialSquare",
+          name: "socialSquare",
+          component: () => import("@/views/social-square/index.vue"),
+          meta:{
+            name:'动态'
+          },
+        },
+        {
+          path: "mine",
+          name: "mine",
+          component: () => import("@/views/mine/index.vue"),
+          meta:{
+            name:'我的'
+          },
+        },
       ],
     },
     {
@@ -53,7 +54,7 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/views/login/index.vue'),
+      component: () => import('@/views/profile/login/index.vue'),
       meta:{
         name:'登录'
       }

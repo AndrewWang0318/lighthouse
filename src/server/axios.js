@@ -5,7 +5,7 @@ import router from "@/router"; // Vue Router
 import codeMessage from "./error_code.json" // 状态码错误信息
 import baseURL from './base_url'
 import { useStore }  from '@/stores/stores'
-import $tool from "@/utils/tool"
+import $tool from "aw-util"
 // 创建axios实例
 const service = axios.create({
   baseURL,
