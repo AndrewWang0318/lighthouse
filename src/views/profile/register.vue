@@ -26,14 +26,13 @@ export default {
 </script>
 
 <script setup>
-import { useStore } from '@/stores/stores'
+
 import { showToast } from "vant"
-import { ref, reactive, onBeforeMount } from 'vue'
-import { useRouter,onBeforeRouteLeave } from 'vue-router';
+import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router';
 import API from "@/server/api"
-import $tool from "aw-util"
 const router = useRouter();
-const store = useStore();
+
 
 
 
@@ -61,5 +60,5 @@ const onRegisteSubmit = (form) => {// 注册新用户
 </script>
 
 <style scoped lang="scss">
-@import "@/assets/sass/Login.scss";
+@import "@/assets/sass/register.scss";
 </style>

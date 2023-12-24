@@ -6,8 +6,8 @@
     <!-- 登录表单 -->
     <div class="row-form">
       <van-form @submit="onLoginSubmit">
-        <van-field v-model="loginForm.user_name" input-align="center" name="user_name" placeholder="请输入账户" />
-        <van-field v-model="loginForm.user_password" input-align="center" type="password" name="user_password" placeholder="请输入密码" clearable />
+        <van-field v-model="login_form.user_name" input-align="center" name="user_name" placeholder="请输入账户" />
+        <van-field v-model="login_form.user_password" input-align="center" type="password" name="user_password" placeholder="请输入密码" clearable />
         <van-button type="primary" block native-type="submit">登录</van-button>
       </van-form>
     </div>
@@ -32,11 +32,10 @@ import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import API from "@/server/api";
 import $tool from "aw-util";
 
-
 const router = useRouter();
 const store = useStore();
-let autoLogin = ref(true) // 免登录开关
-let loginForm = reactive({
+const autoLogin = ref(true) // 免登录开关
+const login_form = reactive({
   user_name: "",
   user_password: "",
 })
@@ -79,5 +78,5 @@ onBeforeRouteLeave((to, from) => {
 </script>
 
 <style scoped lang="scss">
-@import "@/assets/sass/Login.scss";
+@import "@/assets/sass/login.scss";
 </style>
