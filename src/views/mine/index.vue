@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="function-content">
-      <van-cell title="账号安全" is-link @click="exit"/>
+      <van-cell title="账号安全" is-link />
       <van-cell title="退出登录" is-link @click="exit"/>
     </div>
   </div>

@@ -84,7 +84,15 @@ const router = createRouter({
         name:'注册'
       }
     },
-
+    // 华容道游戏
+    {
+      path: '/hrdGame',
+      name: 'hrdGame',
+      component: () => import('@/views/profile/hrd-game.vue'),
+      meta:{
+        name:'注册'
+      }
+    },
     {
       path: '/error',
       name: 'error',
