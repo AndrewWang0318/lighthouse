@@ -54,9 +54,17 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/views/profile/login/index.vue'),
+      component: () => import('@/views/profile/login.vue'),
       meta:{
         name:'登录'
+      }
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('@/views/profile/register.vue'),
+      meta:{
+        name:'注册'
       }
     },
     {

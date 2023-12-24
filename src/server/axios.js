@@ -61,9 +61,9 @@ service.interceptors.response.use(
   }
 );
 // loading开关函数
-const _store = useStore()
+const store = useStore()
 function loadingSwitch(state) {
-  if (state === "open") _store.loadingSwitch = true;
-  if (state === "close") _store.loadingSwitch = false;
+  if (state === "open") store.loadingSwitch = true;
+  if (state === "close") store.loadingSwitch = false;
 }
 export default service;

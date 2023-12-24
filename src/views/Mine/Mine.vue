@@ -37,9 +37,9 @@ export default {
   import $tool from "@/utils/tool";
   import base_url from '@/server/base_url'
 
-  const _store = useStore();
+  const store = useStore();
   const router = useRouter();
-  const userInfo = reactive(_store.userInfo);
+  const userInfo = reactive(store.userInfo);
 
   const baseURL = base_url;
 
@@ -58,7 +58,7 @@ export default {
     showConfirmDialog({
       title: '确定退出？',
     }).then(() => {
-      _store.userInfoAction({}) // 存入状态管理
+      store.userInfoAction({}) // 存入状态管理
       $tool.operatCookie("del", "user_info");
       $tool.operatCookie("del", "token");
 

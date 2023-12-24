@@ -1,25 +1,25 @@
 .page-login {
-  .banner-content {
-    background-color: #2e2e2e;
-    padding: 0.04rem;
-    box-sizing: border-box;
+  min-height: 100vh;
+  background-color: #f8f8f8;
+  .row-logo {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    text-align: center;
+    .name-text {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #808080; /*文字颜色必须和背景同色*/
+      transform: scale(1);
+      animation: start 2s ease-in-out infinite alternate;
+    }
   }
-}
-.my-swipe .van-swipe-item {
-  color: #fff;
-  font-size: 20px;
-  height: 3rem;
-  line-height: 3rem;
-  text-align: center;
-  background-color: #fff;
-}
-.login-content,
-.register-content {
-  background-color: white;
-  padding: 0.2rem 0.1rem;
-}
-.image-item {
-  height: 3rem;
-  background-position: center center;
-  background-size: cover;
+
+  @keyframes start {
+    to {
+      color: #fff;
+      transform: scale(1.1);
+      text-shadow: 0 0 0.1rem #fff, 0 0 0.1rem rgb(0, 168, 0);
+    }
+  }
 }
