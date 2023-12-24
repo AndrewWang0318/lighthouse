@@ -8,8 +8,8 @@
 
 <script setup>
 import { RouterView } from 'vue-router'
-import BottomBar from '@/components/bottomBar.vue'
-import TopBar from '@/components/topBar.vue'
+import BottomBar from '@/layout/bottom-bar.vue'
+import TopBar from '@/layout/top-bar.vue'
 </script>
 
 <style lang="scss" scoped>
