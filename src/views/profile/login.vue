@@ -14,11 +14,15 @@
         <div class="form-function">
           <van-button type="primary" disabled block native-type="submit">登录</van-button>
         </div>
-
-
       </van-form>
     </div>
     <div class="row-function">
+      <div class="item-function btn-register" @click="customerLogin">
+        <div class="icon around">
+          <van-icon name="friends" />
+        </div>
+        <div class="text">游客登录</div>
+      </div>
       <div class="item-function btn-register" @click="routeToRegister">
         <div class="icon around">
           <van-icon name="plus" />
@@ -65,8 +69,9 @@ const onLoginSubmit = (form) => {// 用户登录
   });
 }
 const routeToRegister = () => {
-
   router.push({ path: "/register" })
+}
+const customerLogin = () => {
 }
 
 onBeforeMount(() => {

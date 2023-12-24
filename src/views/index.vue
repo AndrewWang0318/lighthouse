@@ -1,15 +1,15 @@
 <template>
   <div class="page-home">
-    <TopBar id="top-bar" />
-    <RouterView id="home-view" />
-    <BottomBar id="bottom-bar" />
+    <Nav></Nav>
+    <RouterView />
+    <BottomBar />
   </div>
 </template>
 
 <script setup>
 import { RouterView } from 'vue-router'
 import BottomBar from '@/layout/bottom-bar.vue'
-import TopBar from '@/layout/top-bar.vue'
+import Nav from '@/layout/nav.vue'
 </script>
 
 <style lang="scss" scoped>

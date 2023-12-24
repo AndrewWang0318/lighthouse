@@ -1,21 +1,25 @@
 <template>
   <div class="page-register">
-    <!-- 注册表单 -->
-    <van-form @submit="onRegisteSubmit">
-      <div class="register-content">
-        <van-cell-group inset>
-          <van-field v-model="registeForm.user_name" name="user_name" label="用户名" placeholder="用户名"
-            :rules="[{ required: true, message: '请填写用户名!!!' }]" />
-          <van-field v-model="registeForm.user_password" type="password" name="user_password" label="密码" placeholder="密码"
-            :rules="[{ required: true, message: '请填写密码!!!' }]" />
-        </van-cell-group>
-      </div>
-      <div style="margin: 16px">
-        <van-button style="margin-bottom: 0.2rem;" block type="primary" native-type="submit">
-          点击注册
-        </van-button>
-      </div>
-    </van-form>
+    
+    <div class="row-logo">
+      <div class="name-text">LIGHTHOUSE</div>
+    </div>
+    <!-- 登录表单 -->
+    <div class="row-form">
+      <van-form @submit="onRegisteSubmit">
+        <div class="form-content">
+          <van-field class="item-form-content" v-model="registe_form.user_name" input-align="center" name="user_name" 
+            placeholder="用户名" />
+          <van-field class="item-form-content" v-model="registe_form.user_password" input-align="center" clearable type="password"
+            name="user_password" placeholder="密码" />
+            <van-field class="item-form-content" v-model="registe_form.user_password" input-align="center" clearable type="password"
+            name="user_password" placeholder="确认密码" />
+        </div>
+        <div class="form-function">
+          <van-button type="primary" disabled block native-type="submit">注册</van-button>
+        </div>
+      </van-form>
+    </div>
   </div>
 </template>
 
@@ -36,7 +40,7 @@ const router = useRouter();
 
 
 
-let registeForm = reactive({
+let registe_form = reactive({
   user_name: "",
   user_password: "",
 })
@@ -46,11 +50,10 @@ const onRegisteSubmit = (form) => {// 注册新用户
   API.register(form).then((res) => {
     showToast(res.data.msg);
     if (res.data.code == 0) {
-      registeForm = {
+      registe_form = {
         user_name: "",
         user_password: "",
       };
-      loginForm = form;
     }
   })
 }

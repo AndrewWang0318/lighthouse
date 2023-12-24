@@ -5,6 +5,7 @@ import router from '@/router'
 
 import Pixelfit from 'pixelfit' // 适配组件
 import Vant from "vant"; //引入Vant ui
+import { Icon } from 'vant';
 import 'vant/lib/index.css';
 import moment from "moment"; // 引入moment时间处理模块
 import 'moment/dist/locale/zh-cn'; // 引入中文环境

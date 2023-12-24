@@ -1,3 +1,32 @@
 .page-register{
-  
+  min-height: 100vh;
+  background-color: #f8f8f8;
+  position: relative;
+  .row-logo {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    text-align: center;
+    .name-text {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #808080; /*文字颜色必须和背景同色*/
+    }
+  }
+  .row-form{
+    padding: 0 0.6rem;
+    box-sizing: border-box;
+    .form-content{
+      margin-bottom: 0.6rem;
+      .item-form-content{
+        
+        line-height: 0.48rem;
+        font-size: 0.32rem;
+        border-radius: 0.1rem;
+        margin-bottom: 0.4rem;
+        padding: 0.26rem 0.2rem;
+        box-shadow: 0 0 0.24rem #efefef;
+      }
+    }
+  }
 }

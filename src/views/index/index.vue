@@ -10,12 +10,16 @@
   </div>
 </template>
 <script setup>
+import { reactive,getCurrentInstance } from 'vue'
+const instance = getCurrentInstance();
+const $global = instance.appContext.app.config.globalProperties;
+const base_url = $global.base_url;
 const swiperList = reactive([
-  { imgSrc: `${baseUrl}/image/banner/swiper1.jpg` },
-  { imgSrc: `${baseUrl}/image/banner/swiper2.png` },
-  { imgSrc: `${baseUrl}/image/banner/swiper3.jpg` },
-  { imgSrc: `${baseUrl}/image/banner/swiper4.png` },
-  { imgSrc: `${baseUrl}/image/banner/swiper5.jpg` },
+  { imgSrc: `${base_url}/image/banner/swiper1.jpg` },
+  { imgSrc: `${base_url}/image/banner/swiper2.png` },
+  { imgSrc: `${base_url}/image/banner/swiper3.jpg` },
+  { imgSrc: `${base_url}/image/banner/swiper4.png` },
+  { imgSrc: `${base_url}/image/banner/swiper5.jpg` },
 ])
 </script>
 <style lang="scss">
