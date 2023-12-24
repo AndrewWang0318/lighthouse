@@ -23,22 +23,22 @@
   let bottomBarList = ref([
     {
       title: "首页",
-      route: "/home/index",
+      route: "/home",
       icon: "wap-home",
     },
     {
       title: "动态",
-      route: "/home/socialSquare",
+      route: "/socialSquare",
       icon: "fire",
     },
     {
       title: "发现",
-      route: "/home/discover",
+      route: "/discover",
       icon: "smile",
     },
     {
       title: "我的",
-      route: "/home/mine",
+      route: "/mine",
       icon: "manager",
     },
   ]);

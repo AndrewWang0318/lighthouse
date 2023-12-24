@@ -13,6 +13,7 @@
       </div>
     </div>
     <div class="function-content">
+      <van-cell title="账号安全" is-link @click="exit"/>
       <van-cell title="退出登录" is-link @click="exit"/>
     </div>
   </div>
@@ -47,7 +48,7 @@ export default {
     router.push("/login");
   }
   const route_to_updateinfo = () => {
-    router.push("/UserInfoEdit");
+    router.push("/userEdit");
   }
   const exit = () => { // 退出登录
     showConfirmDialog({

@@ -10,7 +10,7 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 const should_nav_show = ref(true);
-const title = ref('')
+const title = ref('发现')
 
 onBeforeMount(() => {
   if (route.meta.nav_show == 'hide') {

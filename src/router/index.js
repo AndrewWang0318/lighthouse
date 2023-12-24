@@ -7,20 +7,17 @@ const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
+   
     {
       path: '/',
-      redirect:'/home/index',
-    },
-    {
-      path: '/home',
-      name: 'home',
-      redirect:'/index',
+      name: 'index',
+      redirect:'/home',
       component: () => import("@/views/index.vue"),
       children: [
         {
-          path: "index",
-          name: "index",
-          component: () => import("@/views/index/index.vue"),
+          path: "home",
+          name: "home",
+          component: () => import("@/views/home/index.vue"),
           meta:{
             name:'首页', // title名称
           },
@@ -52,14 +49,7 @@ const router = createRouter({
         },
       ],
     },
-    {
-      path: '/error',
-      name: 'error',
-      component: () => import('@/views/profile/error.vue'),
-      meta:{
-        name:'错误'
-      }
-    },
+    // 登录注册
     {
       path: '/login',
       name: 'login',
@@ -74,6 +64,33 @@ const router = createRouter({
       component: () => import('@/views/profile/register.vue'),
       meta:{
         name:'注册'
+      }
+    },
+    // 修改用户信息
+    {
+      path: '/userEdit',
+      name: 'userEdit',
+      component: () => import('@/views/profile/user-edit.vue'),
+      meta:{
+        name:'注册'
+      }
+    },
+    // 发布瞬间
+    {
+      path: '/dynamicPublish',
+      name: 'dynamicPublish',
+      component: () => import('@/views/profile/dynamic-publish.vue'),
+      meta:{
+        name:'注册'
+      }
+    },
+
+    {
+      path: '/error',
+      name: 'error',
+      component: () => import('@/views/profile/error.vue'),
+      meta:{
+        name:'错误'
       }
     },
     {

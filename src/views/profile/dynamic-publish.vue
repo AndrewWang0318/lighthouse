@@ -73,5 +73,5 @@ async function dynamicPublick() {
 </script>
   
 <style lang="scss" scoped>
-@import "@/assets/sass/Dynamic/DynamicPublish.scss";
+@import "@/assets/sass/DynamicPublish.scss";
 </style>

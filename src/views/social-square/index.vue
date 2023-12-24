@@ -7,7 +7,7 @@
         <div class="user-avatar" :style="`background-image: url(${base_url + store.userInfo.user_avatar});`"></div>
       </div>
       <!-- 发动态按钮 -->
-      <div class="btn-upload-dynamic" ref="btn_upload" @click="router.push('/DynamicPublish')">
+      <div class="btn-upload-dynamic" ref="btn_upload" @click="router.push('/dynamicPublish')">
         <van-icon name="plus" size='0.34rem' color="#ffffff" />
       </div>
     </div>

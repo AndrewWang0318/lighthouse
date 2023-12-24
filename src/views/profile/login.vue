@@ -85,7 +85,7 @@ const onLoginSubmit = (form) => {// 用户登录
       if (auto_login.value) {
         $tool.operatCookie("set", "user_info", JSON.stringify(form), 1000 * 60 * 60 * 24); // 存入cookie用于自动登录
       }
-      router.push("/home/index");
+      router.push("/home");
     }
   });
 }

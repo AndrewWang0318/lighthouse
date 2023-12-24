@@ -2,9 +2,10 @@
   <div class="page-discover">
     <NavBar />
     <div class="row-content">
-
       <van-grid class="setting-area" square :column-num="4">
         <van-grid-item icon="flower-o" text="华容道游戏" @click="router.push('/game')" />
+        <van-grid-item icon="flower-o" text="健身计划" @click="router.push('/train')" />
+        <van-grid-item icon="flower-o" text="三省吾身" @click="router.push('/train')" />
         <van-grid-item icon="service-o" text="反馈建议" @click="router.push('/demand')" />
       </van-grid>
     </div>
