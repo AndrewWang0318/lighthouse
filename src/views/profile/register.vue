@@ -1,9 +1,6 @@
 <template>
   <div class="page-register">
-    
-    <div class="row-logo">
-      <div class="name-text">LIGHTHOUSE</div>
-    </div>
+    <NavBar/>
     <!-- 登录表单 -->
     <div class="row-form">
       <van-form @submit="onRegisteSubmit">
@@ -30,7 +27,7 @@ export default {
 </script>
 
 <script setup>
-
+import NavBar from '@/layout/nav-bar.vue'
 import { showToast } from "vant"
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router';

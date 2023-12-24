@@ -1,6 +1,5 @@
 <template>
   <div class="page-home">
-    <Nav></Nav>
     <RouterView />
     <BottomBar />
   </div>
@@ -9,7 +8,7 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import BottomBar from '@/layout/bottom-bar.vue'
-import Nav from '@/layout/nav.vue'
+
 </script>
 
 <style lang="scss" scoped>

@@ -2,17 +2,8 @@
   min-height: 100vh;
   background-color: #f8f8f8;
   position: relative;
-  .row-logo {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    text-align: center;
-    .name-text {
-      display: inline-block;
-      font-size: 0.8rem;
-      font-weight: bold;
-      color: #808080; /*文字颜色必须和背景同色*/
-    }
-  }
+  padding-top: 5rem;
+  box-sizing: border-box;
   .row-form{
     padding: 0 0.6rem;
     box-sizing: border-box;
