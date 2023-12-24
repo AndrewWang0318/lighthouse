@@ -58,7 +58,7 @@
 
 <script setup>
 
-import all_level_data from "./hrd_level"
+import all_level_data from "@/assets/js/hrd_level"
 import { ref } from 'vue';
 import { useRouter } from "vue-router";
 import { getUrl } from "@/utils/util"

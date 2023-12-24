@@ -9,16 +9,16 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect:'/home',
+      redirect:'/index',
     },
     {
-      path: '/home',
-      name: 'home',
+      path: '/index',
+      name: 'index',
       children: [
         {
           path: "index",
           name: "Index",
-          component: () => import("@/views/home/home.vue"),
+          component: () => import("@/views/index/index.vue"),
           meta:{
             name:'首页'
           },
