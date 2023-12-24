@@ -61,6 +61,7 @@ export default {
       router.replace("/login");
     })
   }
+  // 添加金币功能
 </script>
 
 <style lang="scss" scoped>
