@@ -14,7 +14,6 @@
     </div>
     <div class="function-content">
       <van-grid class="setting-area" square :column-num="3">
-        <van-grid-item icon="underway" text="摸鱼办" @click="router.push('/FishOffice')"/>
         <van-grid-item icon="flower-o" text="游戏合集" @click="router.push('/Game')"/>
         <van-grid-item icon="service-o" text="反馈建议"  @click="router.push('/Demand')"/>
         <van-grid-item icon="revoke" text="退出登录" @click="exit"/>
@@ -34,7 +33,7 @@ export default {
   import { ref, reactive } from 'vue'
   import { useRouter } from 'vue-router';
   import { useStore } from '@/stores/stores';
-  import $tool from "@/utils/tool";
+  import $tool from "aw-util";
   import base_url from '@/server/base_url'
 
   const store = useStore();
@@ -68,5 +67,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/sass/Mine/Mine.scss";
+@import "@/assets/sass/mine.scss";
 </style>

@@ -1,6 +1,6 @@
 <template >
   <div class="nav-bar">
-    <van-nav-bar v-if="should_nav_show" :fixed="true" :title="title" left-text="" left-arrow
+    <van-nav-bar v-if="should_nav_show" :fixed="true" :placeholder="true" :title="title" left-text="" left-arrow
       @click-left="router.go(-1)" />
   </div>
 </template>
@@ -21,15 +21,15 @@ onBeforeMount(() => {
 </script>
 <style scoped lang="scss">
 .nav-bar {
-  .van-nav-bar {
+  .van-nav-bar,.van-nav-bar__placeholder {
     background-color: rgba(0, 0, 0, 0);
+
     :deep(.van-icon) {
       color: gray;
     }
   }
-  .van-hairline--bottom:after{
-  border-bottom-width: 0;
+  .van-hairline--bottom:after {
+    border-bottom-width: 0;
+  }
 }
-}
-
 </style>

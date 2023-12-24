@@ -23,7 +23,6 @@ const router = createRouter({
           component: () => import("@/views/index/index.vue"),
           meta:{
             name:'首页', // title名称
-            nav_show:'hide', // 是否展示nav,默认展示show,隐藏hide
           },
         },
         {
@@ -32,7 +31,15 @@ const router = createRouter({
           component: () => import("@/views/social-square/index.vue"),
           meta:{
             name:'动态',
-            nav_show:'hide'
+
+          },
+        },
+        {
+          path: "discover",
+          name: "discover",
+          component: () => import("@/views/discover/index.vue"),
+          meta:{
+            name:'发现',
           },
         },
         {
@@ -41,7 +48,6 @@ const router = createRouter({
           component: () => import("@/views/mine/index.vue"),
           meta:{
             name:'我的',
-            nav_show:'hide'
           },
         },
       ],
@@ -59,8 +65,7 @@ const router = createRouter({
       name: 'login',
       component: () => import('@/views/profile/login.vue'),
       meta:{
-        name:'登录',
-        nav_show:'hide'
+        name:'登录'
       }
     },
     {

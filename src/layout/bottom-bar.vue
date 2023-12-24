@@ -1,14 +1,14 @@
 <template>
-  <van-tabbar class="component-bottom-bar" route active-color="#ee0a24" :border="true">
+  <van-tabbar class="bottom-bar" route active-color="#ee0a24" :border="true">
     <van-tabbar-item
       v-for="(v, i) in bottomBarList"
       :key="i"
       :icon="v.icon"
       :to="v.route"
     >
-      <span>{{ v.title }}</span>
+      <div class="item-text">{{ v.title }}</div>
       <template v-slot:icon>
-        <van-icon :name="v.icon" :size="v.title == '' ? '0.6rem' : '0.36rem'" />
+        <van-icon :name="v.icon" size="0.4rem" />
       </template>
     </van-tabbar-item>
   </van-tabbar>
@@ -32,6 +32,11 @@
       icon: "fire",
     },
     {
+      title: "发现",
+      route: "/home/discover",
+      icon: "smile",
+    },
+    {
       title: "我的",
       route: "/home/mine",
       icon: "manager",
@@ -40,5 +45,14 @@
 </script>
 
 <style lang="scss" scoped>
-
+.bottom-bar{
+  background-color: #fff;
+  z-index: 2;
+  padding-bottom: 0.14rem;
+  padding-top: 0.14rem;
+  font-size: 0.26rem;
+  .van-badge__wrapper{
+    margin-bottom: 0.06rem;
+  }
+}
 </style>
