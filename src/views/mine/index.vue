@@ -13,11 +13,7 @@
       </div>
     </div>
     <div class="function-content">
-      <van-grid class="setting-area" square :column-num="3">
-        <van-grid-item icon="flower-o" text="游戏合集" @click="router.push('/Game')"/>
-        <van-grid-item icon="service-o" text="反馈建议"  @click="router.push('/Demand')"/>
-        <van-grid-item icon="revoke" text="退出登录" @click="exit"/>
-      </van-grid>
+      <van-cell title="退出登录" is-link @click="exit"/>
     </div>
   </div>
 </template>
