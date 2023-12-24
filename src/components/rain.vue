@@ -5,11 +5,11 @@
 import { onMounted } from "vue";
 onMounted(() => {
   // Vars
-  var c = document.createElement('canvas'),
+  let c = document.createElement('canvas'),
     ctx = c.getContext('2d'),
     dpr = window.devicePixelRatio,
-    w = 400,
-    h = 400,
+    w = window.innerWidth,
+    h = window.innerHeight,
     particles = [],
     particleCount = 1000,
     particlePath = 4,
@@ -27,15 +27,7 @@ onMounted(() => {
   c.width = w * dpr;
   c.height = h * dpr;
   ctx.scale(dpr, dpr);
-  // Utility
-  function rand(min, max) {
-    return Math.random() * (max - min) + min;
-  }
-  function distance(a, b) {
-    var dx = a.x - b.x,
-      dy = a.y - b.y;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
+  
   // Particle
   function Particle(opt) {
     this.path = [];
@@ -183,6 +175,16 @@ onMounted(() => {
   }
   // Blast Off
   init();
+
+  // Utility
+  function rand(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+  function distance(a, b) {
+    var dx = a.x - b.x,
+      dy = a.y - b.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
 })
 
 </script>
@@ -191,54 +193,13 @@ html,
 body {
   height: 100%;
 }
-
-body {
-  background: #111;
-  background: radial-gradient(#222, #000);
-  overflow: hidden;
-}
-
-
-// canvas {
-//   background: #000;
-//   bottom: 0;
-//   box-shadow:
-//     0 0 0 10px #222,
-//     0 30px 30px -20px #000
-//   ;
-//   height: 400px;
-//   left: 0;
-//   margin: auto;
-//   max-height: 100%;
-//   max-width: 100%;
-//   position: absolute;
-//   right: 0;
-//   top: 0;
-//   width: 600px;
-// }
-
 .scene {
-  background: #000;
-  bottom: 0;
-  box-shadow:
-    0 0 0 10px #222,
-    0 30px 30px -20px #000;
-  height: 80vmin;
-  left: 0;
-  max-height: 400px;
-  max-width: 400px;
-  margin: auto;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 80vmin;
+  width: 100vh;
+  height: 100vh;
 }
 
 canvas {
   height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
   width: 100%;
 }
 </style>
