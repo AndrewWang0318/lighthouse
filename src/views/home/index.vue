@@ -21,6 +21,7 @@ const swiperList = reactive([
   { imgSrc: `${base_url}/image/banner/swiper4.png` },
   { imgSrc: `${base_url}/image/banner/swiper5.jpg` },
 ])
+
 </script>
 <style lang="scss">
 .page-home {
