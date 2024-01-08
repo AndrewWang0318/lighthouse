@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tweenjs/tween.js": "^21.0.0",
     "@vant/area-data": "^1.2.2",
     "animejs": "^3.2.1",
     "aw-util": "^2.1.1",
@@ -21,6 +22,7 @@
     "pixelfit": "^1.0.1",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
+    "three": "^0.160.0",
     "vant": "^4.4.1",
     "vue": "^3.3.2",
     "vue-fragment-plus": "^1.0.4",
