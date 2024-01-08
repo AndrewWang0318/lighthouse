@@ -22,7 +22,7 @@
         <div class="icon around">
           <van-icon name="friends" />
         </div>
-        <div class="text">自动注册</div>
+        <div class="text">一键注册</div>
       </div>
       <div class="item-function btn-register" @click="routeToRegister">
         <div class="icon around">
