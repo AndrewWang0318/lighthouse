@@ -1,6 +1,5 @@
 <template >
   <div class="page-error">
-    <!-- <rain></rain> -->
     <component :is="current_page"></component>
   </div>
 </template>

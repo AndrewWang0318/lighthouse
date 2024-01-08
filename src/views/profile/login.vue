@@ -34,14 +34,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: 'loginPage'
 }
 </script>
 
-<script setup>
-
+<script setup lang="ts">
 import { ref, reactive, onBeforeMount,watch } from 'vue';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import { showToast } from "vant";
