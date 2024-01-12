@@ -50,7 +50,6 @@
 </template>
 
 <script setup>
-
 import all_level_data from "@/assets/js/hrd_level"
 import { ref } from 'vue';
 import { useRouter } from "vue-router";
@@ -60,21 +59,18 @@ const router = useRouter();
 
 // 重新刷新游戏
 let reflash_game = ref(false);
+// 音频播放dom
 const walk_audio_el = ref('');
+// 关卡名称
 const level_name_columns = all_level_data.map((v, i) => {
   return { text: v.name, value: i }
 })
+// 当前关卡
 let current_level = ref(0)
-let level_name = ref(level_name_columns[current_level.value].text)
+// 关卡名称
+let level_name = ref(level_name_columns[current_level.value].text);
+// 关卡选择器是否隐藏
 let showLevePicker = ref(false);
-const levePickerConfirm = ({ selectedOptions }) => {
-  showLevePicker.value = false;
-  level_name.value = selectedOptions[0].text;
-  current_level.value = selectedOptions[0].value
-  gameStart(current_level.value)
-};
-
-
 
 const grid_size = 1.6;// 布局一格的长度
 const wall_w = 4; // 盒子的宽
@@ -222,7 +218,7 @@ gameStart(current_level.value)
 
 // 游戏开始 [重新换关卡存在响应丢失问题]
 function gameStart(level) {
-  const all_role_data = all_level_data[level].data.map(item => new Soldier(...item)) // 所有人物
+  const all_role_data = all_level_data[level].data.map(item => new Soldier(...item)) // 生成所有人物
   all_role = ref(all_role_data)
   all_role_locate = ref(all_role_data.map(v => v.role_locate)); // 所有人物坐标点
 
@@ -271,6 +267,13 @@ function touchMove(move_direct, item) {
   }
 }
 
+// 切换光卡
+const levePickerConfirm = ({ selectedOptions }) => {
+  showLevePicker.value = false;
+  level_name.value = selectedOptions[0].text;
+  current_level.value = selectedOptions[0].value
+  gameStart(current_level.value)
+};
 
 </script>
 
