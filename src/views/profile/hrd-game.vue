@@ -1,11 +1,6 @@
 <template >
   <div class="page-hrd">
-    <van-nav-bar
-      title=""
-      left-text="返回"
-      left-arrow
-      @click-left="router.go(-1)"
-    />
+    <van-nav-bar title="" left-text="返回" left-arrow @click-left="router.go(-1)" />
     <div id="game-title">三国华容道</div>
     <div id="game-guild">
       <div class="level-select" @click="showLevePicker = true">
@@ -13,7 +8,7 @@
         <span style="color: green;">{{ level_name }}</span>
       </div>
       <div>移动步数: <span style="color: brown;">{{ move_step }}</span></div>
-      
+
       <div class="rank-title">排行榜</div>
     </div>
     <div id="game-content" v-if="!reflash_game" :style="{
@@ -48,8 +43,6 @@
       <van-button type="success" @click="reStart">重新来过</van-button>
     </div>
     <audio hidden ref="walk_audio_el" :src="getUrl('audio/walk.wav')"></audio>
-
-
     <van-popup v-model:show="showLevePicker" round position="bottom">
       <van-picker :columns="level_name_columns" @cancel="showLevePicker = false" @confirm="levePickerConfirm" />
     </van-popup>
@@ -62,10 +55,10 @@ import all_level_data from "@/assets/js/hrd_level"
 import { ref } from 'vue';
 import { useRouter } from "vue-router";
 import { getUrl } from "@/utils/util"
-import { showDialog,showConfirmDialog } from 'vant';
+import { showDialog, showConfirmDialog } from 'vant';
 const router = useRouter();
 
-
+// 重新刷新游戏
 let reflash_game = ref(false);
 const walk_audio_el = ref('');
 const level_name_columns = all_level_data.map((v, i) => {
@@ -83,7 +76,7 @@ const levePickerConfirm = ({ selectedOptions }) => {
 
 
 
-const grid_size = 1.5;// 布局一格的长度
+const grid_size = 1.6;// 布局一格的长度
 const wall_w = 4; // 盒子的宽
 const wall_h = 5; // 盒子的高
 const export_w = 2; // 出口的宽度
@@ -100,7 +93,7 @@ class Soldier {
     this.height = `${h * grid_size}rem`;
     this.top = lt[1] * grid_size;
     this.left = lt[0] * grid_size;
-    this.img =  getUrl(`images/hrd/${img_name}`);
+    this.img = getUrl(`images/hrd/${img_name}`);
     // 出口坐标
     this.export_locate = {
       lb: { x: (wall_w - export_w) / 2, y: wall_h },
@@ -234,17 +227,17 @@ function gameStart(level) {
   all_role_locate = ref(all_role_data.map(v => v.role_locate)); // 所有人物坐标点
 
   move_step.value = 0
-  setTimeout(()=>{
+  setTimeout(() => {
     reflash_game.value = true
-  },400)
-  setTimeout(()=>{
+  }, 400)
+  setTimeout(() => {
     reflash_game.value = false
-  },410)
+  }, 410)
 }
-function reStart(){
+function reStart() {
   showConfirmDialog({
-    message: '确认重新来过',
-    theme: 'round-button',
+    title: '提示',
+    message: '是否重新来过？',
   }).then(() => {
     gameStart(current_level.value)
   })
@@ -269,7 +262,7 @@ function touchMove(move_direct, item) {
   const cc_role = (all_role_locate.value.filter((item) => item.name == 'cc'))[0]
   if (item.isWin(cc_role)) {
     showDialog({
-      message: '天不灭我曹!!!',
+      message: '已逃出',
       theme: 'round-button',
     }).then(() => {
       // on close
@@ -289,7 +282,8 @@ function touchMove(move_direct, item) {
   touch-action: none; // 禁止页面拖动
   background-size: auto 100%;
   background-position: center center;
-  background-image: url('../../static/images/hrd/bg.jpg');
+  // background-image: url('../../static/images/hrd/bg.jpg');
+
   #game-title {
     padding-top: 1rem;
     font-weight: bold;
@@ -315,7 +309,7 @@ function touchMove(move_direct, item) {
     border: 0.08rem solid black;
     position: relative;
     margin: 0 auto;
-    
+
     #role-content {
       width: 6rem;
       height: 7.5rem;
@@ -323,11 +317,13 @@ function touchMove(move_direct, item) {
       z-index: 9;
       top: 0;
       left: 0;
-      .cc{
+
+      .cc {
         color: brown !important;
         border-color: brown !important;
         font-size: 0.4rem !important;
       }
+
       .role-item {
         font-family: '楷体';
         font-size: 0.26rem;
@@ -358,16 +354,17 @@ function touchMove(move_direct, item) {
     }
   }
 
-  #game-rule{
+  #game-rule {
 
 
     position: absolute;
     right: 0.5rem;
-    top: 0.4rem;
+    top: 1.2rem;
     // color: #fff;
     font-weight: bold;
   }
-  :deep(.van-nav-bar){
+
+  :deep(.van-nav-bar) {
     background-color: transparent !important;
   }
 }

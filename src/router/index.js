@@ -93,6 +93,26 @@ const router = createRouter({
         name:'注册'
       }
     },
+
+    {
+      path: '/pickGame',
+      name: 'pickGame',
+      component: () => import('@/views/profile/pickGame.vue'),
+      meta:{
+        name:'注册'
+      }
+    },
+    {
+      path: '/rollingGame',
+      name: 'rollingGame',
+      component: () => import('@/views/profile/rollingGame.vue'),
+      meta:{
+        name:'注册'
+      }
+    },
+
+
+
     {
       path: '/error',
       name: 'error',
