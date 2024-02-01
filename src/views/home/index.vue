@@ -2,9 +2,11 @@
   <div class="data-table" @mousemove="handleMouseMove" @mouseup="handleMouseUp">
     <div v-if="isSelecting" class="drag-select" :style="dragSelectStyle"></div>
     <div class="table" @mousedown="handleMouseDown">
-      <div class="table-row" v-for="(row, rowIndex) in data" :key="rowIndex"
-        :class="{ 'selected': isSelected(rowIndex) }">
-        <div class="table-cell" v-for="(cell, cellIndex) in row" :key="cellIndex">{{ cell }}</div>
+      <div class="table-row" v-for="(rowItem, rowIndex) in data" :key="rowIndex">
+        <div :class="`table-cell ${{'selected': isSelected(rowIndex,cellIndex)}}`"  
+          v-for="(cellItem, cellIndex) in row" :key="cellIndex">
+          {{ rowIndex + ',' + cellIndex }}
+        </div>
       </div>
     </div>
   </div>
@@ -12,7 +14,6 @@
 
 <script setup>
 import { ref } from 'vue';
-
 const data = [
   [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
   [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -112,11 +113,12 @@ const isSelected = (rowIndex) => {
 
 <style lang="scss">
 .data-table {
-  position: relative;
+  // position: relative;
   // width: 300px;
   // height: 200px;
-  overflow: auto;
+  // overflow: auto;
   /* margin: 60px auto; */
+  display: inline-block;
 }
 
 .table {
