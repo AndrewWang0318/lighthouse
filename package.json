@@ -15,6 +15,7 @@
     "aw-util": "^2.1.1",
     "axios": "^1.4.0",
     "compressorjs": "^1.1.1",
+    "mockjs": "^1.1.0",
     "moment": "^2.29.1",
     "pinia": "^2.0.36",
     "pinia-plugin-persistedstate": "^3.1.0",
