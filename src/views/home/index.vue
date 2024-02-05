@@ -11,10 +11,13 @@
       <div id="earth"></div>
       <div id="popup"></div>
     </div>
+    <van-dialog v-model:show="show" :title="user_name" show-cancel-button>
+      <div>{{ user_content }}</div>
+    </van-dialog>
   </div>
 </template>
 <script setup>
-import { reactive, getCurrentInstance, onMounted } from 'vue'
+import { ref, reactive, getCurrentInstance, onMounted } from 'vue'
 import * as THREE from "three";
 import * as TWEEN from "@tweenjs/tween.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -33,6 +36,10 @@ const swiperList = reactive([
   { imgSrc: `${base_url}/image/banner/swiper4.png` },
   { imgSrc: `${base_url}/image/banner/swiper5.jpg` },
 ])
+const show = ref(false);
+const user_content = ref("");
+const user_name = ref("");
+
 
 onMounted(() => {
 
@@ -106,7 +113,7 @@ onMounted(() => {
       element.className = "element"; //给图片加类名即设置对应的图片大小
 
       element.innerHTML = name_arr[num];
-      element.name = i; // 给元素的name属性赋值，以便获取鼠标点击的当前值
+      element.name = name_arr[num]; // 给元素的name属性赋值，以便获取鼠标点击的当前值
 
       let block = document.createElement("div");
       block.className = "block"; //给图片加类名即设置对应的图片大小
@@ -174,11 +181,14 @@ onMounted(() => {
 
   // 鼠标单击事件
   function clickMouse(e) {
-    if (!e) {
-      let e = window.event;
-    }
     let tname = e.target.name; //获取点击图片的名称
+
+    if(!tname) return;
+
     console.log(tname);
+    show.value = true
+    user_name.value = tname
+    user_content.value = "这是一段测试用的话！！！"
   }
 
 
@@ -220,9 +230,11 @@ onMounted(() => {
       background-size: cover;
     }
   }
-  .earch-content{
+
+  .earch-content {
     background-color: #2e2e2e;
   }
+
   .element {
     cursor: pointer;
     width: 100px;
