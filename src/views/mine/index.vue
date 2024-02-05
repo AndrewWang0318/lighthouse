@@ -12,6 +12,9 @@
         <div class="notic" @click="jumpLogin">点击登录</div>
       </div>
     </div>
+    <div>
+      当前余额：
+    </div>
     <div class="function-content">
       <van-cell title="账号安全" is-link />
       <van-cell title="退出登录" is-link @click="exit"/>
