@@ -67,16 +67,16 @@ onMounted(() => {
 
   // 镜头
   const camera = new THREE.PerspectiveCamera(
-    40,
+    32,
     window.innerWidth / window.innerHeight,
     1,
     10000
   );
-  camera.position.z = 3400;
+  camera.position.z = 3000;
 
   // 渲染器
   const renderer = new CSS3DRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth, 400);
   document.getElementById("earth").appendChild(renderer.domElement);
 
   //坐标初始化
@@ -126,9 +126,9 @@ onMounted(() => {
       var phi = Math.acos(-1 + (2 * i) / l);
       var theta = Math.sqrt(l * Math.PI) * phi;
       // 计算元素在球面上的坐标
-      var x = 800 * Math.cos(theta) * Math.sin(phi); //800代表球的半径
-      var y = 800 * Math.sin(theta) * Math.sin(phi);
-      var z = 800 * Math.cos(phi);
+      var x = 750 * Math.cos(theta) * Math.sin(phi); //750代表球的半径
+      var y = 750 * Math.sin(theta) * Math.sin(phi);
+      var z = 750 * Math.cos(phi);
 
       var object = new THREE.Object3D();
       object.position.set(x, y, z); //设置对象的位置
@@ -137,7 +137,7 @@ onMounted(() => {
       object.lookAt(vector); //vector这个变量的作用，它用来作为'目标位置'，使用这个方法让这个位置的对象object看向vector这一点所在的方向
       spheres.push(object);
     }
-    transform(spheres, 2000); //动画转换
+    transform(spheres, 3600); //动画转换
   }
 
   function transform(spheres, duration) {
