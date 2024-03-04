@@ -109,15 +109,12 @@ const router = createRouter({
         name:'注册'
       }
     },
-
-
-
     {
       path: '/error',
       name: 'error',
       component: () => import('@/views/profile/error.vue'),
       meta:{
-        name:'错误'
+        name:'404'
       }
     },
     {
