@@ -1,11 +1,12 @@
 <template >
   <div class="page-home">
-    主页
+    <NavBar title="LIGHTHOUSE" color="gray" :leftArrow="false"/>
   </div>
 </template>
 <script setup>
+import NavBar from '@/layout/nav-bar.vue'
 
 </script>
-<style lang="scss">
+<style scoped lang="scss">
   
 </style>
