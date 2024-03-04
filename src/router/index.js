@@ -93,7 +93,6 @@ const router = createRouter({
         name:'注册'
       }
     },
-
     {
       path: '/pickGame',
       name: 'pickGame',
