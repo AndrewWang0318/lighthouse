@@ -1,6 +1,6 @@
 <template>
   <div class="page-discover">
-    <NavBar />
+    <NavBar :title="'发现'" :leftArrow="false"/>
     <div class="row-content">
       <van-grid class="setting-area" square :column-num="4">
         <van-grid-item icon="flower-o" text="华容道游戏" @click="router.push('/hrdGame')" />
