@@ -2,7 +2,7 @@
   <div class="page-discover">
     <NavBar title="发现" color="gray" :leftArrow="false" />
     <van-cell-group class="row-content">
-      <van-cell v-for="(item, index) in discover_list" size="large" :title="item.title" is-link>
+      <van-cell v-for="(item, index) in discover_list" size="large" :title="item.title" is-link @click="cellClick(item)">
         <template #icon>
           <van-icon style="margin-right: 0.3rem;" :name="item.icon" :color="item.iconColor" size="0.42rem" />
         </template>
@@ -18,7 +18,13 @@ const router = useRouter();
 
 const discover_list = [
   {
-    icon: "eye",
+    icon: "wechat-moments",
+    iconColor: "#07c160",
+    title: "朋友动态",
+    route: "/socialSquare"
+  },
+  {
+    icon: "todo-list",
     iconColor: "#07c160",
     title: "每日反思",
     route: "/train"
@@ -31,6 +37,9 @@ const discover_list = [
   },
 ]
 
+const cellClick = function(item){
+  router.push(item.route)
+}
 
 
 </script>

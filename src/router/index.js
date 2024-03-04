@@ -23,15 +23,6 @@ const router = createRouter({
           },
         },
         {
-          path: "socialSquare",
-          name: "socialSquare",
-          component: () => import("@/views/social-square/index.vue"),
-          meta:{
-            name:'动态',
-
-          },
-        },
-        {
           path: "discover",
           name: "discover",
           component: () => import("@/views/discover/index.vue"),
@@ -74,6 +65,16 @@ const router = createRouter({
       meta:{
         name:'注册'
       }
+    },
+    // 朋友圈
+    {
+      path: "/socialSquare",
+      name: "socialSquare",
+      component: () => import("@/views/profile/social-square/index.vue"),
+      meta:{
+        name:'动态',
+
+      },
     },
     // 发布瞬间
     {
