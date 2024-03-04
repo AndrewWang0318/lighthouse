@@ -17,6 +17,10 @@ import base_url from '@/server/base_url';
 import tool from 'aw-util'
 import directives from '@/utils/directives'; // 引入自己定义的全局指令
 import Vue3TouchEvents from "vue3-touch-events";
+
+import VueLuckyCanvas from '@lucky-canvas/vue';
+
+
 import '@/assets/index.css' // 导入公用样式
 moment.locale("zh-cn"); // moment采用中文本地化
 
@@ -37,5 +41,6 @@ app.use(Vant)
 app.use(Fragment)
 app.use(Vue3TouchEvents)
 app.use(directives)
+app.use(VueLuckyCanvas)
 app.component("Loading", Loading) // 注册全局组件
 app.mount('#app')
