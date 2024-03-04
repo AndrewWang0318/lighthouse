@@ -73,7 +73,6 @@ const router = createRouter({
       component: () => import("@/views/profile/social-square/index.vue"),
       meta:{
         name:'动态',
-
       },
     },
     // 发布瞬间
