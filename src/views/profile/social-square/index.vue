@@ -7,11 +7,11 @@
         <div class="user-avatar" :style="`background-image: url(${base_url + store.userInfo.user_avatar});`"></div>
       </div>
       <!-- 发动态按钮 -->
-      <div class="btn-back" ref="btn_upload" @click="router.go(-1)">
-        <van-icon name="plus" size='0.34rem' color="#ffffff" />
+      <div class="btn-back" @click="router.go(-1)">
+        <van-icon name="arrow-left" size="0.42rem" color="rgba(245, 245, 245,0.6)" />
       </div>
       <!-- 返回按钮 -->
-      <div class="btn-upload-dynamic" ref="btn_upload" @click="router.push('/dynamicPublish')">
+      <div class="btn-upload-dynamic" @click="router.push('/dynamicPublish')">
         <van-icon name="plus" size='0.34rem' color="#ffffff" />
       </div>
     </div>
