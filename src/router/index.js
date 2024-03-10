@@ -23,15 +23,6 @@ const router = createRouter({
           },
         },
         {
-          path: "socialSquare",
-          name: "socialSquare",
-          component: () => import("@/views/social-square/index.vue"),
-          meta:{
-            name:'动态',
-
-          },
-        },
-        {
           path: "discover",
           name: "discover",
           component: () => import("@/views/discover/index.vue"),
@@ -75,6 +66,15 @@ const router = createRouter({
         name:'注册'
       }
     },
+    // 朋友圈
+    {
+      path: "/socialSquare",
+      name: "socialSquare",
+      component: () => import("@/views/profile/social-square/index.vue"),
+      meta:{
+        name:'动态',
+      },
+    },
     // 发布瞬间
     {
       path: '/dynamicPublish',
@@ -93,7 +93,6 @@ const router = createRouter({
         name:'注册'
       }
     },
-
     {
       path: '/pickGame',
       name: 'pickGame',
@@ -110,15 +109,12 @@ const router = createRouter({
         name:'注册'
       }
     },
-
-
-
     {
       path: '/error',
       name: 'error',
       component: () => import('@/views/profile/error.vue'),
       meta:{
-        name:'错误'
+        name:'404'
       }
     },
     {

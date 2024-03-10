@@ -1,56 +1,106 @@
-<template>
+<template >
   <div class="page-home">
-    <div class="banner-content">
-      <van-swipe class="login-swipe" :autoplay="4000" indicator-color="white" :show-indicators="false">
-        <van-swipe-item v-for="(v, i) in swiperList" :key="i">
-          <div class="image-item" :style="`background-image:url(${v.imgSrc})`"></div>
-        </van-swipe-item>
-      </van-swipe>
+    <NavBar title="LIGHTHOUSE" color="gray" :leftArrow="false" />
+    <div id="area-lottery" class="area-lottery">
+      <SlotMachine ref="myLucky" width="7rem" height="4rem" :prizes="prizes" :blocks="blocks"
+        :defaultConfig="defaultConfig" :defaultStyle="defaultStyle" :slots="slots" @start="startCallback" />
     </div>
   </div>
 </template>
 <script setup>
-import { reactive,getCurrentInstance } from 'vue'
-const instance = getCurrentInstance();
-const $global = instance.appContext.app.config.globalProperties;
-const base_url = $global.base_url;
-const swiperList = reactive([
-  { imgSrc: `${base_url}/image/banner/swiper1.jpg` },
-  { imgSrc: `${base_url}/image/banner/swiper2.png` },
-  { imgSrc: `${base_url}/image/banner/swiper3.jpg` },
-  { imgSrc: `${base_url}/image/banner/swiper4.png` },
-  { imgSrc: `${base_url}/image/banner/swiper5.jpg` },
-])
+// @start="startCallback" 
+// @end="endCallback" 
+import NavBar from '@/layout/nav-bar.vue';
+import { ref, onMounted } from "vue";
+import { getUrl } from "@/utils/util";
 
+const myLucky = ref("")
+
+// 奖励
+const prizes = [{
+  background: '#bac5ee',
+  borderRadius: '10px',
+  imgs: [{
+    width: '60%',
+    top: '20%',
+    src: getUrl("images/lottery/chicken.png")
+  }]
+},
+{
+  background: '#bac5ee',
+  borderRadius: '10px',
+  imgs: [{
+    width: '60%',
+    top: '20%',
+    src: getUrl("images/lottery/monkey.png")
+  }]
+},
+{
+  background: '#bac5ee',
+  borderRadius: '10px',
+  imgs: [{
+    width: '60%',
+    top: '20%',
+    src: getUrl("images/lottery/dog.png")
+  }]
+},
+{
+  background: '#bac5ee',
+  borderRadius: '10px',
+  imgs: [{
+    width: '60%',
+    top: '20%',
+    src: getUrl("images/lottery/pig.png")
+  }]
+}
+];
+// 块
+const blocks = ref([{ padding: '8px', background: '#869cfa' },
+{ padding: '6px', background: '#e9e8fe' },]);
+
+const defaultConfig = {
+  rowSpacing: '10px',
+  colSpacing: '10px'
+}
+// 默认样式
+const defaultStyle = {
+  borderRadius: Infinity,
+  background: '#bac5ee',
+  fontSize: '32px',
+  fontColor: '#333'
+}
+// 礼物排序
+const slots = [
+  { order: [0, 1, 2, 3] },
+  { order: [0, 1, 2, 3] },
+  { order: [0, 1, 2, 3] },
+  { order: [0, 1, 2, 3] },
+  // { order: [3, 1, 0] },
+]
+// blocks buttons prizes
+
+
+
+const startCallback = () => {
+  console.log(myLucky.value)
+  myLucky.value.play()
+  myLucky.value.stop([1, 1, 1, 1])
+}
+onMounted(() => {
+  startCallback()
+})
+
+const endCallback = () => {
+
+}
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .page-home {
-  .banner-content {
-    background-color: #2e2e2e;
-    padding: 0.04rem;
-    box-sizing: border-box;
-    // width: 6rem;
-    height: 2rem;
+  padding-top: 0.2rem;
 
-    .my-swipe .van-swipe-item {
-      color: #fff;
-      font-size: 20px;
-      height: 2rem;
-      line-height: 2rem;
-      text-align: center;
-      background-color: #fff;
-    }
-
-    .login-content,
-    .register-content {
-      background-color: white;
-      padding: 0.2rem 0.1rem;
-    }
-
-    .image-item {
-      height: 2rem;
-      background-position: center center;
-      background-size: cover;
-    }
+  .area-lottery {
+    display: flex;
+    justify-content: center;
   }
-}</style>
+}
+</style>

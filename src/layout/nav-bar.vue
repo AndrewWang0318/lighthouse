@@ -1,35 +1,43 @@
 <template >
-  <div class="nav-bar">
-    <van-nav-bar v-if="should_nav_show" :fixed="true" :placeholder="true" :title="title" left-text="" left-arrow
-      @click-left="router.go(-1)" />
+  <div class="component-nav">
+    <van-nav-bar
+      :class="color == 'gray' ? 'bg-gray': 'bg-normal'"
+      :fixed="true"
+      :placeholder="true"
+      :title="title"
+      left-text=""
+      :left-arrow="leftArrow"
+      :safe-area-inset-top="true"
+      @click-left="router.go(-1)"
+    />
   </div>
 </template>
 <script setup>
-import { ref, onBeforeMount } from "vue";
-import { useRoute, useRouter } from 'vue-router';
-const route = useRoute();
-const router = useRouter();
-const should_nav_show = ref(true);
-const title = ref('发现')
+import { ref } from "vue";
+import { useRouter } from 'vue-router';
 
-onBeforeMount(() => {
-  if (route.meta.nav_show == 'hide') {
-    should_nav_show.value = false
-  }
-})
+const { title, leftArrow } = defineProps({
+  title: String,
+  leftArrow: {
+    Boolean,
+    default: true
+  },
+  color: {
+    String,
+    default: 'normal'
+  },
+}); // 传递的参数
+
+
+const router = useRouter();
 
 </script>
 <style scoped lang="scss">
-.nav-bar {
-  .van-nav-bar,.van-nav-bar__placeholder {
-    background-color: rgba(0, 0, 0, 0);
-
-    :deep(.van-icon) {
-      color: gray;
+.component-nav {
+  .bg-gray{
+    :deep(.van-nav-bar){
+      background: #f5f5f5;
     }
-  }
-  .van-hairline--bottom:after {
-    border-bottom-width: 0;
   }
 }
 </style>

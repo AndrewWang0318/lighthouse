@@ -27,15 +27,15 @@
       icon: "wap-home",
     },
     {
-      title: "动态",
-      route: "/socialSquare",
-      icon: "fire",
-    },
-    {
       title: "发现",
       route: "/discover",
-      icon: "smile",
+      icon: "eye",
     },
+    // {
+    //   title: "动态",
+    //   route: "/socialSquare",
+    //   icon: "wechat-moments",
+    // },
     {
       title: "我的",
       route: "/mine",

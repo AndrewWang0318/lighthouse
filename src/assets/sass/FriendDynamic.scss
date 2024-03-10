@@ -29,15 +29,30 @@
     // 发动态按钮
     .btn-upload-dynamic{
       width: 0.8rem;
-      height: 0.5rem;
+      height: 0.8rem;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       position: absolute;
       top: 0.4rem;
       right: 0.4rem;
-      background-color: #1989fa;
+      background-color: rgba(26, 138, 250,0.8);
       border: 0.01rem solid rgb(95, 194, 255);
+    }
+    // 发动态按钮
+    .btn-back{
+      width: 0.8rem;
+      height: 0.8rem;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 0.4rem;
+      left: 0.4rem;
+
+      color: rgba(245, 245, 245,0.6);
     }
   }
 
